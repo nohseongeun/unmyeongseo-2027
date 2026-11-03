@@ -151,7 +151,7 @@ header{position:relative}
 </head>
 <body>
 <main>
-<header class="oksoon-header"><div class="eyebrow">진도에서 온 한마디 · GHOST SAJU 2027</div><h1>귀신사주</h1><button id="oksoonSound" class="oksoon-sound" type="button" aria-pressed="false">♪ 서늘한 배경음 켜기</button><div class="oksoon-photo"><img src="./assets/oksoon-portrait.jpg?v=26" alt="진도 정옥순 할머니 캐릭터 흑백 초상" loading="eager"></div><h2>진도 정옥순 할머니</h2><p class="oksoon-phrase">“어디 보자… 자네 팔자부터 좀 들여다보세.”</p><p>태어난 기운부터 앞으로 조심할 일까지, 하나하나 짚어드리겠네.</p><p class="note">※ 정옥순 할머니는 창작 캐릭터이며 실제 신점이나 영적 능력을 주장하지 않습니다.</p></header>
+<header class="oksoon-header"><div class="eyebrow">진도에서 온 한마디 · GHOST SAJU 2027</div><h1>귀신사주</h1><button id="oksoonSound" class="oksoon-sound" type="button" aria-pressed="false">♫ 배경음 끄기 / 켜기</button><div class="oksoon-photo"><img src="./assets/oksoon-portrait.jpg?v=26" alt="진도 정옥순 할머니 캐릭터 흑백 초상" loading="eager"></div><h2>진도 정옥순 할머니</h2><p class="oksoon-phrase">“어디 보자… 자네 팔자부터 좀 들여다보세.”</p><p>태어난 기운부터 앞으로 조심할 일까지, 하나하나 짚어드리겠네.</p><p class="note">※ 정옥순 할머니는 창작 캐릭터이며 실제 신점이나 영적 능력을 주장하지 않습니다.</p></header>
 <audio id="oksoonAudio" src="./assets/oksoon-less-wind-v2.mp3?v=26" preload="none" loop></audio>
 <section id="oksoonLoader" class="oksoon-loader hidden" role="status" aria-live="polite"><div class="oksoon-loader-in"><img src="./assets/oksoon-portrait.jpg?v=26" alt="" aria-hidden="true"><div class="eyebrow">진도 정옥순 할머니 · 사주 살펴보는 중</div><h2 id="oksoonLoadingLine">“어디… 자네 사주부터 보자꾸나.”</h2><div class="oksoon-bar"><span></span></div><p>풀이 화면을 준비하는 연출입니다. 명리 규칙에 따라 계산한 결과를 보여드립니다.</p></div></section>
 <div class="steps" id="progress" aria-label="진행 단계"></div>
@@ -769,43 +769,68 @@ page(1);
 })();
 </script>
 <script>
-/* OKSOON REAL MP3 V26: user-approved V2 soundtrack; iOS click-to-play */
+/* OKSOON MP3 V27: attempt autoplay, first-tap fallback, manual off */
 (function(){
  "use strict";
  const button=document.getElementById("oksoonSound");
  const audio=document.getElementById("oksoonAudio");
  if(!button||!audio)return;
- audio.loop=true;
- audio.volume=0.85;
- let pending=false;
- function updateUI(){
+ audio.loop=true;audio.volume=0.85;audio.muted=false;
+ let userStopped=false;
+ let busy=false;
+ let armed=true;
+ function sync(){
   const playing=!audio.paused&&!audio.ended;
   button.setAttribute("aria-pressed",String(playing));
-  button.textContent=playing?"♫ 서늘한 배경음 끄기":"♪ 서늘한 배경음 켜기";
+  button.textContent=playing?"♫ 배경음 끄기":userStopped?"♪ 배경음 다시 켜기":"♪ 배경음 켜기";
  }
- button.addEventListener("click",async()=>{
-  if(pending)return;
-  if(!audio.paused){audio.pause();updateUI();return;}
-  pending=true;button.textContent="♪ 음악 연결 중…";
+ function disarm(){
+  armed=false;
+  document.removeEventListener("pointerdown",wake,true);
+  document.removeEventListener("touchstart",wake,true);
+  document.removeEventListener("keydown",wake,true);
+ }
+ async function startSound(){
+  if(userStopped||busy||!audio.paused)return;
+  busy=true;
   try{
    audio.muted=false;
-   const result=audio.play();
-   if(result&&typeof result.then==="function")await result;
-   updateUI();
+   await audio.play();
+   disarm();sync();
   }catch(error){
-   audio.pause();
-   button.setAttribute("aria-pressed","false");
-   button.textContent="소리가 막혔어 · 다시 눌러봐";
-   console.warn("Audio playback was rejected:",error);
-  }finally{pending=false;}
+   // iPhone Safari often rejects audible autoplay until the first real gesture.
+   sync();
+  }finally{busy=false;}
+ }
+ function wake(event){
+  if(!armed||userStopped)return;
+  // Starting playback synchronously within the user's gesture is required on iOS.
+  if(audio.paused){
+   audio.muted=false;
+   const result=audio.play();
+   if(result&&typeof result.then==="function")result.then(()=>{disarm();sync();}).catch(()=>sync());
+   else{disarm();sync();}
+  }
+ }
+ button.addEventListener("click",()=>{
+  if(!audio.paused){
+   userStopped=true;disarm();audio.pause();sync();
+  }else{
+   userStopped=false;
+   audio.muted=false;
+   const result=audio.play();
+   if(result&&typeof result.then==="function")result.then(()=>{disarm();sync();}).catch(()=>{button.textContent="♪ 눌러서 음악 켜기";});
+   else{disarm();sync();}
+  }
  });
- audio.addEventListener("play",updateUI);
- audio.addEventListener("pause",updateUI);
- audio.addEventListener("error",()=>{
-  button.setAttribute("aria-pressed","false");
-  button.textContent="오디오 로드 실패 · 다시 눌러봐";
- });
- document.addEventListener("visibilitychange",()=>{if(document.hidden&&!audio.paused){audio.pause();updateUI();}});
+ audio.addEventListener("play",sync);
+ audio.addEventListener("pause",sync);
+ audio.addEventListener("error",()=>{button.textContent="음악 파일을 불러오지 못했어";});
+ document.addEventListener("pointerdown",wake,true);
+ document.addEventListener("touchstart",wake,true);
+ document.addEventListener("keydown",wake,true);
+ // Best effort. Browser policy decides whether sound can start without a gesture.
+ startSound();
 })();
 </script>
 </body></html>
