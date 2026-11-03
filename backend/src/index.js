@@ -89,7 +89,8 @@ export default {
   try{
    const upstream=await fetch("https://api.openai.com/v1/responses",{
     method:"POST",headers:{"Authorization":"Bearer "+env.OPENAI_API_KEY,"Content-Type":"application/json"},
-    body:JSON.stringify({model:env.OPENAI_MODEL||"gpt-5-mini",store:false,max_output_tokens:950,
+    body:JSON.stringify({model:env.OPENAI_MODEL||"gpt-5-mini",store:false,max_output_tokens:2400,
+      reasoning:{effort:"low"},text:{verbosity:"medium"},
       instructions:prompt.instructions,input:prompt.input}),
     signal:AbortSignal.timeout(28000)
    });
@@ -107,7 +108,11 @@ export default {
    }
    const out=await upstream.json();
    const answer=extractText(out);
-   if(!answer)throw new Error("EMPTY_ANSWER");
+   if(!answer){
+    // Only non-sensitive diagnostics; never log the user question or secret.
+    console.error("OpenAI returned no visible output",{status:out.status,incomplete_reason:out.incomplete_details?.reason||null,output_types:(out.output||[]).map(x=>x.type),output_tokens:out.usage?.output_tokens||0});
+    throw new Error("EMPTY_ANSWER");
+   }
    await env.DB.prepare("UPDATE sessions SET status='finished',question=?,answer=? WHERE id=?")
     .bind(question,answer,id).run();
    return json({answer,remaining:0},200,headers);
