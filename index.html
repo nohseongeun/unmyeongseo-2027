@@ -146,6 +146,18 @@ header{position:relative}
 .confirmation-applied{margin:21px 0;padding:16px;border:1px solid #68645a;background:#20221d;border-radius:13px}
 .confirmation-applied .okline{font-size:15px!important}
 
+
+/* OKSOON CHAT V30 */
+.chat-shell{margin-top:30px;border:1px solid #8f8069;border-radius:16px;padding:17px;background:linear-gradient(155deg,#252820,#111410)}
+.chat-shell h3{font-size:22px;color:#eedcc0;line-height:1.5;margin:10px 0}
+.chat-shell textarea{display:block;width:100%;min-height:100px;padding:12px;border:1px solid #82786a;border-radius:10px;background:#1e201c;color:#f3ece1;font:16px/1.65 inherit;resize:vertical}
+.chat-bubble{background:#292a24;border-left:3px solid #b6a687;border-radius:10px;padding:14px;margin:13px 0;font-size:15px;line-height:1.9;white-space:pre-wrap}
+.chat-bubble.mine{background:#35372e;border-left-color:#91a085}
+.chat-role{font-size:12px;font-weight:700;color:#d2b995;letter-spacing:.3px;margin-bottom:5px}
+.chat-sub{font-size:12px;color:#baac98;line-height:1.7}
+.chat-note{border:1px solid #5f665a;background:#21251f;border-radius:10px;padding:12px;margin-top:12px;font-size:13px;color:#ddd1bd}
+.chat-error{color:#e9b5a7;font-size:13px;margin:11px 0}
+
 </style>
 <style>
 /* UNMYEONGSEO-V17-MANSE: readable four pillars */
@@ -197,7 +209,7 @@ header{position:relative}
 </section>
 <section class="page card" id="page2">
  <div class="eyebrow">02 / 05 · 정옥순 할머니의 첫마디</div><h2 id="personTitle">자네는 어떤 팔자인가</h2>
- <div id="manseChart"></div><div id="personBody"></div>
+ <div id="manseChart"></div><div id="personBody"></div><section id="oksoonChat" class="chat-shell" aria-label="정옥순 할매 상담방"></section>
 </section>
 <section class="page card" id="page3">
  <div class="eyebrow">03 / 05 · 2027년 기운</div><h2>“올해 운, 함부로 넘기지 말게.”</h2>
@@ -209,13 +221,11 @@ header{position:relative}
 </section>
 <section class="page card" id="page4">
  <div class="eyebrow">04 / 05 · 팔자의 다음 이야기</div><h2>“자네 팔자는 아직 끝난 게 아닐세.”</h2>
- <p>무료로 확인한 나의 성향과 2027년의 주제를 좀 더 깊이 살펴보고 싶다면, 아래 내용으로 구성된 전체 운명서를 준비하고 있어요.</p>
- <div class="offer"><div class="eyebrow">PREMIUM REPORT</div><h3>나의 2027년 전체 운명서</h3>
- <div class="price">7,900원</div><div class="pills"><span class="pill">타고난 성향</span><span class="pill">재물·직업·연애</span><span class="pill">월별 12개월</span><span class="pill">맞춤 실천 조언</span></div>
- <p>8개 장으로 나눈 개인별 해석 리포트. 읽기 쉬운 문장과 월별 메뉴로 구성했어요.</p>
- <button class="primary" type="button" disabled>7,900원 결제 · 아직 준비 중</button>
- <p class="note">지금은 결제할 수 없고, 실제 유료 리포트를 제공하지 않아요. 아래에서 개발 중인 전체 내용을 무료로 검수할 수 있어요.</p></div>
- <div class="hint"><h3>선택 추가 상품도 준비 중</h3><p>💞 궁합 리포트 — 서로의 성향과 소통 방식 비교</p><p>💰 재물 심층 리포트 — 돈을 대하는 태도와 재정 계획을 더 자세히</p><p class="note">추가 상품은 가격 미정·미출시예요.</p></div>
+ <p>할매 추가 상담·전체 사주풀이·분야별 풀이를 따로 고를 수 있어. 가격은 아직 정해지지 않았어.</p>
+ <div class="offer"><div class="eyebrow">01 · 추가 상담권</div><h3>할매랑 더 이야기하기</h3><div class="price">가격 미정</div><p>기본 사주풀이와 질문 1회는 무료. 이후 상담을 계속 이어가는 별도 상품이야.</p><button class="primary" type="button" disabled>추가 상담 준비 중</button></div>
+ <div class="offer"><div class="eyebrow">02 · 전체 사주풀이</div><h3>정옥순 할매의 2027년 전체 풀이</h3><div class="price">가격 미정</div><div class="pills"><span class="pill">성향 심층 풀이</span><span class="pill">재물·일·인연</span><span class="pill">월별 12개월</span><span class="pill">생활 조언</span></div><p>대화 상담과 별도로 구매하는 종합 사주풀이야.</p><button class="primary" type="button" disabled>전체 풀이 준비 중</button></div>
+ <div class="offer"><div class="eyebrow">03 · 골라 보는 분야별 풀이</div><h3>궁금한 것만 하나씩</h3><div class="price">분야별 가격 미정</div><div class="pills"><span class="pill">💰 재물운</span><span class="pill">💼 직업·사업운</span><span class="pill">💞 연애·결혼운</span><span class="pill">🏠 가족·인간관계</span><span class="pill">📅 월별 운세</span><span class="pill">🌙 전생 이야기</span></div><p>전체 풀이가 부담스러우면 한 분야만 선택할 수 있어. 결제 후 그 분야만 열리도록 이용권을 따로 관리할 거야.</p><button class="primary" type="button" disabled>분야별 풀이 준비 중</button></div>
+
 </section>
 <section class="page card" id="page5">
  <div class="eyebrow">05 / 05 · 전체 풀이 검수</div><h2 id="reportTitle">2027년 귀신사주</h2>
@@ -466,7 +476,7 @@ function page(num){
  for(let i=1;i<=5;i++){const s=make("span");if(i<=step)s.className="active";$("progress").append(s);}
  $("stepCaption").textContent=step+" / 5 페이지";
  $("back").textContent=step===2?"입력 수정":"이전 페이지";
- $("next").textContent=step===5?"다른 정보로 다시 보기":step===2?"2027년 운세 읽기":step===3?"전체 리포트 안내":step===4?(devPreview?"개발자용 전체 풀이 확인":"결제 오픈 준비 중"):"다음 페이지";
+ $("next").textContent=step===5?"다른 정보로 다시 보기":step===2?"2027년 운세 읽기":step===3?"상품별 이용 안내":step===4?(devPreview?"개발자용 전체 풀이 확인":"상품 준비 중"):"다음 페이지";
  $("next").disabled=step===4&&!devPreview;
  window.scrollTo(0,0);
 }
@@ -580,6 +590,94 @@ function buildQuestion(target){
  }
  panel.append(options);panel.append(status);
  target.append(panel);display();
+}
+
+
+/* OKSOON AI CHAT V30
+   Requires a separately deployed server. Never store the OpenAI API key in this file.
+   window.OKSOON_CHAT_API can be configured in public config.js after deployment. */
+let chatSession=null,chatLeft=1,chatBusy=false;
+function chatBubble(feed,who,words,isMe){
+ const bubble=make("div",null,"chat-bubble"+(isMe?" mine":""));
+ bubble.append(make("div",who,"chat-role"));
+ bubble.append(make("div",words));feed.append(bubble);return bubble;
+}
+function chatApi(){return String(window.OKSOON_CHAT_API||"").trim().replace(/\/$/,"");}
+async function chatStart(){
+ const url=chatApi();if(!url)return null;
+ const response=await fetch(url+"/api/session",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:"{}"});
+ const json=await response.json().catch(()=>({}));
+ if(!response.ok||!json.sessionId)throw Error(json.error||"상담방 연결이 되지 않았어.");
+ return json;
+}
+function chatRequestPayload(){
+ const p=state.p;return {
+  question:$("chatQuestion").value.trim(),
+  chart:{year:p.getYear(),month:p.getMonth(),day:p.getDay(),time:state.unknown?null:p.getTime(),
+    dayMaster:state.day,calendar:state.calendar,unknownTime:state.unknown},
+  clientContext:state.context||{},
+  confirmedPreference:state.confirmation||null
+ };
+}
+function setChatState(remaining,locked){
+ chatLeft=remaining;
+ const textarea=$("chatQuestion"),send=$("chatSend");
+ if(!textarea||!send)return;
+ textarea.disabled=locked||chatBusy;
+ send.disabled=locked||chatBusy;
+ $("chatCounter").textContent="할매 무료상담 · "+Math.max(0,chatLeft)+"회 남음";
+ if(locked){textarea.placeholder="무료 상담 1회를 사용했어. 추가 상담 상품은 준비 중이야.";send.textContent="추가 상담 준비 중";}
+ else send.textContent="할매한테 물어보기";
+}
+function renderChat(){
+ const root=$("oksoonChat");if(!root)return;root.replaceChildren();
+ root.append(make("div","할매에게 질문 한 번은 무료","eyebrow"));
+ root.append(make("h3","“궁금한 게 있으면 하나 물어봐. 자네 팔자랑 같이 풀어줄게.”"));
+ root.append(make("p","만세력을 바탕으로 할매가 대화하듯 답해줘. 미래의 사건이나 돈 들어올 날짜를 정확히 알아맞힐 수 있다는 뜻은 아니야.","chat-sub"));
+ const counter=make("div","할매 무료상담 · 1회 남음","chat-role");counter.id="chatCounter";root.append(counter);
+ const feed=make("div");feed.id="chatFeed";root.append(feed);
+ chatBubble(feed,"정옥순 할매","“자, 돈이든 일자리든 사랑이든 하나 물어보거라. 내가 아는 범위에서 구체적으로 풀어줄게.”",false);
+ const form=make("form");form.addEventListener("submit",e=>{e.preventDefault();sendChat()});
+ const input=make("textarea");input.id="chatQuestion";input.maxLength=500;input.placeholder="예: 할머니, 돈이 언제 들어올까요?";input.setAttribute("aria-label","정옥순 할매에게 질문");form.append(input);
+ const btn=make("button","할매한테 물어보기","primary");btn.id="chatSend";btn.type="submit";form.append(btn);root.append(form);
+ const status=make("div",null,"chat-error");status.id="chatStatus";status.setAttribute("role","status");root.append(status);
+ const upsell=make("div",null,"chat-note");upsell.id="chatUpsell";
+ upsell.append(make("strong","추가 상담 · 가격 미정"));
+ upsell.append(make("p","무료 질문은 한 번이야. 이후 계속 상담하거나 재물운·연애운 등 분야별 풀이를 따로 이용하는 상품은 준비 중이야.","chat-sub"));root.append(upsell);
+ if(!chatApi()){
+  status.textContent="실제 할매 대화 서버를 연결하는 중이야. 지금은 질문 전송이 잠겨 있어.";
+  input.disabled=true;btn.disabled=true;
+ }else{
+  status.textContent="할매 상담 서버에 연결하는 중이야…";input.disabled=true;btn.disabled=true;
+  chatStart().then(res=>{
+   chatSession=res.sessionId;
+   const remaining=Number(res.remaining);
+   if(!Number.isInteger(remaining)||remaining<0)throw Error("상담 횟수를 확인하지 못했어.");
+   status.textContent=remaining?"질문 하나를 적어봐.":"무료 상담을 모두 사용했어.";
+   setChatState(remaining,remaining===0);
+  }).catch(err=>{status.textContent=err.message||"서버 연결을 확인해 줘.";input.disabled=true;btn.disabled=true});
+ }
+}
+async function sendChat(){
+ if(chatBusy||chatLeft<1||!chatSession)return;
+ const question=$("chatQuestion").value.trim();
+ if(question.length<2||question.length>500){$("chatStatus").textContent="질문은 2~500글자로 적어줘.";return;}
+ chatBusy=true;setChatState(chatLeft,false);
+ const feed=$("chatFeed");chatBubble(feed,"자네",question,true);
+ $("chatStatus").textContent="“잠깐 있어 봐… 자네 만세력을 다시 살펴볼게.”";
+ try{
+  const response=await fetch(chatApi()+"/api/chat",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({...chatRequestPayload(),sessionId:chatSession})});
+  const result=await response.json().catch(()=>({}));
+  if(!response.ok){
+   if(response.status===402||result.code==="FREE_LIMIT")setChatState(0,true);
+   throw Error(result.error||"할매 상담이 잠시 연결되지 않았어.");
+  }
+  chatBubble(feed,"정옥순 할매",result.answer||"미안하구나. 다시 확인해 볼게.",false);
+  $("chatQuestion").value="";
+  chatLeft=Number(result.remaining);
+  $("chatStatus").textContent=chatLeft===0?"무료 상담 한 번을 마쳤어. 추가 상담 상품은 준비 중이야.":"답변이 도착했어.";
+ }catch(e){$("chatStatus").textContent=e.message||"답변을 받지 못했어. 다시 시도해 줘.";}
+ finally{chatBusy=false;setChatState(chatLeft,chatLeft===0);}
 }
 
 function person(){
@@ -869,7 +967,7 @@ $("begin").addEventListener("click",()=>{
   messages.forEach((message,i)=>setTimeout(()=>{if(oksoonBusy)line.textContent=message;},i*700));
   setTimeout(()=>{
    try{
-    renderManse();person();annualIntro();preview(0);
+    renderManse();person();renderChat();annualIntro();preview(0);
     $("reportTitle").textContent=state.name+"님의 2027년 귀신사주";chapter(0);page(2);
    }catch(err){$("formError").textContent=err.message||"풀이를 준비하지 못했어요.";}
    finally{loader.classList.add("hidden");oksoonBusy=false;$("begin").disabled=false;}
