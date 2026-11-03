@@ -198,7 +198,7 @@ header{position:relative}
 <main>
 <header class="oksoon-header"><div class="eyebrow">진도 정옥순 할매의 귀신사주</div><h1>귀신사주</h1><button id="oksoonSound" class="oksoon-sound" type="button" aria-pressed="false">♫ 배경음 끄기 / 켜기</button><div class="oksoon-photo"><img src="./assets/oksoon-portrait.jpg?v=26" alt="진도 정옥순 할머니 흑백 초상" loading="eager"></div><h2>진도 정옥순 할머니</h2><p class="oksoon-phrase">“어디 보자… 자네 팔자부터 좀 들여다보세.”</p><p>태어난 기운부터 앞으로 조심할 일까지, 하나하나 짚어드리겠네.</p></header>
 <audio id="oksoonAudio" src="./assets/oksoon-ambient-long-v3.mp3?v=28" preload="none" loop></audio>
-<section id="oksoonLoader" class="oksoon-loader hidden" role="status" aria-live="polite"><div class="oksoon-loader-in"><img src="./assets/oksoon-portrait.jpg?v=26" alt="" aria-hidden="true"><div class="eyebrow">진도 정옥순 할머니 · 사주 살펴보는 중</div><h2 id="oksoonLoadingLine">“어디… 자네 사주부터 보자꾸나.”</h2><div class="oksoon-bar"><span></span></div><p>잠시만 기다려 보게. 자네 사주를 찬찬히 살펴보고 있네.</p><div class="oksoon-review-samples"><div class="oksoon-review-label">상담 후기 문구 예시 · 실제 고객 후기는 아님</div><div id="oksoonReviewList" aria-live="off"></div></div></div></section>
+<section id="oksoonLoader" class="oksoon-loader hidden" role="status" aria-live="polite"><div class="oksoon-loader-in"><img src="./assets/oksoon-portrait.jpg?v=26" alt="" aria-hidden="true"><div class="eyebrow">진도 정옥순 할머니 · 사주 살펴보는 중</div><h2 id="oksoonLoadingLine">“어디… 자네 사주부터 보자꾸나.”</h2><div class="oksoon-bar"><span></span></div><p>잠시만 기다려 보게. 자네 사주를 찬찬히 살펴보고 있네.</p><div class="oksoon-review-samples"><div class="oksoon-review-label">할매의 소름 돋는 한마디</div><div id="oksoonReviewList" aria-live="off"></div></div></div></section>
 <div class="steps" id="progress" aria-label="진행 단계"></div>
 <section class="page active card" id="page1">
  <div class="eyebrow">01 / 05 · 사주 맡기기</div><h2>자네, 태어난 날부터 말해보게.</h2>
@@ -1173,14 +1173,14 @@ $("begin").addEventListener("click",()=>{
   messages.forEach((message,i)=>setTimeout(()=>{if(oksoonBusy)line.textContent=message;},i*700));
   // Fictional sample reactions for preview; never presented as verified customer endorsements.
   const exampleReviews=[
-   "“진짜 소름 돋는다… 성격 얘기 듣는데 순간 말문이 막혔어요.”",
-   "“와, 이거 너무 잘 맞춘다. 제 단점을 이렇게 직설적으로 말한다고요?”",
-   "“좋은 말만 하는 사주가 아니네요. 듣고 뜨끔한 부분이 있었어요.”",
-   "“제 성격을 옆에서 지켜본 사람처럼 설명하는 느낌이에요.”",
-   "“연애할 때 자꾸 싸우는 이유가 떠올라서 놀랐어요.”",
-   "“할매가 저를 혼내는 것 같은데 이상하게 계속 듣고 싶어요.”",
-   "“어려운 명리 용어를 쉽게 풀어주니까 이해가 확 됐어요.”",
-   "“뻔한 운세보다 제 습관을 구체적으로 이야기해주는 게 좋았어요.”"
+   "“남들은 몰라도, 자네 스스로는 알지. 그 성격 때문에 손해 본 적 있다는 거.”",
+   "“듣기 좋은 소리만 해주면 그게 무슨 사주풀이냐.”",
+   "“자네는 쿨한 게 아니라, 속에 쌓아두고 안 꺼내는 사람이야.”",
+   "“시작은 번개처럼 하지. 그런데 끝까지 책임지는 건 또 다른 이야기야.”",
+   "“사람 때문에 힘들다지만, 그 사람을 붙잡고 있는 건 누구냐?”",
+   "“돈복만 묻지 마. 자네 돈이 어디서 새는지부터 보자.”",
+   "“고집을 소신이라고 부르지 마라. 둘은 다른 거야.”",
+   "“자네가 숨기고 싶은 약점부터, 할매가 찬찬히 짚어줄게.”"
   ];
   const reviewList=$("oksoonReviewList");
   const showExampleReviews=(index)=>{
