@@ -761,5 +761,109 @@ $("restart")?.addEventListener("click",()=>{
 </script>
 <!-- END UNMYEONGSEO-V10-DETAILED-REPORT -->
 
+
+<!-- UNMYEONGSEO-V11-TABS -->
+<style>
+#result.v11-active>.card:not(.v11-preview),#result.v11-active>#realSaju,#result.v11-active>#v4Reading,#result.v11-active>#v5Monthly{display:none!important}
+body.v11-active-body #catalog,body.v11-active-body #premiumV9{display:none!important}
+.v11-preview{background:linear-gradient(145deg,#2d2217,#201a15);border:1px solid #ae8e56;padding:20px}
+.v11-hero{font-size:23px;line-height:1.5;color:#f5dfad;margin:8px 0;font-weight:750}
+.v11-quote{border-left:3px solid #e4be7e;background:#38291c;border-radius:10px;padding:15px;color:#f6e4c4;font-size:15px;line-height:1.85;margin:12px 0}
+.v11-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:16px 0}
+.v11-tab{border:1px solid #755f40;background:#2e261d;color:#e3cba3;border-radius:10px;padding:12px 4px;font-size:13px;font-weight:650}
+.v11-tab.active{background:#e1c084;color:#24190d;border-color:#e1c084}
+.v11-detail{background:#30271b;border-radius:13px;border:1px solid #685136;padding:17px}
+.v11-detail h3{margin:6px 0;color:#f5d89e;font-size:19px}
+.v11-detail p{font-size:14px;line-height:1.85}
+.v11-lock{border-top:1px solid #6d5638;padding-top:11px;margin-top:14px;font-size:13px;color:#e5c892}
+.v11-offer{border:1px solid #a1814e;background:#392a1b;border-radius:14px;margin-top:17px;padding:16px}
+.v11-offer h3{margin:5px 0;font-size:18px;color:#f6dcaa}
+.v11-offer p{font-size:13px}
+.v11-button{width:100%;padding:13px;margin-top:10px;border:1px solid #a88b53;border-radius:10px;background:#4b3925;color:#f3d8a2;font-size:14px;font-weight:700}
+.v11-fine{color:#baaa91;font-size:12px;margin-top:12px}
+</style>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const profiles={
+"甲":["당신은 스스로 납득해야 움직이는 사람이에요.","큰 나무처럼 자신의 기준을 지키는 성향으로 읽혀요. 목표가 뚜렷하면 꾸준히 밀고 나가지만, 가끔은 남들의 속도가 답답하게 느껴질 수도 있어요.","내 기준을 지키면서 다른 의견을 듣는 것"],
+"乙":["당신은 부드러워 보여도 쉽게 꺾이지 않는 사람이에요.","풀과 덩굴처럼 상황에 맞춰 방법을 찾아가는 성향으로 읽혀요. 주변 마음을 잘 살피지만, 내 원하는 것을 뒤로 미루고 있지는 않은지도 돌아보세요.","상대를 배려하면서 내 마음도 말하는 것"],
+"丙":["당신은 생각보다 마음과 표정이 먼저 움직이는 사람이에요.","햇살처럼 에너지를 밖으로 표현하는 성향으로 읽혀요. 시작할 때 힘이 좋지만, 혼자 속도를 내느라 중요한 설명을 건너뛰지는 않는지 살펴보세요.","열정과 기다림 사이의 균형"],
+"丁":["당신은 사소한 일도 그냥 지나치지 않는 사람이에요.","작은 등불처럼 한 사람과 한 가지 일에 집중하는 성향으로 읽혀요. 섬세함이 강점이지만, 걱정을 혼자 오래 품고 있지는 않은지도 생각해 보세요.","세심함을 지키되 마음을 쉬게 하기"],
+"戊":["당신은 사람들에게 생각보다 든든한 사람으로 보일 수 있어요.","큰 산처럼 자리를 지키고 책임을 다하는 성향으로 읽혀요. 한 번 맡은 일은 쉽게 놓지 않지만, 부담을 전부 혼자 짊어질 필요는 없어요.","지켜야 할 것과 내려놓아도 될 것 구분하기"],
+"己":["당신은 남이 놓치는 작은 일들을 챙기는 사람이에요.","비옥한 밭처럼 시간을 들여 현실적인 성과를 만드는 성향으로 읽혀요. 다른 사람을 돌보면서 정작 나 자신은 늦게 챙길 수도 있어요.","상대를 돌보는 만큼 내 생활도 돌보기"],
+"庚":["당신은 결정해야 할 때 생각보다 단호한 사람이에요.","단단한 쇠처럼 복잡한 상황을 정리하고 실행하는 성향으로 읽혀요. 명확한 판단이 강점이지만, 솔직한 말이 상대에게는 날카롭게 들릴 수 있어요.","결단력에 부드러운 설명을 더하기"],
+"辛":["당신은 작은 차이를 그냥 넘기기 어려운 사람이에요.","보석처럼 세부 사항과 완성도를 살피는 성향으로 읽혀요. 보는 눈이 날카롭지만, 완벽하지 않으면 시작을 미루는 때도 있는지 돌아보세요.","완벽한 시작보다 꾸준한 진행"],
+"壬":["당신은 한 가지 답에 쉽게 갇히지 않는 사람이에요.","큰 바다처럼 많은 가능성을 받아들이는 성향으로 읽혀요. 생각이 자유로운 만큼 마음속 계획이 실제 일정으로 옮겨졌는지도 살펴보세요.","좋은 생각을 작은 행동으로 바꾸기"],
+"癸":["당신은 남들이 놓친 감정도 잘 알아차리는 사람이에요.","빗물처럼 미묘한 변화와 분위기를 살피는 성향으로 읽혀요. 관찰이 섬세하지만, 상대 마음을 너무 오래 추측해 피곤해지지 않도록 해보세요.","걱정 대신 직접 확인하고 말하기"]
+};
+const idx={"甲":0,"乙":0,"丙":1,"丁":1,"戊":2,"己":2,"庚":3,"辛":3,"壬":4,"癸":4};
+const yin={"甲":0,"乙":1,"丙":0,"丁":1,"戊":0,"己":1,"庚":0,"辛":1,"壬":0,"癸":1};
+const meanings={
+"비견":["내 방식과 협력","자기 기준을 분명히 세우되 비슷한 입장의 사람과 어떻게 함께할지도 살펴보세요."],
+"겁재":["경쟁과 나눔","누군가와 역할이나 돈을 나눌 때 조건을 분명히 정하는 태도를 생각해볼 수 있어요."],
+"식신":["꾸준히 쌓는 실력","큰 변화보다 매일 조금씩 결과를 쌓아가는 방식이 올해의 해석 주제로 나타나요."],
+"상관":["새로운 시도와 표현","익숙한 방법에 질문을 던지고 내 생각을 표현하는 주제로 읽혀요. 약속을 지키는 균형도 중요해요."],
+"편재":["새로운 제안과 기회","기회를 넓혀 보되 돈과 시간을 얼마나 쓰게 될지도 함께 점검해 보세요."],
+"정재":["돈과 생활의 균형","눈앞의 수익보다 반복되는 지출과 생활의 안정감을 먼저 살펴보는 주제로 읽혀요."],
+"편관":["도전과 책임감","어려운 일을 맡았을 때 무리하지 않으면서 우선순위를 정하는 태도를 생각해보세요."],
+"정관":["약속과 신뢰","맡은 역할을 정리하고 작은 약속을 지키는 행동이 중요한 주제로 나타나요."],
+"편인":["새로운 배움과 시각","이전과 다른 방법을 탐색하면서 실제로 시도할 한 가지를 골라보세요."],
+"정인":["도움과 배움","혼자 해결하려 하기보다 좋은 조언을 받아들이고 기초를 다지는 태도를 살펴보세요."]
+};
+function ten(a,b){const x=idx[a],y=idx[b],same=yin[a]===yin[b];if(x===undefined||y===undefined)return null;if(x===y)return same?"비견":"겁재";if((x+1)%5===y)return same?"식신":"상관";if((x+2)%5===y)return same?"편재":"정재";if((y+1)%5===x)return same?"편인":"정인";if((y+2)%5===x)return same?"편관":"정관";return null;}
+function node(tag,txt,cls){const n=document.createElement(tag);n.textContent=txt;if(cls)n.className=cls;return n;}
+function pillar(){
+ if(!window.Solar||!window.Lunar)throw Error("달력 정보를 불러오지 못했어요.");
+ const y=+$("year").value,m=+$("month").value,d=+$("day").value,h=$("unknown").checked?12:+$("hour").value,mn=$("unknown").checked?0:+$("minute").value;
+ let solar;
+ if($("calendar").value==="양력"){if(d>new Date(y,m,0).getDate())throw Error("날짜를 확인해 주세요.");solar=Solar.fromYmdHms(y,m,d,h,mn,0);}
+ else{const lm=$("calendar").value==="음력 윤달"?-m:m;solar=Lunar.fromYmdHms(y,lm,d,h,mn,0).getSolar();const back=solar.getLunar();if(back.getYear()!==y||back.getMonth()!==lm||back.getDay()!==d)throw Error("음력 날짜를 확인해 주세요.");}
+ return solar.getLunar().getEightChar();
+}
+function build(){
+ const root=$("result");if(!root||root.classList.contains("hidden"))return;
+ $("v11Card")?.remove();
+ const card=node("section","","card v11-preview");card.id="v11Card";root.insertBefore(card,root.firstChild);
+ try{
+ const p=pillar(),day=p.getDayGan(),character=profiles[day],annual=ten(day,"丁"),earth=ten(day,"己");
+ if(!character||!annual||!earth)throw Error("사주 결과를 확인하지 못했어요.");
+ card.append(node("div","YOUR PERSONAL STORY · 무료 맞춤 미리보기","eyebrow"));
+ card.append(node("h2",($("name").value.trim()||"고객")+"님은 어떤 사람일까요?","v11-hero"));
+ card.append(node("div",character[0],"v11-quote"));
+ card.append(node("p",character[1]));
+ card.append(node("p","그리고 2027년에는 '"+meanings[annual][0]+"'과 '"+meanings[earth][0]+"'라는 두 가지 주제가 함께 보여요.","v11-fine"));
+ const tabnames=["나의 성향","재물운","직업운","연애운","월별운세","기회·주의"];
+ const tabs=node("div","","v11-tabs");card.append(tabs);
+ const detail=node("div","","v11-detail");card.append(detail);
+ const btns=[];
+ function show(k){
+  btns.forEach((b,i)=>b.classList.toggle("active",i===k));
+  detail.replaceChildren();
+  let title="",txt="",locked="";
+  if(k===0){title="당신을 알아보는 첫 번째 단서";txt=character[1]+" 그래서 올해는 "+character[2]+"을 떠올려 보세요.";locked="더 자세한 성향 해석 · 관계에서 드러나는 모습 · 강점 활용법";}
+  if(k===1){title="2027년 돈에 관한 첫 번째 이야기";txt="올해의 해석 주제 중 하나는 '"+meanings[earth][0]+"'이에요. "+meanings[earth][1];locked="돈을 대하는 성향 · 재정 관리 조언 · 12개월 돈 관련 주제";}
+  if(k===2){title="일할 때 더 눈여겨볼 점";txt="올해의 한 가지 흐름은 '"+meanings[annual][0]+"'이에요. "+meanings[annual][1];locked="일할 때의 장점 · 선택을 고민할 때의 조언 · 월별 일 관련 주제";}
+  if(k===3){title="사랑에서도 나다운 방식이 있어요";txt=character[0]+" "+character[1].split("。")[0]+" 관계에서는 내 마음을 표현하는 방법을 돌아보세요.";locked="관계에서의 내 모습 · 대화하는 방식 · 관계를 위한 월별 조언";}
+  if(k===4){const first=Solar.fromYmdHms(2027,1,15,12,0,0).getLunar().getEightChar().getMonthGan();const topic=ten(day,first);title="1월에는 '"+meanings[topic][0]+"'";txt="1월 15일을 기준으로 한 해석에서는 "+meanings[topic][1]+" 월별 관계는 절기에 따라 달라져요.";locked="2월부터 12월까지의 해석 · 매달 돈·일·관계에 관한 이야기";}
+  if(k===5){title="2027년에 기억할 한 가지";txt="사주에서 읽히는 두 가지 주제는 '"+meanings[annual][0]+"'과 '"+meanings[earth][0]+"'이에요. "+meanings[annual][1];locked="한 해의 점검 질문 · 실천 조언 · 달별 주의할 점";}
+  detail.append(node("div","FREE READING · 일부 공개","eyebrow"),node("h3",title),node("p",txt));
+  const lock=node("div","","v11-lock");lock.append(node("strong","🔒 전체 리포트에서 이어지는 이야기"));lock.append(node("p",locked));detail.append(lock);
+ }
+ tabnames.forEach((name,i)=>{const b=node("button",name,"v11-tab");b.type="button";b.addEventListener("click",()=>show(i));tabs.append(b);btns.push(b);});
+ show(0);
+ const offer=node("div","","v11-offer");offer.append(node("div","PREMIUM · 전체 내용 보기","eyebrow"),node("h3","나에 관한 이야기, 여기서 끝이 아니에요"),node("p","타고난 성향부터 재물·일·사랑·2027년 12개월까지 한 번에 살펴보는 리포트로 준비하고 있어요."),node("div","7,900원","price"));
+ const pay=node("button","전체 운명서 · 결제 준비 중");pay.type="button";pay.disabled=true;offer.append(pay);card.append(offer);
+ card.append(node("p","※ 전통 사주풀이 일부 규칙을 이용한 해석 체험판이에요. 실제 성격이나 미래를 정확히 알아맞힌다는 뜻은 아니에요. 결제 기능과 유료 리포트는 아직 제공하지 않습니다.","v11-fine"));
+ root.classList.add("v11-active");document.body.classList.add("v11-active-body");
+ }catch(error){card.append(node("p","미리보기를 표시하지 못했어요: "+(error.message||String(error)),"note"));}
+}
+$("start")?.addEventListener("click",()=>setTimeout(build,220));
+$("restart")?.addEventListener("click",()=>{ $("v11Card")?.remove();$("result")?.classList.remove("v11-active");document.body.classList.remove("v11-active-body");});
+})();
+</script>
+<!-- END UNMYEONGSEO-V11-TABS -->
+
 </body>
 </html>
