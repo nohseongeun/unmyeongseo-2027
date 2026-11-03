@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>운명서 2027</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#11100d;color:#f2dda8;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif}
+main{max-width:480px;margin:auto;padding:35px 22px}
+header{text-align:center;padding:25px 0}
+small{color:#c7a96d;letter-spacing:2px}
+h1{font-size:43px;margin:12px 0}
+p{color:#c5b9a4}
+section{background:#211c15;border:1px solid #56472f;border-radius:18px;padding:22px}
+label{display:block;margin:17px 0 8px;color:#e6d6b9}
+input,select{width:100%;padding:13px 8px;border:1px solid #69583b;border-radius:9px;background:#30281d;color:white;font-size:16px;min-width:0}
+.group{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.check{display:flex;align-items:center;gap:10px;color:#ddd}
+.check input{width:auto}
+button{width:100%;margin-top:22px;padding:16px;background:#d8b875;color:#17120a;border:0;border-radius:10px;font-size:16px;font-weight:bold}
+#result{display:none;margin-top:20px}
+</style>
+</head>
+<body>
+<main>
+<header><small>運命書 · 2027 EDITION</small><h1>운명서</h1><p>당신의 2027년을 미리 읽다</p></header>
+<section>
+<h2>나의 운명서 시작하기</h2>
+<label>이름</label><input id="name" placeholder="이름 입력">
+<label>태어난 날짜</label>
+<div class="group"><select id="year"></select><select id="month"></select><select id="day"></select></div>
+<label>양력 / 음력</label>
+<select id="calendar"><option>양력</option><option>음력</option><option>음력 윤달</option></select>
+<label>태어난 시간</label>
+<label class="check"><input id="unknown" type="checkbox" onchange="toggleTime()">태어난 시간 모름</label>
+<div class="group two" id="timebox"><select id="hour"></select><select id="minute"></select></div>
+<button onclick="preview()">무료 미리보기 확인하기</button>
+</section>
+<section id="result"></section>
+</main>
+<script>
+function fill(id,start,end,suffix,reverse=false){
+const s=document.getElementById(id);
+const values=Array.from({length:end-start+1},(_,i)=>start+i);
+if(reverse)values.reverse();
+values.forEach(v=>s.add(new Option(v+suffix,String(v))));
+}
+fill("year",1900,2026,"년",true);
+fill("month",1,12,"월");
+fill("day",1,31,"일");
+fill("hour",0,23,"시");
+fill("minute",0,59,"분");
+year.value="1991";month.value="10";day.value="21";hour.value="9";minute.value="0";
+function toggleTime(){document.getElementById("timebox").style.display=unknown.checked?"none":"grid"}
+function preview(){
+const n=document.getElementById("name").value.trim();
+const y=+year.value,m=+month.value,d=+day.value;
+if(!n){alert("이름을 입력해 주세요.");return}
+if(d>new Date(y,m,0).getDate()){alert("올바른 날짜를 선택해 주세요.");return}
+const t=unknown.checked?"모름":hour.value+"시 "+minute.value+"분";
+const r=document.getElementById("result");
+r.style.display="block";
+r.innerHTML="<small>2027 FREE PREVIEW</small><h2>"+n.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")+"님의 운명서</h2><p>"+y+"년 "+m+"월 "+d+"일 · "+calendar.value+"</p><p>태어난 시간: "+t+"</p><hr><h3>2027년, 나의 새로운 이야기</h3><p>운명서 무료 테스트에 오신 것을 환영합니다. 실제 사주 계산과 개인별 운세는 아직 연결되지 않았습니다.</p><p>프리미엄 리포트 예정 가격: 7,900원</p>";
+r.scrollIntoView({behavior:"smooth"});
+}
+</script>
+</body>
+</html>
