@@ -192,6 +192,13 @@ header{position:relative}
 .v17-evidence{border:1px solid #7b5c35;background:#332719;border-radius:13px;padding:15px;margin:15px 0}
 .v17-evidence h3{font-size:17px;margin:0 0 9px}
 .v17-evidence p{font-size:14px;line-height:1.9}
+.compat-form{display:grid;gap:14px;background:#27231f;padding:18px;border:1px solid #92764e;border-radius:14px;margin:18px 0}
+.compat-form label{font-size:14px;color:#e9d8b8;font-weight:700;display:block;margin-bottom:6px}
+.compat-form input,.compat-form select{width:100%;min-width:0;background:#191a18;border:1px solid #a38759;color:#fff0da;padding:12px;border-radius:8px;font-size:16px}
+.compat-form .compat-duo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.compat-form button{padding:14px;border:1px solid #c7ad7c;background:#d0b995;color:#20180e;border-radius:10px;font-weight:800;font-size:16px}
+.compat-error{color:#ffb1aa;font-size:13px;line-height:1.6}
+.compat-result{padding-top:10px}
 </style>
 </head>
 <body>
@@ -380,7 +387,7 @@ function verdictLine(topic){
  const map={money:v.money,work:v.career,love:v.romance,person:v.core,health:v.weak,annual:v.strength,guide:v.weak};
  return map[topic]||v.core;
 }
-const chapterNames=["타고난 나","2027년 종합","돈·재물","직장·사업","사랑·관계","생활·마음","12개월","실천 가이드","전생 이야기"];
+const chapterNames=["타고난 나","2027년 종합","돈·재물","직장·사업","사랑·관계","생활·마음","12개월","실천 가이드","전생 이야기","궁합·인연 분석"];
 let state=null,step=1,chapterIndex=0,previewIndex=0,monthIndex=1;
 function make(tag,content,cls){const x=document.createElement(tag);if(content!==undefined&&content!==null)x.textContent=content;if(cls)x.className=cls;return x}
 function addP(parent,text){parent.append(make("p",text))}
@@ -1362,9 +1369,103 @@ function chapter(index){
  const heading=chapterNames[index];
  root.append(make("h2",heading));
  if(index===6){monthReport(root)}
+ else if(index===9){renderCompatibility(root)}
  else{oksoonPremiumEditorial(root,index);oksoonDetailedCases(root,index);if(index===1)renderDaewoon(root);}
  [...$("chapters").children].forEach((t,i)=>t.classList.toggle("active",i===index));
 }
+
+/* Gung-hap is a real two-chart comparison, never a guessed partner profile. */
+function renderCompatibility(root){
+ const intro=make("div","두 사람의 사주를 따로 계산하는 궁합 상담","eyebrow");
+ root.append(intro);
+ moment(root,"한 사람의 사주로 둘의 미래를 정하진 않겠다",[
+  "“자네가 아무리 좋은 사람이어도 둘이 부딪힐 수 있고, 서로 성향이 달라도 잘 지낼 수 있어.”",
+  "“궁합은 두 사람이 태어난 날의 기운을 따로 계산해야지. 상대의 생일도 모르면서 마음을 맞혀준다는 건 순 거짓말이야.”",
+  "“두 사람의 기질, 다툴 때의 반응, 돈과 생활 습관, 관계를 오래 지키는 방법을 나눠 보자.”"
+ ]);
+ const form=make("div",null,"compat-form");
+ const nameField=make("div");nameField.append(make("label","상대방 이름 또는 별명"));
+ const otherName=make("input");otherName.placeholder="상대방 별명";otherName.maxLength=20;nameField.append(otherName);form.append(nameField);
+ const dateField=make("div");dateField.append(make("label","상대방 생년월일"));
+ const date=make("input");date.type="date";date.min="1900-01-01";date.max="2026-12-31";dateField.append(date);form.append(dateField);
+ const mode=make("div");mode.append(make("label","양력 / 음력"));
+ const cal=make("select");for(const t of ["양력","음력","음력 윤달"]){const o=make("option",t);o.value=t;cal.append(o)}mode.append(cal);form.append(mode);
+ const hours=make("div",null,"compat-duo");
+ const hf=make("div");hf.append(make("label","태어난 시각 (선택)"));const hour=make("select");for(const [v,t] of [["","시간 모름"],...Array.from({length:24},(_,i)=>[String(i),i+"시"])]){const o=make("option",t);o.value=v;hour.append(o)}hf.append(hour);hours.append(hf);
+ const mf=make("div");mf.append(make("label","분"));const minute=make("select");for(let i=0;i<60;i++){const o=make("option",i+"분");o.value=i;minute.append(o)}mf.append(minute);hours.append(mf);form.append(hours);
+ const btn=make("button","두 사람 궁합 자세히 보기");btn.type="button";form.append(btn);
+ const error=make("p",null,"compat-error");form.append(error);
+ root.append(form);
+ const output=make("div",null,"compat-result");root.append(output);
+ btn.addEventListener("click",()=>{
+  error.textContent="";output.replaceChildren();
+  try{
+   if(!date.value)throw Error("상대방의 생년월일을 먼저 입력해 줘.");
+   if(!window.Solar||!window.Lunar)throw Error("만세력 계산 자료를 불러오지 못했어. 연결 상태를 확인해 줘.");
+   const [y,m,d]=date.value.split("-").map(Number),h=hour.value===""?12:Number(hour.value),mm=hour.value===""?0:Number(minute.value);
+   if(y<1900||y>2026||!m||!d)throw Error("상대방의 날짜를 다시 확인해 줘.");
+   let solar;
+   if(cal.value==="양력"){if(d>new Date(y,m,0).getDate())throw Error("존재하지 않는 날짜야.");solar=Solar.fromYmdHms(y,m,d,h,mm,0)}
+   else{
+    const lunarMonth=cal.value==="음력 윤달"?-m:m;
+    solar=Lunar.fromYmdHms(y,lunarMonth,d,h,mm,0).getSolar();
+    const chk=solar.getLunar();
+    if(chk.getYear()!==y||chk.getMonth()!==lunarMonth||chk.getDay()!==d)throw Error("음력 날짜나 윤달을 다시 확인해 줘.");
+   }
+   const a=state.p,b=solar.getLunar().getEightChar();
+   const me=state.name||"자네",other=otherName.value.trim()||"상대방";
+   const myDay=a.getDayGan(),theirDay=b.getDayGan(),myBranch=a.getDayZhi(),theirBranch=b.getDayZhi();
+   const towardThem=ten(myDay,theirDay),towardMe=ten(theirDay,myDay);
+   const aLabel=koreanPillar(a.getDay()),bLabel=koreanPillar(b.getDay());
+   const part=(title,lines)=>moment(output,title,lines.map(x=>"“"+x+"”"));
+   part("두 사람의 사주, 섞지 말고 따로 보자",[
+    me+"의 일주(태어난 날 두 글자)는 "+aLabel+"이고 일간은 "+ganKo[myDay]+"이야. "+other+"의 일주는 "+bLabel+", 일간은 "+ganKo[theirDay]+"이지.",
+    "자네 쪽에서 상대를 바라보는 십성은 "+tenEasy(towardThem)+"이고, 상대 쪽에서 자네를 바라보는 십성은 "+tenEasy(towardMe)+"야. 양쪽이 같아 보이더라도 보는 위치가 다르니 따로 풀어야 해.",
+    (hour.value===""?"상대방 태어난 시간을 몰라서 시주(태어난 시각 두 글자)는 계산에서 뺐어.":"상대방 시각을 입력했으니 그 기준으로 만세력을 계산했어.")+" 출생지나 절입 경계 기준에 따라 세부 결과가 달라질 수는 있단다."
+   ]);
+   const positions=[
+    {label:"서로의 일지(가까운 관계를 보는 자리)",a:myBranch,b:theirBranch},
+    {label:"자네 일지와 상대 월지",a:myBranch,b:b.getMonthZhi()},
+    {label:"상대 일지와 자네 월지",a:theirBranch,b:a.getMonthZhi()}
+   ];
+   const clashesHere=positions.filter(x=>clashes[x.a]===x.b);
+   if(clashesHere.length){
+    part("부딪히는 자리가 실제로 있구나",[
+     clashesHere.map(x=>x.label+"의 "+zhiKo[x.a]+"·"+zhiKo[x.b]).join(", ")+"는 충(서로 맞부딪히는 상징)이야.",
+     "갈등이 생기면 한쪽은 빨리 끝내자고 하고 다른 쪽은 더 생각하고 싶을 수 있어. 그때 누가 옳은지 결정하기 전에 각자의 방식부터 확인하게.",
+     "충이 있다고 헤어진다는 소리는 아니야. 사주에 없는 비극을 지어낼 생각도 없어."
+    ]);
+   }else{
+    part("먼저 확인한 관계에서 직접적인 충은 없네",[
+     "두 사람 일지끼리, 또 서로의 일지와 월지를 비교했을 때 단순 육충(대표적인 여섯 가지 충돌 짝)은 발견되지 않아.",
+     "충이 없다고 다툼이 없다는 보장도 아니지. 돈, 연락, 휴식 방식은 실제로 맞춰 가야 해."
+    ]);
+   }
+   const elements=eGan[myDay]===eGan[theirDay];
+   part("같은 장점이 만났을 때, 다른 기질이 만났을 때",[
+    elements?"둘의 일간이 모두 "+eGan[myDay]+" 기운이야. 서로 행동하는 방식이 익숙하게 느껴질 수 있지만, 비슷한 고집도 함께 나타날 수 있지.":"자네 일간은 "+eGan[myDay]+", 상대는 "+eGan[theirDay]+" 기운이야. 서로 다른 방식으로 문제를 풀 수 있다는 상징이지. 다름을 틀림이라고 부르지 마.",
+    "자네 쪽 기질은 이래. "+oksoonSharp[myDay][1],
+    "상대의 일간에서는 이런 경향을 읽어. "+oksoonSharp[theirDay][1]+" 하지만 실제 성격은 상대의 경험과 행동을 통해 확인해야 해."
+   ]);
+   part("사랑하는 방식보다 싸우는 방식이 더 중요해",[
+    "서운할 때 바로 말하는 사람과 며칠 생각한 뒤 말하는 사람이 만나면 작은 일도 커질 수 있지. 싸우기 전에 서로 생각할 시간을 얼마나 줄지 약속해.",
+    "말을 세게 하는 것과 솔직한 건 달라. '왜 맨날 그러냐' 대신 '어제 이 행동이 서운했어. 다음엔 이렇게 해주면 좋겠어'라고 구체적으로 말해.",
+    "상대가 시간을 달라고 할 때 그 시간을 존중할 수 있는지, 자네가 불편한 걸 이야기할 때 끝까지 들어주는지 실제 행동을 보게."
+   ]);
+   part("현실 궁합은 돈과 생활에서 드러나지",[
+    "데이트 비용이나 결혼 준비를 한다면 두 사람의 수입이 아니라 각자 부담 가능한 돈부터 확인해. 같은 금액을 쓰는 게 공평함의 전부는 아니야.",
+    "여가 시간이 다르다면 하나는 함께 보내고 하나는 각자 쓰는 시간을 만들어. 사랑한다면 모든 것을 같이 해야 한다는 생각은 버리게.",
+    "지출 성향, 가족과의 거리, 연락 빈도, 일과 휴식의 우선순위를 하나씩 적어보면 말로만 잘 맞는다는 소리보다 쓸모가 있을 거야."
+   ]);
+   part("궁합이 좋은지 마지막으로 확인할 네 가지",[
+    "첫째, 갈등이 생겼을 때 사과보다 실제 행동이 바뀌는가. 둘째, 돈 이야기를 불편해하지 않고 할 수 있는가.",
+    "셋째, 각자의 일과 시간을 존중하는가. 넷째, 한 사람이 계속 희생하는 구조는 아닌가.",
+    "할매는 사주로 두 사람 마음을 보증하거나 이별·결혼 날짜를 찍진 않아. 여기서 본 건 실제 두 만세력의 상징적인 관계이고, 좋은 궁합은 두 사람의 행동이 완성하는 거야."
+   ]);
+  }catch(err){error.textContent=err.message||"상대방의 입력 정보를 확인해 줘.";}
+ });
+}
+
 function monthReport(root){
  root.append(make("h3","“열두 달을 똑같이 이야기하면 그건 사주가 아니지.”"));
  say(root,"“월운(매달 바뀌는 기운)은 매달 대표적인 월주와 자네 일간을 비교해서 보는 거야. 실제 절기 경계일 전후는 다를 수 있단다.”");
