@@ -297,6 +297,19 @@ const directProfiles={
  "壬":{core:"너는 자유로운 아이디어형이야. 한 가지 길만 가라고 하면 숨이 막혀.",outer:"겉으론 여유롭고 개방적이지만 속으로는 선택지가 너무 많아 흔들려.",strength:"사람과 정보를 연결하고 새로운 기회를 찾는 데 강해.",weak:"시작만 여러 개 하고 끝내지 못하면 실력이 묻혀.",money:"기회에 눈이 빠르지만 분산 지출을 조심해. 먼저 하나를 검증해.",career:"사람·정보·기획을 잇는 일이 맞아. 우선순위 없이 벌리면 손해야.",romance:"독립적인 시간을 원해. 연락과 거리의 기준을 서로 맞춰야 해."},
  "癸":{core:"너는 관찰형이야. 말수는 적어도 속으로는 사람과 상황을 계속 분석해.",outer:"겉은 조용하고 부드럽지만 속으로는 감정의 변화에 민감해.",strength:"작은 신호를 읽고 남이 놓친 문제를 발견해.",weak:"확인하지 않은 추측을 사실처럼 믿으면 혼자 상처받아.",money:"신중하게 판단하는 편이지만 걱정만 하다가 기회를 놓치지 마.",career:"분석·정리·관찰이 필요한 일에 강해. 생각을 결과로 보여줘야 해.",romance:"상대의 작은 변화도 알아채. 마음을 추측하지 말고 직접 물어봐."}
 };
+const tenSimple={
+ "비견":"나와 비슷한 기운이라 내 의견을 강하게 내세우는 관계",
+ "겁재":"나와 비슷하지만 경쟁하거나 내 몫을 챙기려는 관계",
+ "식신":"실력을 차근차근 결과로 만들어내는 관계",
+ "상관":"새로운 생각을 말하고 기존 방식을 바꾸려는 관계",
+ "편재":"새로운 돈벌이와 사람, 기회를 찾아 움직이는 관계",
+ "정재":"돈과 생활을 계획대로 관리하는 관계",
+ "편관":"책임과 압박 앞에서 버티고 도전하는 관계",
+ "정관":"규칙과 약속을 중요하게 여기는 관계",
+ "편인":"혼자 깊이 생각하고 새로운 것을 탐구하는 관계",
+ "정인":"배우고 준비하며 기초를 쌓는 관계"
+};
+const tenEasy=term=>term+"(쉽게 말해 "+(tenSimple[term]||"나와 다른 글자의 관계")+")";
 const tenTemper={
  "비견":["자기주장이 강해","남의 지시보다 자기 방식으로 움직이려 해","협업할 때 고집 때문에 부딪치기 쉬워"],
  "겁재":["경쟁심이 강해","내 몫과 상대 몫을 민감하게 따져","비교가 심해지면 돈과 인간관계에서 충돌해"],
@@ -329,9 +342,9 @@ function detailedTemper(){
  const max=order[0][1], leaders=order.filter(x=>x[1]===max).map(x=>x[0]);
  const lowest=order.filter(x=>x[1]===0).map(x=>x[0]);
  return {
-  main:"월주 "+koreanPillar(p.getMonth())+"의 월간 "+ganKo[p.getMonthGan()]+"은 네 일간 "+ganKo[state.day]+"에게 "+m+"이야. 이 조합의 특징은 이거야. "+t[0]+". "+t[1]+". 약점은 "+t[2]+".",
-  day:"일주 "+koreanPillar(p.getDay())+"의 일지 "+zhiKo[p.getDayZhi()]+"는 가까운 관계와 일상적인 반응을 읽는 자리야. "+branchTemper[p.getDayZhi()],
-  elements:"사주 겉글자 "+(p.getTime()?"8":"6")+"개를 보면 "+leaders.join("·")+" 기운이 "+max+"개로 가장 두드러져. "+(lowest.length?lowest.join("·")+"은 표면에 안 보여. 그렇다고 아예 없는 기운이나 부족한 성격이라고 단정하면 안 돼.":"다른 기운도 함께 섞여 있어.")+" 이건 천간과 지지의 대표 오행을 단순 집계한 결과야.",
+  main:"월주(태어난 달을 나타내는 두 글자) "+koreanPillar(p.getMonth())+"의 월간(그중 위 글자) "+ganKo[p.getMonthGan()]+"은 일간(태어난 날 위 글자, 바로 너를 뜻하는 기운) "+ganKo[state.day]+"에게 "+tenEasy(m)+"이야. 이 조합의 특징은 이거야. "+t[0]+". "+t[1]+". 약점은 "+t[2]+".",
+  day:"일주(태어난 날에 붙은 두 글자) "+koreanPillar(p.getDay())+"의 일지(그중 아래 글자) "+zhiKo[p.getDayZhi()]+"는 가까운 관계와 일상적인 반응을 읽는 자리야. "+branchTemper[p.getDayZhi()],
+  elements:"오행(나무·불·흙·쇠·물 다섯 기운)을 보자. 사주 겉글자 "+(p.getTime()?"8":"6")+"개를 보면 "+leaders.join("·")+" 기운이 "+max+"개로 가장 두드러져. "+(lowest.length?lowest.join("·")+"은 표면에 안 보여. 그렇다고 아예 없는 기운이나 부족한 성격이라고 단정하면 안 돼.":"다른 기운도 함께 섞여 있어.")+" 이건 천간과 지지의 대표 오행을 단순 집계한 결과야.",
   limitation:"성격은 이 간지 조합을 바탕으로 한 명리학적 해석이야. 실제 성격검사 결과나 확인된 개인 이력은 아니야."
  };
 }
@@ -351,7 +364,7 @@ function renderDaewoon(root){
  const blocks=d.map((x,i)=>{
   const t=ten(state.day,x.pillar[0]),v=tenTemper[t];
   const to=d[i+1]?d[i+1].age-1:x.age+9;
-  return "“"+x.age+"~"+to+"세 "+koreanPillar(x.pillar)+" 대운은 "+t+" 운이야. "+v[0]+". "+v[1]+". 주의할 점은 "+v[2]+". 실제 대운 경계 나이는 입력한 원본 대운표를 기준으로 한 거야.”";
+  return "“"+x.age+"~"+to+"세 "+koreanPillar(x.pillar)+" 대운(약 10년씩 바뀌는 큰 흐름)은 "+tenEasy(t)+" 운이야. "+v[0]+". "+v[1]+". 주의할 점은 "+v[2]+". 실제 대운 경계 나이는 입력한 원본 대운표를 기준으로 한 거야.”";
  });
  moment(root,"확인된 대운의 시기별 성격과 과제",blocks);
 }
@@ -601,6 +614,7 @@ function storyIntro(target){
    Requires a separately deployed server. Never store the OpenAI API key in this file.
    window.OKSOON_CHAT_API can be configured in public config.js after deployment. */
 let chatSession=null,chatLeft=1,chatBusy=false;
+let chatHistory=[]; // Recent dialogue only; kept in memory, no local storage.
 let adminKey=""; // Runtime memory only. Never store admin credentials in URL, HTML or localStorage.
 function chatBubble(feed,who,words,isMe){
  const bubble=make("div",null,"chat-bubble"+(isMe?" mine":""));
@@ -624,7 +638,8 @@ function chatRequestPayload(){
   chart:{year:p.getYear(),month:p.getMonth(),day:p.getDay(),time:state.unknown?null:p.getTime(),
     dayMaster:state.day,calendar:state.calendar,unknownTime:state.unknown},
   clientContext:state.context||{},
-  confirmedPreference:null
+  confirmedPreference:null,
+  history:chatHistory.slice(-6)
  };
 }
 function setChatState(remaining,locked){
@@ -721,6 +736,8 @@ async function sendChat(){
    throw Error(result.error||"할매 상담이 잠시 연결되지 않았어.");
   }
   chatBubble(feed,"정옥순 할매",result.answer||"미안하구나. 다시 확인해 볼게.",false);
+  chatHistory.push({role:"user",text:question},{role:"assistant",text:result.answer||""});
+  chatHistory=chatHistory.slice(-6);
   $("chatQuestion").value="";
   chatLeft=Number(result.remaining);
   $("chatStatus").textContent=adminKey?"관리자 답변이 도착했어. 계속 질문해 봐.":chatLeft===0?"무료 상담 한 번을 마쳤어. 추가 상담 상품은 준비 중이야.":"답변이 도착했어.";
