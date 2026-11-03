@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#100e0b">
 <meta name="description" content="태어난 날로 살펴보는 2027년 나의 이야기. 운명서 무료 성향 풀이와 상세 사주 리포트 체험.">
-<title>運命書 2027 | 나를 읽는 새해 이야기</title>
+<title>진도 정옥순 할머니의 귀신사주 | 運命書 2027</title>
 <style>
 :root{color-scheme:dark;--bg:#100e0b;--panel:#231b14;--panel2:#32271c;--gold:#e8c689;--line:#665036;--text:#f5ead6;--muted:#c9baa3}
 *{box-sizing:border-box}
@@ -75,6 +75,24 @@ footer{text-align:center;color:#93846d;font-size:12px;padding:25px 6px}
 .report-h{border-top:1px solid #705538;padding-top:20px;margin-top:24px}
 .source-panel p{white-space:normal}
 
+
+/* OKSOON PERSONA V19 */
+.oksoon-header{padding:22px 4px 20px}.oksoon-header h1{font-size:41px;color:#f0d7a6;letter-spacing:3px}
+.oksoon-header h2{font-size:22px;color:#f0d7a6;margin:17px 0 7px}
+.oksoon-photo{margin:16px auto 12px;width:min(100%,360px);height:325px;border-radius:16px;overflow:hidden;box-shadow:0 10px 40px #0008;border:1px solid #7b6850;background:#201d1a}
+.oksoon-photo img{width:100%;height:100%;object-fit:cover;object-position:center 32%;filter:grayscale(1);display:block}
+.oksoon-phrase{font-size:18px;font-weight:750;color:#f4dcb5}
+.oksoon-intro{border-left:3px solid #b89a70;background:#352c24;padding:13px 12px;margin:12px 0;font-size:15px;line-height:1.8;color:#f1dcc0;font-weight:700}
+.oksoon-loader{position:fixed;inset:0;z-index:9999;background:rgba(11,10,10,.97);display:grid;place-items:center;padding:20px;text-align:center}
+.oksoon-loader-in{width:min(340px,100%);color:#e9d6b3}
+.oksoon-loader-in img{width:160px;height:185px;border-radius:12px;object-fit:cover;object-position:center 30%;filter:grayscale(1);border:1px solid #9f8767;margin:0 auto 22px;display:block}
+.oksoon-loader-in h2{font-size:20px;margin:22px 0;color:#f6debb;min-height:68px}
+.oksoon-loader-in p{font-size:12px;color:#b2a18a}
+.oksoon-bar{height:4px;background:#403327;border-radius:10px;overflow:hidden}
+.oksoon-bar span{height:100%;display:block;width:100%;transform-origin:left center;background:#dcc095;animation:oksoonWait 2.8s ease forwards}
+@keyframes oksoonWait{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media(prefers-reduced-motion:reduce){.oksoon-bar span{animation:none;transform:scaleX(1)}}
+
 </style>
 <style>
 /* UNMYEONGSEO-V17-MANSE: readable four pillars */
@@ -95,10 +113,11 @@ footer{text-align:center;color:#93846d;font-size:12px;padding:25px 6px}
 </head>
 <body>
 <main>
-<header><div class="eyebrow">UNMYEONGSEO · PERSONAL FORTUNE 2027</div><h1>運命書</h1><p>당신을 이해하는 것부터 시작하는 2027년 이야기</p></header>
+<header class="oksoon-header"><div class="eyebrow">진도에서 온 한마디 · GHOST SAJU 2027</div><h1>귀신사주</h1><div class="oksoon-photo"><img src="./assets/oksoon-blackwhite.jpg" alt="진도 정옥순 할머니 캐릭터 흑백 초상" loading="eager"></div><h2>진도 정옥순 할머니</h2><p class="oksoon-phrase">“어디 보자… 자네 팔자부터 좀 들여다보세.”</p><p>태어난 기운부터 앞으로 조심할 일까지, 하나하나 짚어드리겠네.</p><p class="note">※ 정옥순 할머니는 창작 캐릭터이며 실제 신점이나 영적 능력을 주장하지 않습니다.</p></header>
+<section id="oksoonLoader" class="oksoon-loader hidden" role="status" aria-live="polite"><div class="oksoon-loader-in"><img src="./assets/oksoon-blackwhite.jpg" alt="" aria-hidden="true"><div class="eyebrow">진도 정옥순 할머니 · 사주 살펴보는 중</div><h2 id="oksoonLoadingLine">“어디… 자네 사주부터 보자꾸나.”</h2><div class="oksoon-bar"><span></span></div><p>풀이 화면을 준비하는 연출입니다. 명리 규칙에 따라 계산한 결과를 보여드립니다.</p></div></section>
 <div class="steps" id="progress" aria-label="진행 단계"></div>
 <section class="page active card" id="page1">
- <div class="eyebrow">01 / 05 · 시작하기</div><h2>나의 운명서 열어보기</h2>
+ <div class="eyebrow">01 / 05 · 사주 맡기기</div><h2>자네, 태어난 날부터 말해보게.</h2>
  <p>생년월일로 계산하거나, 만세력 캡처에 표시된 사주를 직접 입력할 수 있어요. **캡처에서 확인한 값이 우선**이고, 보이지 않는 정보는 추정하지 않습니다.</p>
  
 <section class="source-panel" id="sourcePanel">
@@ -140,14 +159,14 @@ footer{text-align:center;color:#93846d;font-size:12px;padding:25px 6px}
 <label for="v17Love">현재 관계</label><select id="v17Love"><option value="">선택 안 함</option><option value="single">싱글</option><option value="dating">연애 중</option><option value="married">결혼·동거 중</option><option value="other">그 외</option></select>
 <label for="v17Worry">가장 궁금한 고민</label><select id="v17Worry"><option value="">선택 안 함</option><option value="money">돈·재정</option><option value="work">일·진로</option><option value="love">사랑·관계</option><option value="decision">중요한 선택</option></select>
 </div><p class="note">입력한 정보는 이 화면에서 계산하며, 서버에 전송하거나 회원 정보로 저장하지 않아요. 닉네임을 사용해도 돼요.</p>
- <button class="primary" id="begin" type="button">무료로 나의 운명서 읽기</button><p id="formError" class="error" role="alert"></p>
+ <button class="primary" id="begin" type="button">정옥순 할머니께 무료 풀이받기 →</button><p id="formError" class="error" role="alert"></p>
 </section>
 <section class="page card" id="page2">
- <div class="eyebrow">02 / 05 · 나를 알아보는 이야기</div><h2 id="personTitle">나라는 사람</h2>
+ <div class="eyebrow">02 / 05 · 정옥순 할머니의 첫마디</div><h2 id="personTitle">자네는 어떤 팔자인가</h2>
  <div id="manseChart"></div><div id="personBody"></div>
 </section>
 <section class="page card" id="page3">
- <div class="eyebrow">03 / 05 · 2027년 운세 맛보기</div><h2>2027년, 내게 중요한 이야기는?</h2>
+ <div class="eyebrow">03 / 05 · 2027년 기운</div><h2>“올해 운, 함부로 넘기지 말게.”</h2>
  <div id="annualIntro"></div>
  <h3>가장 궁금한 것부터 읽어보세요</h3>
  <div class="tabs" id="previewTabs"></div><div class="hint" id="previewBody" aria-live="polite"></div>
@@ -155,7 +174,7 @@ footer{text-align:center;color:#93846d;font-size:12px;padding:25px 6px}
  <p class="note">전체 사주와 운세는 미래를 확정하는 예언이 아니라, 전통 명리학을 활용한 상징적 풀이예요.</p>
 </section>
 <section class="page card" id="page4">
- <div class="eyebrow">04 / 05 · 프리미엄 상품 구성</div><h2>내 이야기, 여기서 끝이 아니에요</h2>
+ <div class="eyebrow">04 / 05 · 팔자의 다음 이야기</div><h2>“자네 팔자는 아직 끝난 게 아닐세.”</h2>
  <p>무료로 확인한 나의 성향과 2027년의 주제를 좀 더 깊이 살펴보고 싶다면, 아래 내용으로 구성된 전체 운명서를 준비하고 있어요.</p>
  <div class="offer"><div class="eyebrow">PREMIUM REPORT</div><h3>나의 2027년 전체 운명서</h3>
  <div class="price">7,900원</div><div class="pills"><span class="pill">타고난 성향</span><span class="pill">재물·직업·연애</span><span class="pill">월별 12개월</span><span class="pill">맞춤 실천 조언</span></div>
@@ -165,7 +184,7 @@ footer{text-align:center;color:#93846d;font-size:12px;padding:25px 6px}
  <div class="hint"><h3>선택 추가 상품도 준비 중</h3><p>💞 궁합 리포트 — 서로의 성향과 소통 방식 비교</p><p>💰 재물 심층 리포트 — 돈을 대하는 태도와 재정 계획을 더 자세히</p><p class="note">추가 상품은 가격 미정·미출시예요.</p></div>
 </section>
 <section class="page card" id="page5">
- <div class="eyebrow">05 / 05 · 전체 리포트 검수용 미리보기</div><h2 id="reportTitle">나의 2027년 운명서</h2>
+ <div class="eyebrow">05 / 05 · 전체 풀이 검수</div><h2 id="reportTitle">2027년 귀신사주</h2>
  <p>실제 결제 전 내용을 확인하는 <strong>무료 개발용 미리보기</strong>예요. 장을 골라 읽을 수 있어요.</p>
  <div class="chapter-tabs" id="chapters"></div>
  <div class="chapter-text" id="chapterBody" aria-live="polite"></div>
@@ -174,7 +193,7 @@ footer{text-align:center;color:#93846d;font-size:12px;padding:25px 6px}
 </section>
 <nav id="nav" class="nav hidden" aria-label="페이지 이동"><button id="back" class="secondary" type="button">이전</button><button id="next" class="primary" type="button" style="margin:0">다음 이야기 보기</button></nav>
 <p id="stepCaption" class="note" style="text-align:center"></p>
-<footer>運命書 © 2027 · 사주 해석 체험 서비스 · 비과학적 예측 콘텐츠</footer>
+<footer>진도 정옥순 할머니의 귀신사주 · 창작 캐릭터 · 전통 명리 규칙을 활용한 해석 체험</footer>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/lunar-javascript@1.7.7/lunar.min.js"></script>
 <script>
@@ -417,8 +436,8 @@ function page(num){
 }
 function person(){
  const root=$("personBody"),{name,base:b,branch,annual:a,ground:g,month}=state;root.replaceChildren();
- root.append(make("h2",name+"님은 어떤 사람일까요?"));
- root.append(make("div","당신은 "+b.headline+"으로 해석돼요.","quote"));
+ root.append(make("h2",name+"님, 할머니가 자네 사주를 보겠네."));
+ root.append(make("div","“자네는 "+b.headline+"일 수 있겠구먼. 하지만 겉으로 드러난 것만 보고 판단하진 말게.”","quote"));
  evidenceParagraphs(root);
  const reason=explain2027();
  section(root,"왜 그런 성향이라고 풀어낼까요?",["일주를 대표하는 기운은 "+koreanPillar(state.p.getDay())+"이고, 태어난 달의 기운도 함께 살펴봤어요. "+(month?"태어난 달과의 관계에서는 "+month.title+"이라는 주제도 읽혀요. ":"")+b.strong+"을 장점으로 해석하는 전통적 근거가 여기에서 시작돼요.","하지만 "+b.blind+"을 무조건 가진 사람이라고 단정할 수는 없어요. 실제 경험과 비교해서 맞는 부분을 살펴보세요."]);
@@ -443,13 +462,13 @@ function person(){
  "일에서는 "+b.work+"이 나에게 편안한 방식인지 돌아볼 수 있어요. 직업이나 성공 여부를 사주로 정할 수는 없지만, 좋아하는 업무 환경을 고민하는 데는 이런 질문이 도움이 될 수 있어요.",
  month?"태어난 달의 기운을 비교하면 '"+month.title+"'이라는 주제도 나와요. "+month.work+"를 한 가지 실천 질문으로 삼아보세요.":"내가 잘해온 일과 다시 해보고 싶은 일을 구분해 정리해 보세요."
  ]);
- const box=make("div",null,"hint");box.append(make("h3","그렇다면 2027년에는?"));addP(box,reason.cause);addP(box,reason.consequence);addP(box,"이렇게 해보세요. "+reason.action);addP(box,"올해는 '"+a.title+"'와 '"+g.title+"'이라는 두 해석 주제가 함께 나타나요. "+a.main+"과 "+g.main+"을 돌아보면 좋겠어요.");addP(box,"다음 페이지에서 두 주제가 돈·일·사람 사이의 관계에 어떻게 연결되는지 먼저 들려드릴게요.");root.append(box);
+ const box=make("div",null,"hint");box.append(make("h3","“그렇다면 2027년에는 어떤 점을 조심해야 할까?”"));addP(box,reason.cause);addP(box,reason.consequence);addP(box,"이렇게 해보세요. "+reason.action);addP(box,"올해는 '"+a.title+"'와 '"+g.title+"'이라는 두 해석 주제가 함께 나타나요. "+a.main+"과 "+g.main+"을 돌아보면 좋겠어요.");addP(box,"다음 페이지에서 두 주제가 돈·일·사람 사이의 관계에 어떻게 연결되는지 먼저 들려드릴게요.");root.append(box);
  root.append(make("p","※ 태어난 날과 달을 바탕으로 만든 전통 명리학의 상징적 풀이예요. 누구의 성격도 이 문장만으로 단정할 수 없어요.","note"));
 }
 function annualIntro(){
  const root=$("annualIntro");root.replaceChildren();const {name,annual:a,ground:g}=state;
  const box=make("div",null,"hint");
- box.append(make("h3",name+"님의 2027년, 두 가지 큰 이야기"));
+ box.append(make("h3","“자네 2027년에는 두 가지 기운을 기억하게.”"));
  const reason=explain2027();addP(box,reason.cause);
  addP(box,"첫 번째는 '"+a.title+"'이에요. 올해의 기운을 태어난 날과 비교하면 "+a.main+"을 하나의 주제로 읽어요.");
  addP(box,"두 번째는 '"+g.title+"'이에요. 또 다른 기운은 "+g.main+"을 생각하게 해요. 두 가지를 함께 봐야 한 해를 한쪽으로만 해석하지 않을 수 있어요.");
@@ -472,11 +491,12 @@ function preview(index){
  if(index===2)lines.push(contextAdvice("money"));
  if(index===3)lines.push(contextAdvice("work"));
  if(index===4)lines.push(contextAdvice("love"));
- const root=$("previewBody");root.append(make("h3",title));lines.forEach(x=>addP(root,x));$("previewLock").textContent=locked;
+ const root=$("previewBody");root.append(make("div","“잘 듣게. 자네 사주에서 읽히는 첫 단서일세.”","oksoon-intro"));root.append(make("h3",title));lines.forEach(x=>addP(root,x));$("previewLock").textContent=locked;
  [...$("previewTabs").children].forEach((b,i)=>{b.classList.toggle("active",i===index);b.setAttribute("aria-pressed",String(i===index))});
 }
 function chapter(index){
  chapterIndex=index;const root=$("chapterBody");root.replaceChildren();const {name,base:b,branch,annual:a,ground:g,month}=state;
+ root.append(make("div","“자네 팔자도 허투루 단정할 순 없지. 만세력부터 근거를 짚어보겠네.”","oksoon-intro"));
  if(index===0){
   section(root,"나의 성향과 속마음",["당신의 태어난 날을 '"+b.symbol+"'에 비유하는 것은 "+b.headline+"이라는 해석을 이해하기 위한 한 가지 방식이에요. "+b.outside+"과 "+b.inside+"을 함께 살펴볼 수 있어요.","내가 잘하는 것은 "+b.strong+"일 수 있어요. 한편 "+b.blind+"도 스스로 점검해보세요. 이것은 타고난 운명의 한계가 아니라, 익숙한 행동을 바꿔 볼 여지를 찾는 질문이에요."]);
   section(root,"일과 관계에서 나타날 수 있는 모습",["일에서는 "+b.work+"을, 관계에서는 "+b.love+"을 참고할 수 있어요. 같은 사람이더라도 상황에 따라 다른 행동을 할 수 있기 때문에 어느 한 문장으로 고정할 수는 없어요.","태어난 날 아래의 기운에서는 "+branchHints[branch]+"도 상징적으로 읽어요. 이 해석 중 실제로 나에게 와닿는 부분이 무엇인지 떠올려 보세요."]);
@@ -512,7 +532,7 @@ function monthReport(root){
   monthIndex=month;detail.replaceChildren();
   const data=Solar.fromYmdHms(2027,month,15,12,0,0).getLunar().getEightChar();
   const key=ten(state.day,data.getMonthGan()),theme=themes[key],clash=clashes[state.branch]===data.getMonthZhi();
-  detail.append(make("h3",month+"월 · "+theme.title));
+  detail.append(make("h3",month+"월 · "+theme.title));addP(detail,"“자네, 이달에는 무엇이든 덥석 결정하기 전에 조건부터 따져보게.”");
   addP(detail,"이달 중순의 기운을 태어난 날과 비교하면 "+theme.main+"을 하나의 주제로 읽어요. 이것이 실제로 어떤 사건이 일어난다는 뜻은 아니에요.");
   addP(detail,"돈과 관련해서는 "+theme.money+"을, 일에 대해서는 "+theme.work+"을 살펴보면 좋겠어요.");
   addP(detail,"사람과의 관계에서는 "+theme.love+"도 생각해볼 수 있어요. 내가 기대하는 것과 상대가 기대하는 것이 같은지 대화를 나눠보세요.");
@@ -531,10 +551,24 @@ $("sourceImage").addEventListener("change",()=>{
  if(file&&file.type.startsWith("image/")){window.__manseImageUrl=URL.createObjectURL(file);img.src=window.__manseImageUrl;img.classList.remove("hidden");}
 });
 $("unknown").addEventListener("change",()=>$("timebox").classList.toggle("hidden",$("unknown").checked));
+let oksoonBusy=false;
 $("begin").addEventListener("click",()=>{
+ if(oksoonBusy)return;
  $("formError").textContent="";
- try{state=validate();renderManse();person();annualIntro();preview(0);$("reportTitle").textContent=state.name+"님의 2027년 운명서";chapter(0);page(2);}
- catch(err){$("formError").textContent=err.message||"입력 내용을 확인해 주세요.";}
+ try{
+  state=validate();oksoonBusy=true;$("begin").disabled=true;
+  const loader=$("oksoonLoader"),line=$("oksoonLoadingLine");
+  loader.classList.remove("hidden");
+  const messages=["“어디… 자네 사주부터 보자꾸나.”","“태어난 날의 기운을 살피고 있네.”","“2027년의 기운과 맞춰봐야지.”","“자, 이제 할머니 말을 들어보게.”"];
+  messages.forEach((message,i)=>setTimeout(()=>{if(oksoonBusy)line.textContent=message;},i*700));
+  setTimeout(()=>{
+   try{
+    renderManse();person();annualIntro();preview(0);
+    $("reportTitle").textContent=state.name+"님의 2027년 귀신사주";chapter(0);page(2);
+   }catch(err){$("formError").textContent=err.message||"풀이를 준비하지 못했어요.";}
+   finally{loader.classList.add("hidden");oksoonBusy=false;$("begin").disabled=false;}
+  },2800);
+ }catch(err){$("formError").textContent=err.message||"입력 내용을 확인해 주세요.";}
 });
 names.forEach((name,i)=>{const b=make("button",name,"tab");b.type="button";b.addEventListener("click",()=>preview(i));$("previewTabs").append(b);});
 chapterNames.forEach((name,i)=>{const b=make("button",name,"chapter");b.type="button";b.addEventListener("click",()=>chapter(i));$("chapters").append(b);});
