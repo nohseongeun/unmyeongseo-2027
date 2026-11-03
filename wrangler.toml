@@ -8,4 +8,4 @@ database_name = "oksoon-chat"
 database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
 
 [vars]
-OPENAI_MODEL = "gpt-5-mini"
+OPENAI_MODEL = "gpt-4.1-mini"
