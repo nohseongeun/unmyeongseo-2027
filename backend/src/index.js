@@ -18,6 +18,19 @@ const extractText = data => (data.output||[])
   .filter(part=>part.type==="output_text" && typeof part.text==="string")
   .map(part=>part.text).join("\n").trim();
 
+async function isAdmin(value,env){
+ // The key is a high-entropy server-only secret; never embed it in public pages.
+ if(typeof value!=="string"||value.length<24||value.length>200||
+    typeof env.ADMIN_ACCESS_KEY!=="string"||env.ADMIN_ACCESS_KEY.length<24)return false;
+ const enc=new TextEncoder();
+ const [a,b]=await Promise.all([
+   crypto.subtle.digest("SHA-256",enc.encode(value)),
+   crypto.subtle.digest("SHA-256",enc.encode(env.ADMIN_ACCESS_KEY))
+ ]);
+ const av=new Uint8Array(a),bv=new Uint8Array(b);
+ let diff=0;for(let i=0;i<av.length;i++)diff|=av[i]^bv[i];
+ return diff===0;
+}
 function cors(origin){
  return {"access-control-allow-origin":origin===SITE_ORIGIN?origin:"null",
  "access-control-allow-methods":"POST,OPTIONS",
@@ -58,13 +71,18 @@ export default {
   if(request.method==="OPTIONS")return new Response(null,{status:204,headers});
   if(origin!==SITE_ORIGIN)return json({error:"허용되지 않은 사이트 요청이야."},403,headers);
   const pathname=new URL(request.url).pathname;
-  if(request.method!=="POST"||!["/api/session","/api/chat"].includes(pathname))return json({error:"찾을 수 없는 요청이야."},404,headers);
+  if(request.method!=="POST"||!["/api/session","/api/chat","/api/admin/check"].includes(pathname))return json({error:"찾을 수 없는 요청이야."},404,headers);
   if(!env.DB)return json({error:"상담 데이터베이스가 연결되지 않았어."},503,headers);
   let data;try{
    if(Number(request.headers.get("content-length")||"0")>9000)throw Error("TOO_LARGE");
    data=await request.json();
   }catch(e){return json({error:"요청 내용을 확인해 줘."},400,headers);}
   if(!data||typeof data!=="object")return json({error:"잘못된 요청이야."},400,headers);
+  if(pathname==="/api/admin/check"){
+   const ok=await isAdmin(data.adminKey,env);
+   return ok?json({admin:true},200,headers):
+    json({code:"ADMIN_AUTH_FAILED",error:"관리자 인증키를 확인해 줘."},403,headers);
+  }
   if(pathname==="/api/session"){
    const requested=excerpt(data.sessionId,100);
    if(/^[0-9a-f-]{36}$/.test(requested)){
@@ -82,9 +100,15 @@ export default {
   try{prompt=makePrompt({...data,question});}
   catch(e){return json({error:"만세력 정보가 올바르지 않아. 생년월일을 다시 입력해 봐."},400,headers);}
   if(!env.OPENAI_API_KEY)return json({error:"할매 상담 AI 연결이 아직 준비되지 않았어."},503,headers);
-  // Atomic claim. Only one concurrent free request can succeed for this token.
-  const claim=await env.DB.prepare("UPDATE sessions SET free_used=1,status='processing' WHERE id=? AND free_used=0 AND status='ready' AND created_at>?").bind(id,Date.now()-STALE_MS).run();
-  if((claim.meta?.changes||0)!==1)return json({code:"FREE_LIMIT",error:"무료 상담 한 번은 여기까지야. 추가 상담은 준비 중이야."},402,headers);
+  // Admin access is verified on the server. URL flags never grant privileges.
+  const adminRequested=Object.prototype.hasOwnProperty.call(data,"adminKey");
+  const admin=adminRequested&&await isAdmin(data.adminKey,env);
+  if(adminRequested&&!admin)return json({code:"ADMIN_AUTH_FAILED",error:"관리자 인증이 만료되었거나 올바르지 않아. 다시 인증해 줘."},403,headers);
+  if(!admin){
+   // Atomic claim: normal customers only get one free question per session.
+   const claim=await env.DB.prepare("UPDATE sessions SET free_used=1,status='processing' WHERE id=? AND free_used=0 AND status='ready' AND created_at>?").bind(id,Date.now()-STALE_MS).run();
+   if((claim.meta?.changes||0)!==1)return json({code:"FREE_LIMIT",error:"무료 상담 한 번은 여기까지야. 추가 상담은 준비 중이야."},402,headers);
+  }
   try{
    // Fast non-reasoning model for short, natural consultation replies.
    // Do not send GPT-5 reasoning parameters to models that do not support them.
@@ -119,12 +143,16 @@ export default {
     console.error("OpenAI returned no visible output",{status:out.status,incomplete_reason:out.incomplete_details?.reason||null,output_types:(out.output||[]).map(x=>x.type),output_tokens:out.usage?.output_tokens||0});
     throw new Error("EMPTY_ANSWER");
    }
-   await env.DB.prepare("UPDATE sessions SET status='finished',question=?,answer=? WHERE id=?")
-    .bind(question,answer,id).run();
-   return json({answer,remaining:0},200,headers);
+   if(!admin){
+    await env.DB.prepare("UPDATE sessions SET status='finished',question=?,answer=? WHERE id=?")
+     .bind(question,answer,id).run();
+   }
+   return json({answer,remaining:admin?1:0,admin},200,headers);
   }catch(error){
    // Release the turn on an upstream failure; don't charge for a failed answer.
-   await env.DB.prepare("UPDATE sessions SET free_used=0,status='ready' WHERE id=? AND status='processing'").bind(id).run();
+   if(!admin){
+    await env.DB.prepare("UPDATE sessions SET free_used=0,status='ready' WHERE id=? AND status='processing'").bind(id).run();
+   }
    const code=String(error?.message||"UNKNOWN");
    const errors={
     API_CREDITS:"OpenAI API 결제 잔액이 부족하거나 사용 한도에 도달했어. OpenAI Platform의 Billing에서 크레딧과 한도를 확인해 줘.",
