@@ -107,7 +107,7 @@ hr{border:0;border-top:1px solid #544632;margin:22px 0}
 </section>
 <div class="foot">運命書 © 2027 · 무료 기능 테스트</div>
 <!-- UNMYEONGSEO-CATALOG-V8 -->
-<section class="card" id="catalog">
+<section class="card hidden" id="catalog">
  <div class="eyebrow">2027 FORTUNE MENU · 무료 탐색</div>
  <h2>가장 궁금한 운세부터 골라보세요</h2>
  <p>재물, 일, 사랑, 건강까지. 보고 싶은 주제를 누르면 어떤 이야기를 읽을 수 있는지 알려드려요.</p>
@@ -551,6 +551,60 @@ get("start")?.addEventListener("click",()=>setTimeout(monthly,160));
 <!-- BLANK-BIRTH-DEFAULTS-V7 -->
 
 
+
+
+<!-- UNMYEONGSEO-V9-FUNNEL -->
+<style>
+.v9-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:14px 0}
+.v9-step{border:1px solid #5a482e;background:#2c2419;padding:10px 5px;border-radius:10px;text-align:center;font-size:12px;color:#d5c5a8}
+.v9-highlight{color:#f5dc9e}
+.v9-sample{background:#30271b;border:1px solid #665337;border-radius:14px;padding:15px;margin-top:13px}
+.v9-sample h3{margin:3px 0 8px;font-size:18px}
+.v9-sample p{font-size:14px}
+.v9-chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.v9-chip{border:1px solid #8a6c3b;color:#e6c893;border-radius:30px;padding:5px 10px;font-size:12px}
+</style>
+<script>
+(function(){
+"use strict";
+const el=id=>document.getElementById(id);
+const previous=el("start"), catalog=el("catalog");
+if(!previous||!catalog)return;
+if(!el("premiumV9")){
+ const section=document.createElement("section");section.className="card hidden";section.id="premiumV9";
+ const tag=document.createElement("div");tag.className="eyebrow";tag.textContent="운명서 2027 · 전체 리포트 안내";section.append(tag);
+ const title=document.createElement("h2");title.textContent="무료 운세가 궁금했다면, 더 깊이 알아보세요";section.append(title);
+ const lead=document.createElement("p");lead.textContent="아래는 7,900원 상품에 담을 내용의 구성 미리보기예요. 실제 프리미엄 분석은 아직 제작 중입니다.";section.append(lead);
+ const steps=document.createElement("div");steps.className="v9-steps";
+ [["01","타고난 성향"],["02","분야별 운세"],["03","12개월 이야기"]].forEach(([num,label])=>{
+  const box=document.createElement("div");box.className="v9-step";
+  const number=document.createElement("strong");number.className="v9-highlight";number.textContent=num;
+  const caption=document.createElement("div");caption.textContent=label;box.append(number,caption);steps.append(box);
+ });
+ section.append(steps);
+ const sample=document.createElement("div");sample.className="v9-sample";
+ const sub=document.createElement("div");sub.className="eyebrow";sub.textContent="프리미엄 구성 예시 · 아직 개인별 분석 아님";sample.append(sub);
+ const st=document.createElement("h3");st.textContent="돈, 일, 사랑을 쉽게 풀어주는 리포트";sample.append(st);
+ const p=document.createElement("p");p.textContent="좋다거나 나쁘다는 말만 하지 않고, 사주풀이에서 어떤 관계를 참고했는지와 일상에서 실천할 조언을 함께 담는 방식으로 준비하고 있어요.";sample.append(p);
+ const chips=document.createElement("div");chips.className="v9-chips";
+ ["💰 돈·재물","💼 직장·사업","💕 연애·결혼","📅 매월 운세","🎯 나만의 조언"].forEach(t=>{const ch=document.createElement("span");ch.className="v9-chip";ch.textContent=t;chips.append(ch);});
+ sample.append(chips);section.append(sample);
+ const price=document.createElement("div");price.className="price";price.style.marginTop="17px";price.textContent="7,900원";section.append(price);
+ const button=document.createElement("button");button.type="button";button.className="primary";button.disabled=true;button.textContent="전체 리포트 · 결제 준비 중";section.append(button);
+ const note=document.createElement("p");note.className="note";note.textContent="지금은 무료 체험만 가능해요. 실제 결제나 유료 결과 제공 기능은 아직 연결되지 않았습니다.";section.append(note);
+ catalog.parentNode.insertBefore(section,catalog);
+}
+previous.addEventListener("click",()=>{
+ const y=el("year"),m=el("month"),d=el("day"),n=el("name");
+ if(!n||!n.value.trim()||!y.value||!m.value||!d.value)return;
+ if(!el("unknown").checked&&(!el("hour").value||!el("minute").value))return;
+ if(el("calendar").value==="양력"&&Number(d.value)>new Date(Number(y.value),Number(m.value),0).getDate())return;
+ catalog.classList.remove("hidden");el("premiumV9").classList.remove("hidden");
+});
+el("restart").addEventListener("click",()=>{catalog.classList.add("hidden");el("premiumV9").classList.add("hidden");});
+})();
+</script>
+<!-- END UNMYEONGSEO-V9-FUNNEL -->
 
 </body>
 </html>
