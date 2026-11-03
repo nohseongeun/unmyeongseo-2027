@@ -329,7 +329,7 @@ function detailedTemper(){
  const max=order[0][1], leaders=order.filter(x=>x[1]===max).map(x=>x[0]);
  const lowest=order.filter(x=>x[1]===0).map(x=>x[0]);
  return {
-  main:"월주 "+koreanPillar(p.getMonth())+"의 월간 "+ganKo[p.getMonthGan()]+"은 네 일간 "+ganKo[state.day]+"에게 "+m+"이야. 이 관계는 "+t[0]+". "+t[1]+". 문제는 "+t[2]+".",
+  main:"월주 "+koreanPillar(p.getMonth())+"의 월간 "+ganKo[p.getMonthGan()]+"은 네 일간 "+ganKo[state.day]+"에게 "+m+"이야. 이 조합의 특징은 이거야. "+t[0]+". "+t[1]+". 약점은 "+t[2]+".",
   day:"일주 "+koreanPillar(p.getDay())+"의 일지 "+zhiKo[p.getDayZhi()]+"는 가까운 관계와 일상적인 반응을 읽는 자리야. "+branchTemper[p.getDayZhi()],
   elements:"사주 겉글자 "+(p.getTime()?"8":"6")+"개를 보면 "+leaders.join("·")+" 기운이 "+max+"개로 가장 두드러져. "+(lowest.length?lowest.join("·")+"은 표면에 안 보여. 그렇다고 아예 없는 기운이나 부족한 성격이라고 단정하면 안 돼.":"다른 기운도 함께 섞여 있어.")+" 이건 천간과 지지의 대표 오행을 단순 집계한 결과야.",
   limitation:"성격은 이 간지 조합을 바탕으로 한 명리학적 해석이야. 실제 성격검사 결과나 확인된 개인 이력은 아니야."
