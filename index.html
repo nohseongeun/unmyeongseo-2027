@@ -1011,7 +1011,7 @@ function oksoonPremiumEditorial(root,index){
  root.append(preface);
  if(index===0){
   fresh(personal[0],[name+", "+personal[1],v.outer+" "+v.weak]);
-  fresh("할매가 그렇게 보는 이유",["일간(태어난 날 윗글자)은 "+baseStem+"이야. "+v.symbol+"로 빗대는 성격의 중심이지. 월주(태어난 달의 두 글자) "+koreanPillar(p.getMonth())+"를 함께 보니 월간과 일간의 관계는 "+tenEasy(m)+"이야.",monthly[0]+". "+monthly[1],"일지(태어난 날 아랫글자)는 "+zhiKo[p.getDayZhi()]+"야. "+branchTemper[p.getDayZhi()]]);
+  fresh("할매가 그렇게 보는 이유",["일간(태어난 날 윗글자)은 "+baseStem+"이야. "+state.base.symbol+"로 빗대는 성격의 중심이지. 월주(태어난 달의 두 글자) "+koreanPillar(p.getMonth())+"를 함께 보니 월간과 일간의 관계는 "+tenEasy(m)+"이야.",monthly[0]+". "+monthly[1],"일지(태어난 날 아랫글자)는 "+zhiKo[p.getDayZhi()]+"야. "+branchTemper[p.getDayZhi()]]);
   fresh("장점이 독이 되는 순간",["이 사주의 강점은 "+v.strength+" 그런데 같은 힘이 지나치면 "+v.weak,clashText,"좋은 말만 해주면 상담이 아니라 아첨이지. 자네가 가장 자주 부딪히는 상황을 딱 하나 떠올려 보게."]);
   fresh("오행은 숫자로 딱 보여줄게",["오행(나무·불·흙·쇠·물)의 겉글자 개수는 "+counts+"야. 이건 보이는 글자만 세었다는 뜻이고, 안 보이는 글자가 있어도 곧장 기운이 부족하다는 소리는 아니야."]);
  } else if(index===1){
@@ -1054,42 +1054,73 @@ function chapter(index){
  [...$("chapters").children].forEach((t,i)=>t.classList.toggle("active",i===index));
 }
 function monthReport(root){
- root.append(make("h3","“자, 열두 달을 차례로 보자.”"));
- say(root,"“매달 15일의 절기 월주를 기준으로 보니, 달의 앞뒤 날짜엔 기운이 다를 수 있어.”");
- say(root,"“좋은 날이나 나쁜 날을 딱 맞힌다는 뜻이 아니라, 달마다 어떤 선택을 점검할지 듣는 거야.”");
+ root.append(make("h3","“열두 달을 똑같이 이야기하면 그건 사주가 아니지.”"));
+ say(root,"“월운(매달 바뀌는 기운)은 매달 대표적인 월주와 자네 일간을 비교해서 보는 거야. 실제 절기 경계일 전후는 다를 수 있단다.”");
  const nav=make("div",null,"month-nav");root.append(nav);
  const detail=make("div",null,"hint");root.append(detail);
  for(let i=1;i<=12;i++){
-  const button=make("button",i+"월");
-  button.type="button";button.addEventListener("click",()=>showMonth(i));nav.append(button);
+  const b=make("button",i+"월");b.type="button";b.addEventListener("click",()=>showMonth(i));nav.append(b);
  }
+ const monthlyVerdicts={
+  "비견":"자기 뜻대로 하고 싶어지는 달이야. 문제는 남이 해준 조언까지 잔소리로 들을 수 있다는 거지.",
+  "겁재":"누가 잘되는 걸 보면 괜히 마음이 급해져. 승부보다 내 돈과 내 시간부터 지켜.",
+  "식신":"성과는 입보다 손끝에서 나오는 달이야. 새로운 계획보다 이미 시작한 것부터 끝내.",
+  "상관":"말 한마디가 일이 되기 쉬워. 반박하고 싶어도 일단 상대의 말을 끝까지 들어.",
+  "편재":"새 기회가 눈에 들어오는 달이야. 혹해서 돈부터 내지 말고 계약 조건을 확인해.",
+  "정재":"실속을 챙길 달이야. 지출을 정리하고 작은 수입이라도 꾸준히 남기는 게 맞아.",
+  "편관":"부담이 몰리면 더 강해지는 달이야. 다만 네가 책임자라고 모든 일을 혼자 하지 마.",
+  "정관":"약속과 평가가 신경 쓰이는 달이야. 일의 순서를 정하고 마감을 지키는 게 중요해.",
+  "편인":"머릿속이 바빠지는 달이야. 공부만 하고 실행하지 않으면 아무것도 남지 않아.",
+  "정인":"배우고 다질 달이야. 준비가 끝나야 움직이겠다는 말로 시작을 미루지 마."
+ };
+ const monthlyActions={
+  "비견":["내 기준과 상대 기준을 각각 적어","협의 전에 혼자 결정하지 마"],
+  "겁재":["공동비용·빌려줄 돈의 기준부터 정해","비교 때문에 급하게 투자하지 마"],
+  "식신":["미완성 결과물 하나를 끝내","성과가 작아도 꾸준히 기록해"],
+  "상관":["새 아이디어를 글 세 줄로 정리해","말하기 전에 상대가 들을 준비가 됐는지 확인해"],
+  "편재":["새 제안의 비용과 정산일을 확인해","친분만 믿고 계약하지 마"],
+  "정재":["고정비와 저축액을 따로 계산해","결제일과 자동이체를 살펴"],
+  "편관":["일의 우선순위를 세 개로 좁혀","가장 무거운 일은 도움을 요청해"],
+  "정관":["약속한 일을 일정표에 적어","지킬 수 없는 약속은 빨리 조정해"],
+  "편인":["새로 배운 걸 작게 실험해","자료만 모으지 말고 결과를 남겨"],
+  "정인":["배울 것 한 가지를 정해","공부한 내용을 실제로 써먹어"]
+ };
+ const symbols={
+  "甲":["초록색","나무 책갈피","오전 9시"],"乙":["연두색","작은 식물 그림 카드","오전 10시"],
+  "丙":["붉은색","빨간 볼펜","오전 11시"],"丁":["분홍색","붉은 실 책갈피","오후 1시"],
+  "戊":["황토색","작은 돌 모양 키링","오후 2시"],"己":["베이지색","메모 수첩","오전 8시"],
+  "庚":["흰색","금속 열쇠고리","오후 3시"],"辛":["은색","은색 클립","오후 4시"],
+  "壬":["남색","푸른 펜","오후 5시"],"癸":["검정색","검은 수첩","오후 6시"]
+ };
  function showMonth(month){
   monthIndex=month;detail.replaceChildren();
-  const pillar=Solar.fromYmdHms(2027,month,15,12,0,0).getLunar().getEightChar();
-  const k=ten(state.day,pillar.getMonthGan()),t=themes[k];
-  detail.append(make("h3",month+"월 · "+t.title));
-  say(detail,"“"+month+"월에 살피는 월주는 "+koreanPillar(pillar.getMonth())+"이야. 네 일간과 월간의 십성 관계는 "+k+"이란다.”");
-  say(detail,"“"+month+"월 중순의 기운과 자네 일간의 관계는 "+k+"이야. 쉽게 말하면 "+trimline(t.main)+"이라는 뜻이지.”");
-  say(detail,"“돈은 "+trimline(t.money)+"부터 챙겨.”");
-  say(detail,"“일은 "+trimline(t.work)+"을 조심해서 봐.”");
-  say(detail,"“사람 관계에선 "+trimline(t.love)+"을 기억하렴.”");
-  say(detail,"“실제로는 "+trimline(t.tip)+"을 해보거라.”");
-  moment(detail,"이달의 선택을 세밀하게 보면",[
-   "“재물: "+trimline(t.money)+". 돈이 걸린 일에는 실제 금액과 지급 날짜부터 확인해.”",
-   "“직업: "+trimline(t.work)+". 이번 달에 끝낼 결과물 하나를 정해.”",
-   "“관계: "+trimline(t.love)+". 상대의 속마음을 지레짐작하지 말고 직접 물어보렴.”"
+  const p=Solar.fromYmdHms(2027,month,15,12,0,0).getLunar().getEightChar();
+  const k=ten(state.day,p.getMonthGan()),t=themes[k],d=monthlyActions[k],ritual=symbols[state.day];
+  detail.append(make("h3",month+"월 · "+monthlyVerdicts[k].split(".")[0]));
+  say(detail,"“"+state.name+"아, "+monthlyVerdicts[k]+"”","okbig");
+  moment(detail,"왜 이런 풀이가 나왔느냐",[
+   "“"+month+"월 중순의 월주는 "+koreanPillar(p.getMonth())+"야. 월주란 그때의 계절을 두 글자로 표현한 거지.”",
+   "“자네 일간 "+ganKo[state.day]+"와 그 달의 윗글자 "+ganKo[p.getMonthGan()]+"는 "+tenEasy(k)+" 관계야. 그래서 이 해석이 나온단다.”"
   ]);
-  moment(detail,"이번 달 실천 처방",[
-   "“첫 주에는 "+trimline(t.tip)+"부터 해 보거라.”",
-   "“둘째 주에는 그 행동이 어떤 도움이 됐는지 보고, 셋째 주에는 덜어낼 일 하나를 정해.”",
-   "“마지막 주에는 다음 달까지 이어갈 좋은 습관 하나를 남겨. 운을 기다리지 말고 네 손으로 만들거라.”"
+  moment(detail,"돈 · 일 · 사람, 딱 집어줄게",[
+   "“돈: "+t.money+". 특히 "+d[1]+". 감정이 올라왔을 때 지갑부터 열지 마.”",
+   "“일: "+t.work+". 이번 달에는 "+d[0]+". 계획보다 결과를 보여줘.”",
+   "“사람: "+t.love+". 상대가 뭘 원하는지 확인하고 혼자 결론 내리지 마.”"
   ]);
-  if(clashes[state.branch]===pillar.getMonthZhi())say(detail,"“여기엔 충이라는 기운도 있어. 서로 부딪히는 상징이란 뜻이지, 사고가 난다는 예언은 아니야. 중요한 선택을 더 꼼꼼히 살펴보렴.”");
-  [...nav.children].forEach((t,i)=>t.classList.toggle("active",i===month-1));
+  const conflict=clashes[state.branch]===p.getMonthZhi();
+  if(conflict)moment(detail,"이 달은 충(서로 부딪히는 관계)을 확인해",[
+   "“자네 일지 "+zhiKo[state.branch]+"와 이달 지지 "+zhiKo[p.getMonthZhi()]+"가 충이야. 명리학에서는 서로 부딪히는 모양이라고 부르지.”",
+   "“사고나 이별이 일어난다는 뜻이 아니야. 중요한 대화나 계약을 서두르지 말라는 점검표로 쓰게.”"
+  ]);
+  moment(detail,"이번 달 할매의 정해진 루틴",[
+   "“"+month+"월에는 "+ritual[2]+"에 10분만 시간을 내. "+ritual[0]+" 소품이나 "+ritual[1]+"을 곁에 두고 오늘 반드시 끝낼 일 하나를 적어.”",
+   "“이 색과 물건은 자네 일간의 오행 상징에서 고른 거야. 실제 운을 바꾼다는 보장은 없어. 대신 매일 결심을 떠올리기 위한 개인 습관으로 써.”",
+   "“이번 달에 할 일은 하나야. "+d[0]+". 말이 아니라 행동으로 보여줘.”"
+  ]);
+  [...nav.children].forEach((b,i)=>b.classList.toggle("active",i===month-1));
  }
  showMonth(monthIndex);
 }
-
 function syncBirthTime(){
  const unknown=$("unknown").checked;
  $("timebox").classList.toggle("hidden",unknown);
