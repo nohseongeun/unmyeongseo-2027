@@ -128,7 +128,7 @@ export default {
    // Fast non-reasoning model for short, natural consultation replies.
    // Do not send GPT-5 reasoning parameters to models that do not support them.
    const model=env.OPENAI_MODEL||"gpt-4.1-mini";
-   const requestBody={model,store:false,max_output_tokens:model.startsWith("gpt-5")?1600:470,
+   const requestBody={model,store:false,max_output_tokens:model.startsWith("gpt-5")?2000:1150,
      instructions:prompt.instructions,input:prompt.input};
    if(model.startsWith("gpt-5")){
      requestBody.reasoning={effort:"low"};
@@ -152,7 +152,23 @@ export default {
     throw new Error("OPENAI_"+upstream.status);
    }
    const out=await upstream.json();
-   const answer=extractText(out);
+   // If a model reaches its token budget, don't publish a sentence cut in half.
+   // Retry once with a larger budget and a request for a complete, concise ending.
+   let answer=extractText(out);
+   const incomplete=out.status==="incomplete"||out.incomplete_details?.reason==="max_output_tokens";
+   if(incomplete){
+    const second={...requestBody,max_output_tokens:model.startsWith("gpt-5")?2600:1750,
+      instructions:prompt.instructions+"\\n답변은 반드시 마지막 문장까지 완결해. 총 5~7문장으로 압축하고 중간에 끊기지 마."};
+    const retry=await fetch("https://api.openai.com/v1/responses",{
+      method:"POST",headers:{"Authorization":"Bearer "+env.OPENAI_API_KEY,"Content-Type":"application/json"},
+      body:JSON.stringify(second),signal:AbortSignal.timeout(22000)
+    });
+    if(!retry.ok)throw new Error("AI_RETRY_FAILED");
+    const rerun=await retry.json();
+    if(rerun.status==="incomplete"||rerun.incomplete_details?.reason==="max_output_tokens")
+      throw new Error("AI_OUTPUT_TRUNCATED");
+    answer=extractText(rerun);
+   }
    if(!answer){
     // Only non-sensitive diagnostics; never log the user question or secret.
     console.error("OpenAI returned no visible output",{status:out.status,incomplete_reason:out.incomplete_details?.reason||null,output_types:(out.output||[]).map(x=>x.type),output_tokens:out.usage?.output_tokens||0});
@@ -174,7 +190,9 @@ export default {
     API_RATE_LIMIT:"OpenAI API 요청 제한에 걸렸어. 잠시 뒤 다시 시도해 줘.",
     API_KEY_INVALID:"OpenAI API 키 인증에 실패했어. GitHub의 OPENAI_API_KEY 등록값을 확인해 줘.",
     API_REQUEST_INVALID:"OpenAI API 요청 설정에 문제가 있어. 관리자에게 알려줘.",
-    EMPTY_ANSWER:"할매가 답변 내용을 받지 못했어. 잠시 뒤 다시 시도해 줘."
+    EMPTY_ANSWER:"할매가 답변 내용을 받지 못했어. 잠시 뒤 다시 시도해 줘.",
+    AI_RETRY_FAILED:"답변을 끝까지 완성하지 못했어. 잠시 뒤 다시 시도해 줘.",
+    AI_OUTPUT_TRUNCATED:"답변이 길어져 완성하지 못했어. 질문을 간결하게 바꿔 다시 시도해 줘."
    };
    const safeCode=/^OPENAI_\d{3}$/.test(code)?code:Object.hasOwn(errors,code)?code:"AI_UNAVAILABLE";
    return json({code:safeCode,error:errors[code]||"AI 서버에서 답변을 받아오지 못했어. 잠시 뒤 다시 시도해 줘."},503,headers);
