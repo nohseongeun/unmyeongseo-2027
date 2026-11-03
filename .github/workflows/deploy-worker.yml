@@ -2,6 +2,13 @@ name: Deploy Oksoon AI chat server
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - 'wrangler.toml'
+      - '.github/workflows/deploy-worker.yml'
 
 permissions:
   contents: read
