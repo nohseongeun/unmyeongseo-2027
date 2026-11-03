@@ -572,73 +572,159 @@ function pastLife(target,short){
  }
 }
 
+
 function preview(index){
- previewIndex=index;
- const {base:b,annual:a,ground:g,day}=state;
- $("previewBody").replaceChildren();let title="",lines=[],locked="";
- if(index===0){title="내가 가진 성향의 또 다른 모습";lines=["당신의 강점으로는 "+b.strong+"을 읽어볼 수 있어요.","하지만 "+b.blind+"도 생각해볼 수 있어요. 어떤 순간에 장점이 부담으로 바뀌는지 내 경험과 비교해 보세요."];locked="내 성향의 여러 모습 · 일과 관계에서 강점 활용법";}
- if(index===1){title="2027년의 전체적인 흐름";lines=["올해는 "+a.main+"과 "+g.main+"이 함께 나타나는 것으로 해석해요.","두 주제를 실제 선택에 적용한다면 내가 무엇을 먼저 정리해야 할지 생각해 볼 수 있어요."];locked="종합 해석의 근거 · 한 해를 준비하는 질문과 실천 계획";}
- if(index===2){title="돈 문제에서 살펴볼 첫 번째 단서";lines=["올해의 한 가지 주제는 "+a.money+"이에요.","또한 "+g.money+"도 놓치지 마세요. 수입이나 투자 성과가 예측된다는 뜻은 아니에요."];locked="재물 성향의 자세한 이야기 · 소비와 관리의 실천법 · 월별 관련 주제";}
- if(index===3){title="일하는 방식에서 기억할 점";lines=["올해는 "+a.work+"을 해석의 한 가지 주제로 삼아요.","여기에 "+g.work+"도 함께 생각해 보세요. 승진이나 이직 시기를 확정할 수는 없어요."];locked="직장·사업·새로운 기회에 대한 상세 풀이";}
- if(index===4){title="사람을 대할 때의 나";lines=["관계에서 "+a.love+"이 하나의 주제로 읽혀요.","다른 기운은 "+g.love+"을 생각하게 해요. 사주만으로 결혼이나 새로운 만남의 시기를 알 수는 없어요."];locked="연애 중일 때와 혼자일 때 참고할 관계의 조언";}
- if(index===5){title="내 마음과 생활을 돌보는 방법";lines=["올해의 기운에서는 "+a.main+"을 살펴볼 수 있어요.","그러면서 "+g.main+"도 떠올려 보세요. 일정과 휴식처럼 직접 바꿀 수 있는 일부터 생각해 보세요."];locked="생활 리듬과 스트레스 관리에 대한 일반적인 실천 조언";}
- if(index===6){const p=Solar.fromYmdHms(2027,1,15,12,0,0).getLunar().getEightChar();const x=themes[ten(day,p.getMonthGan())];title="1월 중순에는 '"+x.title+"'";lines=["1월 15일을 기준으로 살펴보면 "+x.main+"이라는 주제가 나타나요.","매달 절기가 바뀌므로 달 전체에 같은 운세가 적용된다는 뜻은 아니에요."];locked="2~12월의 흐름 · 각 달의 돈·일·관계에 관한 조언";}
- if(index===7){title="올해 내가 직접 바꿀 수 있는 한 가지";lines=["먼저 "+a.tip+"를 시도해 보세요.","또 하나는 "+g.tip+"예요. 운세가 아니라 실천을 통해 내 생활을 돌아보는 작은 출발점이에요."];locked="올해의 세 가지 실천 · 매달 점검할 항목";}
- if(index===8){title="자네 사주의 기운으로 지은 전생 이야기";lines=["할머니가 들려주는 전생 이야기는 실제 전생을 알아맞히는 점괘가 아니라 만세력의 상징으로 지은 이야기일세.","자네에게는 "+pastScenes[state.day].role+"의 이야기가 펼쳐진다네. 그 사람이 가장 후회한 일은 "+pastScenes[state.day].regret+"이었지."];locked="그 삶에서 놓친 약속 · 마지막 장면 · 지금 삶에 남기는 조언";}
- if(index===2)lines.push(contextAdvice("money"));
- if(index===3)lines.push(contextAdvice("work"));
- if(index===4)lines.push(contextAdvice("love"));
- const root=$("previewBody");root.append(make("div","“잘 듣게. 자네 사주에서 읽히는 첫 단서일세.”","oksoon-intro"));root.append(make("h3",title));lines.forEach(x=>addP(root,x));$("previewLock").textContent=locked;
- [...$("previewTabs").children].forEach((b,i)=>{b.classList.toggle("active",i===index);b.setAttribute("aria-pressed",String(i===index))});
+ previewIndex=index;const root=$("previewBody");root.replaceChildren();
+ const a=state.annual,g=state.ground,n=state.name,b=state.base;
+ const intro=["타고난 성미","2027년 전체","돈","일","연애와 관계","몸과 생활","달마다 달라지는 흐름","올해의 당부","전생 이야기"];
+ say(root,"“"+n+"아. "+intro[index]+" 얘길 듣고 싶은 게지?”","okbig");
+ if(index===0)moment(root,"타고난 성미",[
+  "“자네에게는 "+trimline(b.strong)+"이라는 힘이 있어.”",
+  "“그런데 "+trimline(b.blind)+"도 함께 봐야지.”",
+  "“이걸 어찌 다스리느냐에 따라 같은 성미도 장점이 되고 짐이 되는 거야.”"
+ ]);
+ if(index===1){storyIntro(root);say(root,"“좋게 쓰면 "+trimline(a.main)+"이지.”");say(root,"“하지만 "+trimline(g.main)+"이 빠지면 균형이 깨질 수 있어.”");}
+ if(index===2)moment(root,"돈 문제",[
+  "“돈에선 "+trimline(a.money)+"이 먼저 보여.”",
+  "“그리고 "+trimline(g.money)+"도 신경 쓰거라.”",
+  "“"+trimline(contextAdvice("money"))+"”"
+ ]);
+ if(index===3)moment(root,"일과 진로",[
+  "“일에서는 "+trimline(a.work)+"이 핵심 주제야.”",
+  "“다른 한편으론 "+trimline(g.work)+"이지.”",
+  "“"+trimline(contextAdvice("work"))+"”"
+ ]);
+ if(index===4)moment(root,"사람과 인연",[
+  "“사람 사이에선 "+trimline(a.love)+"이란 이야기가 나와.”",
+  "“여기에 "+trimline(g.love)+"도 붙지.”",
+  "“"+trimline(contextAdvice("love"))+"”"
+ ]);
+ if(index===5)moment(root,"몸과 마음",[
+  "“몸이 아플 거라고 사주로 단정하는 건 무책임한 일이야.”",
+  "“대신 일을 몰아서 하는 습관이 있는지, 잠과 휴식은 지키는지 돌아봐.”",
+  "“몸에 이상이 느껴지면 운세로 버티지 말고 진료를 받으렴.”"
+ ]);
+ if(index===6)moment(root,"1월부터",[
+  "“달마다 절기의 기운이 바뀌는 법이야. 날짜 하나로 한 달 내내 같은 일이 난다고 하면 안 되지.”",
+  "“1월부터 12월까지 각 달의 주제와 그때 할 일을 따로 들려줄게.”"
+ ]);
+ if(index===7)moment(root,"할매의 당부",[
+  "“"+trimline(a.tip)+"부터 해보거라.”",
+  "“그리고 "+trimline(g.tip)+"도 잊지 마.”",
+  "“미래를 기다리는 것보다 네 손으로 바꿀 수 있는 일을 먼저 하라는 말이야.”"
+ ]);
+ if(index===8){
+  const ps=pastScenes[state.day];
+  moment(root,"옛이야기 한 자락",[
+   "“전생을 진짜 알아맞혔다는 말은 안 할 거야. 네 만세력을 소재로 만든 이야기란다.”",
+   "“"+ps.role+"이 살았던 옛날로 한번 가보자.”",
+   "“그 사람이 마음에 남긴 건 "+trimline(ps.regret)+"이었대.”"
+  ]);
+ }
+ const lock=$("previewLock");
+ lock.textContent=index===8?"전생의 마지막 장면과 지금 삶에 적용할 이야기":intro[index]+"의 세부 명리 근거와 생활 속 대응법 · 12개월 흐름";
+ [...$("previewTabs").children].forEach((t,i)=>{t.classList.toggle("active",i===index);t.setAttribute("aria-pressed",String(i===index));});
 }
 function chapter(index){
- chapterIndex=index;const root=$("chapterBody");root.replaceChildren();const {name,base:b,branch,annual:a,ground:g,month}=state;
- root.append(make("div","“자네 팔자도 허투루 단정할 순 없지. 만세력부터 근거를 짚어보겠네.”","oksoon-intro"));
+ chapterIndex=index;const root=$("chapterBody");root.replaceChildren();
+ const a=state.annual,g=state.ground,b=state.base,n=state.name;
+ const headings=["너의 타고난 성미","2027년에 들어오는 기운","돈을 대하는 팔자","일과 진로","사람과 인연","건강과 생활","열두 달의 흐름","할매가 남기는 당부","전생 이야기"];
+ root.append(make("div","정옥순 할매의 상세 풀이 · "+headings[index],"eyebrow"));
+ say(root,"“"+n+"아, 이번엔 "+headings[index]+"부터 들려줄게.”","okbig");
  if(index===0){
-  section(root,"나의 성향과 속마음",["당신의 태어난 날을 '"+b.symbol+"'에 비유하는 것은 "+b.headline+"이라는 해석을 이해하기 위한 한 가지 방식이에요. "+b.outside+"과 "+b.inside+"을 함께 살펴볼 수 있어요.","내가 잘하는 것은 "+b.strong+"일 수 있어요. 한편 "+b.blind+"도 스스로 점검해보세요. 이것은 타고난 운명의 한계가 아니라, 익숙한 행동을 바꿔 볼 여지를 찾는 질문이에요."]);
-  section(root,"일과 관계에서 나타날 수 있는 모습",["일에서는 "+b.work+"을, 관계에서는 "+b.love+"을 참고할 수 있어요. 같은 사람이더라도 상황에 따라 다른 행동을 할 수 있기 때문에 어느 한 문장으로 고정할 수는 없어요.","태어난 날 아래의 기운에서는 "+branchHints[branch]+"도 상징적으로 읽어요. 이 해석 중 실제로 나에게 와닿는 부분이 무엇인지 떠올려 보세요."]);
+  moment(root,"자네 타고난 기운",[
+   "“일주는 "+koreanPillar(state.p.getDay())+"이야. 태어난 날의 위아래 글자라는 뜻이지.”",
+   "“윗글자를 "+b.symbol+"에 비유하니 "+trimline(b.headline)+"이란 해석이 나오는 거야.”",
+   "“겉에서는 "+trimline(b.outside)+"이, 속에서는 "+trimline(b.inside)+"이 나타나는지 네가 비교해 보거라.”",
+   "“강점으로는 "+trimline(b.strong)+"을 생각해 볼 수 있어.”",
+   "“반면 "+trimline(b.blind)+"이 네게 부담이 되는 순간도 있는지 돌아봐.”"
+  ]);
+  moment(root,"그걸 인생에 어떻게 쓰냐면",[
+   "“사람 앞에서는 "+trimline(b.love)+"을 해 왔는지 생각해.”",
+   "“일할 땐 "+trimline(b.work)+"이 편했는지도 보렴.”",
+   "“맞지 않는 부분은 억지로 우기지 말자. 네 삶의 실제 경험이 더 중요해.”"
+  ]);
  }else if(index===1){
-  section(root,"2027년을 읽는 두 가지 기준",["2027년의 첫 번째 주제는 '"+a.title+"'이에요. "+a.main+"이 그 핵심이에요.","두 번째 주제인 '"+g.title+"'은 "+g.main+"을 함께 말해요. 한 가지가 더 중요하다고 단정하지 말고 두 주제가 내 생활에서 어떻게 만나는지 살펴보세요."]);
-  section(root,"그렇다면 한 해를 어떻게 준비할까요?",["올해 준비할 일로는 "+a.tip+"를 권해볼 수 있어요. 동시에 "+g.tip+"도 현실적인 선택이 될 수 있어요.","새해를 돌아볼 때는 남에게 보이는 성과만 볼 필요는 없어요. 어떤 선택이 편안했고 무엇이 어려웠는지 기록한다면 2027년을 더 구체적으로 이해하는 데 도움이 될 수 있어요."]);
+  storyIntro(root);
+  moment(root,"좋게 나타난다면",[
+   "“"+trimline(a.main)+"이 좋은 선택의 방향이 될 수 있어.”",
+   "“또 "+trimline(g.main)+"으로 균형을 잡을 수 있지.”",
+   "“작은 목표를 정하고 실행한 날짜와 결과를 적어보렴.”"
+  ]);
+  moment(root,"조심해야 할 때",[
+   "“해석이 마음에 든다고 돈이나 약속을 급하게 결정하지는 마.”",
+   "“내 사주랑 맞다는 말보다 계약 조건과 상대의 행동을 확인해야지.”",
+   "“특정 해에 무조건 사고가 난다거나 돈벼락이 온다는 말은 해줄 수 없어.”"
+  ]);
+  deepReading(root,"brief");
  }else if(index===2){
-  section(root,"내가 돈을 대할 때",["사주에서 나를 '"+b.symbol+"'에 비유하는 성향과 올해의 두 주제를 함께 보면 "+a.money+"을 먼저 살펴볼 수 있어요. 돈을 버는 능력은 사주로 검증할 수 없으므로 이 내용은 재정 습관을 점검하는 계기로 사용해 주세요.","또 다른 관점에서는 "+g.money+"이 중요해 보여요. 사람마다 수입 규모와 형편이 다르기 때문에 내가 유지할 수 있는 방법을 고르는 게 먼저예요."]);
-  section(root,"현실적인 재정 점검",["이번 달 고정 지출과 꼭 필요한 비용을 나누어 적어보세요. "+contextAdvice("money"),"특정 시기에 큰돈을 벌거나 잃는다는 확정적인 예측은 하지 않아요. 중요한 재정 결정에는 실제 자료와 전문가의 조언을 함께 활용하는 편이 안전해요."]);
+  moment(root,"돈이 들어올 때보다 먼저 볼 것",[
+   "“정(丁) 기운과 네 사주를 비교하면 "+trimline(a.money)+"이라는 주제를 읽어.”",
+   "“미(未)의 중심 기운에서는 "+trimline(g.money)+"도 함께 보지.”",
+   "“"+trimline(contextAdvice("money"))+"”",
+   "“수입은 사주보다 장부가 정확하니, 실제 고정비와 남길 돈을 먼저 계산하거라.”",
+   "“누가 돈을 벌 수 있다고 장담하면 거기서부터 의심해.”"
+  ]);
  }else if(index===3){
-  section(root,"나에게 맞는 일의 방식",["태어난 날의 상징적 성향에서는 "+b.work+"을 먼저 떠올려 볼 수 있어요. 올해의 기운은 "+a.work+"을 실천 질문으로 삼게 해요.","여기에 "+g.work+"도 더해 보면, 같은 일을 하더라도 어떤 방식을 선택하는지에 따라 만족감이 달라질 수 있다는 점을 생각하게 해요."]);
-  section(root,"직장·사업·새로운 기회",["새로운 업무나 사업 아이디어가 떠올랐다면 역할과 일정, 필요한 비용을 먼저 확인해 보세요. "+contextAdvice("work")+" "+(month?month.work+"도 작은 참고점이 될 수 있어요.":"내가 오래 할 수 있는지 살펴보세요."),"이직이나 승진, 계약 성공이 언제 일어나는지 사주로 단정할 수 없어요. 내가 통제할 수 있는 준비부터 정리해 보는 것이 좋아요."]);
+  moment(root,"일은 네 선택이 만든다",[
+   "“자네는 "+trimline(b.work)+"을 좋아하는지 확인해 봐.”",
+   "“올해는 "+trimline(a.work)+"을 살피는 쪽으로 풀어보겠어.”",
+   "“또 "+trimline(g.work)+"도 놓치지 말고.”",
+   "“"+trimline(contextAdvice("work"))+"”",
+   "“이직이나 사업 시작 날짜를 맞힌다고 말하는 건 책임 없는 소리야. 현실 조건을 봐야 해.”"
+  ]);
  }else if(index===4){
-  section(root,"사람을 대하는 나의 방식",["사주에서 나의 태어난 날을 상징하는 모습은 "+b.love+"이에요. 올해의 첫 번째 관계 주제는 "+a.love+"이라는 점도 함께 참고해 보세요.","두 번째 주제는 "+g.love+"이에요. 누군가와 함께하는 관계에서는 마음뿐 아니라 표현하는 방식도 중요해요."]);
-  section(root,"연애 중이거나 새로운 만남을 기다릴 때",["내 상황에 맞춰 실천할 수 있는 관계 조언을 생각해 보세요. "+contextAdvice("love"),"특정 상대와의 운명이나 결혼 날짜를 정확히 알아낼 수 있는 해석은 아니에요. 실제 관계에서는 상대의 의사와 행동이 가장 중요해요."]);
+  moment(root,"연애와 결혼의 기운",[
+   "“자네는 "+trimline(b.love)+"이 한 가지 성향으로 읽혀.”",
+   "“2027년에는 "+trimline(a.love)+"이라는 이야기도 나오는구나.”",
+   "“그리고 "+trimline(g.love)+"도 생각해야지.”",
+   "“"+trimline(contextAdvice("love"))+"”",
+   "“누굴 만나고 언제 결혼한다는 건 사주만으론 알 수 없어. 서로의 말과 행동을 제일 먼저 봐.”"
+  ]);
  }else if(index===5){
-  section(root,"내 마음과 생활의 균형",["2027년에는 "+a.main+"과 "+g.main+"을 함께 살펴볼 수 있어요. 이 주제를 생활에 옮기면 무엇을 챙기고 무엇을 내려놓을지 정해보는 일과 연결될 수 있어요.","나에게 잘 맞는 휴식 방식과 하루의 리듬을 찾아보세요. 사주로 질병 여부나 건강 상태를 예측할 수는 없어요. 불편한 증상이 있다면 의료 전문가와 상의해야 해요."]);
-  section(root,"한 주의 작은 실천",["하루 중 가장 바쁜 시간과 여유 있는 시간을 적어보고, 부담이 큰 일을 한 가지 줄일 방법을 찾아보세요.","가까운 사람에게 필요한 도움을 말하는 일도 중요한 자기 관리 방법이에요."]);
- }else if(index===6){monthReport(root);}else if(index===7){
-  section(root,"올해의 세 가지 실천",["첫째, "+a.tip+".","둘째, "+g.tip+".","셋째, 한 달에 한 번 내가 잘한 일과 다시 시도하고 싶은 일을 나누어 적어보세요."]);
-  section(root,"마지막으로 남기는 이야기",["운세 문장은 내 삶을 대신 결정하는 답안지가 아니에요. 와닿는 부분은 참고하고 그렇지 않은 부분은 흘려보내도 괜찮아요.","2027년을 좋게 만드는 것은 어느 하루의 문구보다 지금부터 반복하는 작은 선택일 수 있어요."]);
+  moment(root,"몸은 운세로 판단하지 마",[
+   "“너무 무리하고도 괜찮다고 버티는 날이 있는지 봐.”",
+   "“잠, 밥, 쉬는 시간을 먼저 챙기거라.”",
+   "“어디가 아프거나 이상이 반복되면 바로 병원에서 확인해. 사주는 진단서가 아니야.”"
+  ]);
+ }else if(index===6){
+  monthReport(root);
+ }else if(index===7){
+  moment(root,"올해 자네가 해야 할 일",[
+   "“첫째, "+trimline(a.tip)+"부터 해.”",
+   "“둘째, "+trimline(g.tip)+"도 놓치지 마.”",
+   "“셋째, 한 달에 한 번 돈과 일, 가까운 사람과의 관계를 실제로 점검해.”",
+   "“아무리 운을 봐도 오늘 행동하지 않으면 내일은 그냥 내일이야.”"
+  ]);
+ }else if(index===8){
+  pastLife(root,false);
  }
- if(index===8)pastLife(root,false);
- if(index===1)deepReading(root,"full");
- [...$("chapters").children].forEach((b,i)=>b.classList.toggle("active",i===index));
+ [...$("chapters").children].forEach((t,i)=>t.classList.toggle("active",i===index));
 }
 function monthReport(root){
- root.append(make("h3","2027년 12개월의 이야기"));
- addP(root,"각 달의 15일 정오를 기준으로 절기 월주를 살펴봤어요. 절기 전후의 날짜는 다른 월주가 적용될 수 있으니, 달 전체에 일어날 일을 맞히는 운세로 받아들이지 마세요.");
+ root.append(make("h3","“자, 열두 달을 차례로 보자.”"));
+ say(root,"“매달 15일의 절기 월주를 기준으로 보니, 달의 앞뒤 날짜엔 기운이 다를 수 있어.”");
+ say(root,"“좋은 날이나 나쁜 날을 딱 맞힌다는 뜻이 아니라, 달마다 어떤 선택을 점검할지 듣는 거야.”");
  const nav=make("div",null,"month-nav");root.append(nav);
  const detail=make("div",null,"hint");root.append(detail);
- for(let i=1;i<=12;i++){const button=make("button",i+"월");button.type="button";button.addEventListener("click",()=>displayMonth(i));nav.append(button);}
- function displayMonth(month){
-  monthIndex=month;detail.replaceChildren();
-  const data=Solar.fromYmdHms(2027,month,15,12,0,0).getLunar().getEightChar();
-  const key=ten(state.day,data.getMonthGan()),theme=themes[key],clash=clashes[state.branch]===data.getMonthZhi();
-  detail.append(make("h3",month+"월 · "+theme.title));addP(detail,"“자네, 이달에는 무엇이든 덥석 결정하기 전에 조건부터 따져보게.”");
-  addP(detail,"이달 중순의 기운을 태어난 날과 비교하면 "+theme.main+"을 하나의 주제로 읽어요. 이것이 실제로 어떤 사건이 일어난다는 뜻은 아니에요.");
-  addP(detail,"돈과 관련해서는 "+theme.money+"을, 일에 대해서는 "+theme.work+"을 살펴보면 좋겠어요.");
-  addP(detail,"사람과의 관계에서는 "+theme.love+"도 생각해볼 수 있어요. 내가 기대하는 것과 상대가 기대하는 것이 같은지 대화를 나눠보세요.");
-  addP(detail,"작은 실천으로는 "+theme.tip+"부터 시작해 보세요.");
-  if(clash)addP(detail,"이달의 기운과 태어난 날 아래 기운에는 서로 부딪힘을 상징하는 관계도 있어요. 불운의 징조가 아니라 변화에 대응하는 방법을 점검하는 하나의 상징으로 받아들여 주세요.");
-  const buttons=[...nav.children];buttons.forEach((b,i)=>b.classList.toggle("active",i===month-1));
+ for(let i=1;i<=12;i++){
+  const button=make("button",i+"월");
+  button.type="button";button.addEventListener("click",()=>showMonth(i));nav.append(button);
  }
- displayMonth(monthIndex);
+ function showMonth(month){
+  monthIndex=month;detail.replaceChildren();
+  const pillar=Solar.fromYmdHms(2027,month,15,12,0,0).getLunar().getEightChar();
+  const k=ten(state.day,pillar.getMonthGan()),t=themes[k];
+  detail.append(make("h3",month+"월 · "+t.title));
+  say(detail,"“"+month+"월 중순의 기운과 자네 일간의 관계는 "+k+"이야. 쉽게 말하면 "+trimline(t.main)+"이라는 뜻이지.”");
+  say(detail,"“돈은 "+trimline(t.money)+"부터 챙겨.”");
+  say(detail,"“일은 "+trimline(t.work)+"을 조심해서 봐.”");
+  say(detail,"“사람 관계에선 "+trimline(t.love)+"을 기억하렴.”");
+  say(detail,"“실제로는 "+trimline(t.tip)+"을 해보거라.”");
+  if(clashes[state.branch]===pillar.getMonthZhi())say(detail,"“여기엔 충이라는 기운도 있어. 서로 부딪히는 상징이란 뜻이지, 사고가 난다는 예언은 아니야. 중요한 선택을 더 꼼꼼히 살펴보렴.”");
+  [...nav.children].forEach((t,i)=>t.classList.toggle("active",i===month-1));
+ }
+ showMonth(monthIndex);
 }
 
 $("unknown").addEventListener("change",()=>$("timebox").classList.toggle("hidden",$("unknown").checked));
