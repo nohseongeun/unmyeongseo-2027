@@ -645,8 +645,8 @@ function setChatState(remaining,locked){
  chatLeft=remaining;
  const textarea=$("chatQuestion"),send=$("chatSend");
  if(!textarea||!send)return;
- textarea.disabled=locked||chatBusy;
- send.disabled=locked||chatBusy;
+ textarea.disabled=locked;
+ send.disabled=locked||chatBusy||!chatSession;
  $("chatCounter").textContent="할매 무료상담 · "+Math.max(0,chatLeft)+"회 남음";
  if(locked){textarea.placeholder="무료 상담 1회를 사용했어. 추가 상담 상품은 준비 중이야.";send.textContent="추가 상담 준비 중";}
  else send.textContent="할매한테 물어보기";
@@ -660,25 +660,40 @@ function renderChat(){
  const feed=make("div");feed.id="chatFeed";root.append(feed);
  chatBubble(feed,"정옥순 할매","“자, 돈이든 일자리든 사랑이든 하나 물어보거라. 내가 아는 범위에서 구체적으로 풀어줄게.”",false);
  const form=make("form");form.addEventListener("submit",e=>{e.preventDefault();sendChat()});
- const input=make("textarea");input.id="chatQuestion";input.maxLength=500;input.placeholder="예: 할머니, 돈이 언제 들어올까요?";input.setAttribute("aria-label","정옥순 할매에게 질문");form.append(input);
+ const input=make("textarea");input.id="chatQuestion";input.autocomplete="off";input.maxLength=500;input.placeholder="예: 할머니, 돈이 언제 들어올까요?";input.setAttribute("aria-label","정옥순 할매에게 질문");form.append(input);
  const btn=make("button","할매한테 물어보기","primary");btn.id="chatSend";btn.type="submit";form.append(btn);root.append(form);
  const status=make("div",null,"chat-error");status.id="chatStatus";status.setAttribute("role","status");root.append(status);
  const upsell=make("div",null,"chat-note");upsell.id="chatUpsell";
  upsell.append(make("strong","추가 상담 · 가격 미정"));
  upsell.append(make("p","무료 질문은 한 번이야. 이후 계속 상담하거나 재물운·연애운 등 분야별 풀이를 따로 이용하는 상품은 준비 중이야.","chat-sub"));root.append(upsell);
- if(!chatApi()){
-  status.textContent="실제 할매 대화 서버를 연결하는 중이야. 지금은 질문 전송이 잠겨 있어.";
-  input.disabled=true;btn.disabled=true;
- }else{
-  status.textContent="할매 상담 서버에 연결하는 중이야…";input.disabled=true;btn.disabled=true;
-  chatStart().then(res=>{
+ const retry=make("button","서버 다시 연결하기","secondary");
+ retry.type="button";retry.style.marginTop="8px";retry.classList.add("hidden");
+ root.append(retry);
+ const connect=async()=>{
+  const draft=input.value;
+  status.textContent="할매 상담 서버에 연결하는 중이야…";
+  retry.classList.add("hidden");
+  btn.disabled=true;
+  if(!chatApi()){
+   status.textContent="서버 주소가 아직 설정되지 않았어. 질문은 적어둘 수 있어.";
+   retry.classList.remove("hidden");return;
+  }
+  try{
+   const res=await chatStart();
    chatSession=res.sessionId;
    const remaining=Number(res.remaining);
    if(!Number.isInteger(remaining)||remaining<0)throw Error("상담 횟수를 확인하지 못했어.");
-   status.textContent=remaining?"질문 하나를 적어봐.":"무료 상담을 모두 사용했어.";
+   status.textContent=remaining?"연결됐어! 질문을 보내봐.":"무료 상담 1회를 사용했어.";
    setChatState(remaining,remaining===0);
-  }).catch(err=>{status.textContent=err.message||"서버 연결을 확인해 줘.";input.disabled=true;btn.disabled=true});
- }
+  }catch(err){
+   chatSession=null;
+   status.textContent="서버 연결을 확인하지 못했어. 질문은 입력할 수 있어. 다시 연결해 줘. ("+(err.message||"네트워크 오류")+")";
+   btn.disabled=true;
+   retry.classList.remove("hidden");
+  }
+ };
+ retry.addEventListener("click",connect);
+ connect();
 }
 async function sendChat(){
  if(chatBusy||chatLeft<1||!chatSession)return;
