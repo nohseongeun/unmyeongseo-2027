@@ -205,8 +205,8 @@ header{position:relative}
  <select id="day" aria-label="태어난 일"><option value="" selected disabled>일 선택</option><option value="1">1일</option><option value="2">2일</option><option value="3">3일</option><option value="4">4일</option><option value="5">5일</option><option value="6">6일</option><option value="7">7일</option><option value="8">8일</option><option value="9">9일</option><option value="10">10일</option><option value="11">11일</option><option value="12">12일</option><option value="13">13일</option><option value="14">14일</option><option value="15">15일</option><option value="16">16일</option><option value="17">17일</option><option value="18">18일</option><option value="19">19일</option><option value="20">20일</option><option value="21">21일</option><option value="22">22일</option><option value="23">23일</option><option value="24">24일</option><option value="25">25일</option><option value="26">26일</option><option value="27">27일</option><option value="28">28일</option><option value="29">29일</option><option value="30">30일</option><option value="31">31일</option></select>
  </div>
  <label for="calendar">양력 또는 음력</label><select id="calendar"><option value="양력">양력</option><option value="음력">음력</option><option value="음력 윤달">음력 윤달</option></select>
- <label>태어난 시간 (선택)</label><label class="check"><input id="unknown" type="checkbox" checked>시간을 몰라도 괜찮아. 생년월일만으로 볼게.</label>
- <div class="grid2 hidden" id="timebox">
+ <label>태어난 시간 (선택)</label><label class="check"><input id="unknown" type="checkbox">태어난 시간을 몰라요 (시주 제외)</label>
+ <div class="grid2" id="timebox">
  <select id="hour" aria-label="태어난 시"><option value="" selected disabled>시 선택</option><option value="0">0시</option><option value="1">1시</option><option value="2">2시</option><option value="3">3시</option><option value="4">4시</option><option value="5">5시</option><option value="6">6시</option><option value="7">7시</option><option value="8">8시</option><option value="9">9시</option><option value="10">10시</option><option value="11">11시</option><option value="12">12시</option><option value="13">13시</option><option value="14">14시</option><option value="15">15시</option><option value="16">16시</option><option value="17">17시</option><option value="18">18시</option><option value="19">19시</option><option value="20">20시</option><option value="21">21시</option><option value="22">22시</option><option value="23">23시</option></select>
  <select id="minute" aria-label="태어난 분"><option value="" selected disabled>분 선택</option><option value="0">0분</option><option value="1">1분</option><option value="2">2분</option><option value="3">3분</option><option value="4">4분</option><option value="5">5분</option><option value="6">6분</option><option value="7">7분</option><option value="8">8분</option><option value="9">9분</option><option value="10">10분</option><option value="11">11분</option><option value="12">12분</option><option value="13">13분</option><option value="14">14분</option><option value="15">15분</option><option value="16">16분</option><option value="17">17분</option><option value="18">18분</option><option value="19">19분</option><option value="20">20분</option><option value="21">21분</option><option value="22">22분</option><option value="23">23분</option><option value="24">24분</option><option value="25">25분</option><option value="26">26분</option><option value="27">27분</option><option value="28">28분</option><option value="29">29분</option><option value="30">30분</option><option value="31">31분</option><option value="32">32분</option><option value="33">33분</option><option value="34">34분</option><option value="35">35분</option><option value="36">36분</option><option value="37">37분</option><option value="38">38분</option><option value="39">39분</option><option value="40">40분</option><option value="41">41분</option><option value="42">42분</option><option value="43">43분</option><option value="44">44분</option><option value="45">45분</option><option value="46">46분</option><option value="47">47분</option><option value="48">48분</option><option value="49">49분</option><option value="50">50분</option><option value="51">51분</option><option value="52">52분</option><option value="53">53분</option><option value="54">54분</option><option value="55">55분</option><option value="56">56분</option><option value="57">57분</option><option value="58">58분</option><option value="59">59분</option></select>
  </div>
@@ -360,7 +360,7 @@ function renderManse(){
  container.append(grid);
  const dayGan=p.getDayGan(),z=p.getDayZhi();
  container.append(make("p","이 중 일주 '"+koreanPillar(p.getDay())+"'에서 윗글자 '"+(ganKo[dayGan]||dayGan)+"'을 나를 대표하는 기운으로 사용해요. "+eGan[dayGan]+"의 성질로 비유하며, 아래 글자 '"+(zhiKo[z]||z)+"'는 "+eZhi[z]+"의 상징도 함께 지녀요.","manse-detail"));
- container.append(make("p","“태어난 시간을 모르면 시주는 비워두는 게 맞아. 모르는 걸 멋대로 채우지 않겠어.”","note"));
+ container.append(make("p",state.unknown?"“태어난 시간을 모른다고 했으니 시주는 비워두겠어.”":"“자네가 입력한 태어난 시각은 "+String(state.birthHour).padStart(2,"0")+"시 "+String(state.birthMinute).padStart(2,"0")+"분이야. 이 시각을 기준으로 시주도 계산했어.”","note"));
  container.append(make("p","만세력은 자동 계산된 거야. 절입 경계와 출생지 보정, 23시 일주 변경 등 세부 기준은 전문 만세력 대조가 필요할 수 있어.","note"));
  box.append(container);
 }
@@ -465,8 +465,10 @@ function validate(){
   if(!base||!annual||!ground)throw Error("원본 사주에 필요한 정보를 확인하지 못했습니다.");
   return {name:n,year:y||null,birthday:y&&m&&d?[y,m,d]:null,unknown:!p.getTime(),solar:null,p,day,base,annual,ground,month,branch:p.getDayZhi(),calendar:$("calendar").value,context:{work:$("v17Work").value,love:$("v17Love").value,worry:$("v17Worry").value},manual:true,daewoon:original.daewoon,gender:original.gender};
  }
- const unknown=$("unknown").checked,h=unknown?12:Number($("hour").value),minute=unknown?0:Number($("minute").value);
- if(!unknown&&(!$("hour").value||!$("minute").value))throw Error("태어난 시간을 선택하거나 '시간을 몰라요'에 체크해 주세요.");
+ const unknown=$("unknown").checked;
+ const selectedHour=$("hour").value,selectedMinute=$("minute").value;
+ const h=unknown?12:Number(selectedHour),minute=unknown?0:Number(selectedMinute);
+ if(!unknown&&(selectedHour===""||selectedMinute===""))throw Error("태어난 시와 분을 모두 선택해 줘. 모르면 '태어난 시간을 몰라요'를 체크하면 돼.");
  if(!window.Solar||!window.Lunar)throw Error("사주 달력을 불러오지 못했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.");
  let solar;
  if($("calendar").value==="양력"){
@@ -481,7 +483,7 @@ function validate(){
  const p=solar.getLunar().getEightChar(),day=p.getDayGan(),base=profiles[day];
  const annual=themes[ten(day,"丁")],ground=themes[ten(day,"己")],month=themes[ten(day,p.getMonthGan())];
  if(!base||!annual||!ground)throw Error("사주 계산 결과를 확인할 수 없어요.");
- return {name:n,year:y,birthday:[y,m,d],unknown,solar,p,day,base,annual,ground,month,branch:p.getDayZhi(),calendar:$("calendar").value,context:{work:$("v17Work").value,love:$("v17Love").value,worry:$("v17Worry").value}};
+ return {name:n,year:y,birthday:[y,m,d],unknown,birthHour:unknown?null:h,birthMinute:unknown?null:minute,solar,p,day,base,annual,ground,month,branch:p.getDayZhi(),calendar:$("calendar").value,context:{work:$("v17Work").value,love:$("v17Love").value,worry:$("v17Worry").value}};
 }
 const devPreview=new URLSearchParams(window.location.search).get("dev")==="1";
 function page(num){
@@ -996,7 +998,20 @@ function monthReport(root){
  showMonth(monthIndex);
 }
 
-$("unknown").addEventListener("change",()=>$("timebox").classList.toggle("hidden",$("unknown").checked));
+function syncBirthTime(){
+ const unknown=$("unknown").checked;
+ $("timebox").classList.toggle("hidden",unknown);
+ $("hour").disabled=unknown;
+ $("minute").disabled=unknown;
+}
+$("unknown").addEventListener("change",syncBirthTime);
+for(const id of ["hour","minute"]){
+ $(id).addEventListener("change",()=>{
+  if($(id).value!==""&&$("unknown").checked)$("unknown").checked=false;
+  syncBirthTime();
+ });
+}
+syncBirthTime();
 
 /* CONSULTATION-V32: browser sends one user question to privately deployed server; never embeds an AI key. */
 const CONSULT_API_ORIGIN=window.OKSOON_API_ORIGIN||"";
