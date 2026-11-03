@@ -158,6 +158,16 @@ header{position:relative}
 .chat-note{border:1px solid #5f665a;background:#21251f;border-radius:10px;padding:12px;margin-top:12px;font-size:13px;color:#ddd1bd}
 .chat-error{color:#e9b5a7;font-size:13px;margin:11px 0}
 
+
+/* CONSULT-ONE-QUESTION-V32 */
+.consult-chat{display:grid;gap:10px;max-height:480px;overflow:auto;margin:18px 0;padding:4px}
+.consult-bubble{border:1px solid #615f55;padding:15px;background:#252720;border-radius:13px;max-width:95%}
+.consult-bubble.granny{justify-self:start;border-top-left-radius:4px}.consult-bubble.visitor{justify-self:end;border-top-right-radius:4px;background:#38382e}
+.consult-bubble strong{font-size:12px;color:#d4bfa0}.consult-bubble p{margin:5px 0;white-space:pre-wrap}
+#consultQuestion{display:block;width:100%;min-height:98px;resize:vertical;background:#1f211e;color:#f0e5d5;font:inherit;border:1px solid #777062;border-radius:10px;padding:13px}
+#consultQuestion:focus-visible{outline:2px solid #dcc8a2}
+.consult-lock{padding:16px;border:1px solid #82745e;background:#252820;border-radius:13px;margin-top:18px}
+.consult-preview{margin-top:24px;padding-top:18px;border-top:1px solid #5a5a4d}
 </style>
 <style>
 /* UNMYEONGSEO-V17-MANSE: readable four pillars */
@@ -212,12 +222,15 @@ header{position:relative}
  <div id="manseChart"></div><div id="personBody"></div><section id="oksoonChat" class="chat-shell" aria-label="정옥순 할매 상담방"></section>
 </section>
 <section class="page card" id="page3">
- <div class="eyebrow">03 / 05 · 2027년 기운</div><h2>“올해 운, 함부로 넘기지 말게.”</h2>
- <div id="annualIntro"></div>
- <h3>가장 궁금한 것부터 읽어보세요</h3>
- <div class="tabs" id="previewTabs"></div><div class="hint" id="previewBody" aria-live="polite"></div>
- <div class="lock"><strong>🔒 이어지는 내용은 전체 운명서에</strong><p id="previewLock"></p></div>
- <p class="note">전체 사주와 운세는 미래를 확정하는 예언이 아니라, 전통 명리학을 활용한 상징적 풀이예요.</p>
+<div class="eyebrow">03 / 05 · 정옥순 할매 무료상담</div>
+<h2>“자네, 딱 하나만 물어봐.”</h2>
+<p class="note">할매가 만세력과 자네가 들려준 이야기를 참고해 답하는 상담이야. 무료 질문은 1회, 전체 풀이와 분야별 풀이·추가 상담은 각각 별도 상품이야.</p>
+<div id="consultMessages" class="consult-chat" role="log" aria-live="polite"><div class="consult-bubble granny"><strong>정옥순 할매</strong><p>“태어난 날의 기운을 봤으니 이제 자네 말도 들어보자. 돈이든 사람이든 뭐가 제일 마음에 걸리냐?”</p></div></div>
+<form id="consultForm"><label for="consultQuestion">할매한테 물어볼 한 가지</label><textarea id="consultQuestion" rows="3" maxlength="600" placeholder="예: 돈이 언제 들어올까요?" required></textarea><button id="consultSubmit" class="primary" type="submit">할매에게 물어보기 · 무료 1회</button></form>
+<p id="consultStatus" class="note" role="status" aria-live="polite">상담 서버가 연결되면 직접 질문할 수 있어. 아직은 실제 답변을 생성하지 않아.</p>
+<div id="consultLocked" class="consult-lock hidden"><h3>“오늘 무료 질문은 여기까지란다.”</h3><p>더 궁금하면 추가 상담 상품에서 이어가면 돼. 가격은 아직 정하지 않았어.</p><button class="secondary" type="button" disabled>추가 상담 · 준비 중</button></div>
+<div class="consult-preview"><h3>“새해 기운도 짚어보자꾸나.”</h3><div id="annualIntro"></div><div class="tabs" id="previewTabs"></div><div class="hint" id="previewBody" aria-live="polite"></div><div class="lock"><strong>🔒 더 깊은 풀이는 별도 상품에서</strong><p id="previewLock"></p></div></div>
+<p class="note">정옥순 할매는 창작 캐릭터야. 사주 해석은 전통 명리학에 따른 상징적 설명이며 실제 미래의 일을 확정적으로 예언하지 않아.</p>
 </section>
 <section class="page card" id="page4">
  <div class="eyebrow">04 / 05 · 팔자의 다음 이야기</div><h2>“자네 팔자는 아직 끝난 게 아닐세.”</h2>
@@ -955,12 +968,68 @@ function monthReport(root){
 }
 
 $("unknown").addEventListener("change",()=>$("timebox").classList.toggle("hidden",$("unknown").checked));
+
+/* CONSULTATION-V32: browser sends one user question to privately deployed server; never embeds an AI key. */
+const CONSULT_API_ORIGIN=window.OKSOON_API_ORIGIN||"";
+const consultation={token:null,used:false,busy:false};
+function consultBubble(who,message){
+ const item=make("div",null,"consult-bubble "+(who==="visitor"?"visitor":"granny"));
+ item.append(make("strong",who==="visitor"?"자네가 한 말":"정옥순 할매"));
+ item.append(make("p",message));$("consultMessages").append(item);
+ item.scrollIntoView({block:"nearest",behavior:"smooth"});
+}
+function consultProfile(){
+ return {name:state.name,calendar:state.calendar,birthday:state.birthday,unknown:state.unknown,
+  pillars:{year:state.p.getYear(),month:state.p.getMonth(),day:state.p.getDay(),hour:state.unknown?null:state.p.getTime()},
+  userProvided:state.context};
+}
+function consultReset(){
+ consultation.token=null;consultation.used=false;consultation.busy=false;
+ $("consultForm").classList.remove("hidden");$("consultLocked").classList.add("hidden");
+ $("consultQuestion").value="";$("consultSubmit").disabled=false;
+ $("consultStatus").textContent="상담 서버가 연결되면 직접 질문할 수 있어.";
+ $("consultMessages").replaceChildren();
+ consultBubble("granny","“태어난 날의 기운을 봤으니 이제 자네 말도 들어보자. 돈이든 사람이든 뭐가 제일 마음에 걸리냐?”");
+}
+function consultFinish(){
+ consultation.used=true;$("consultForm").classList.add("hidden");
+ $("consultLocked").classList.remove("hidden");$("consultStatus").textContent="무료 질문 1회 사용 완료";
+}
+$("consultForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+ if(!state||consultation.busy||consultation.used)return;
+ const question=$("consultQuestion").value.trim();if(!question)return;
+ if(!CONSULT_API_ORIGIN){
+  $("consultStatus").textContent="실제 AI 상담 서버를 아직 연결하지 않았어. 정해진 대답을 가짜 상담처럼 보여주지는 않을게.";
+  return;
+ }
+ consultation.busy=true;$("consultSubmit").disabled=true;
+ $("consultStatus").textContent="“할매가 자네 말을 듣고 만세력을 살펴보는 중이야…”";
+ try{
+  if(!consultation.token){
+   const init=await fetch(CONSULT_API_ORIGIN+"/api/session",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({profile:consultProfile()})});
+   const data=await init.json();if(!init.ok)throw Error(data.error||"상담을 시작하지 못했어");
+   consultation.token=data.token;
+  }
+  const resp=await fetch(CONSULT_API_ORIGIN+"/api/consult",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+consultation.token},body:JSON.stringify({question})});
+  const data=await resp.json();
+  if(!resp.ok){
+   if(resp.status===403&&data.code==="LIMIT_REACHED"){consultFinish();return;}
+   throw Error(data.error||"상담 연결이 끊겼어");
+  }
+  consultBubble("visitor",question);consultBubble("granny",data.answer);consultFinish();
+ }catch(error){
+  $("consultStatus").textContent=error.message||"상담 연결에 실패했어. 다시 시도해봐.";
+  $("consultSubmit").disabled=false;
+ }finally{consultation.busy=false;}
+});
+
 let oksoonBusy=false;
 $("begin").addEventListener("click",()=>{
  if(oksoonBusy)return;
  $("formError").textContent="";
  try{
-  state=validate();oksoonBusy=true;$("begin").disabled=true;
+  state=validate();consultReset();oksoonBusy=true;$("begin").disabled=true;
   const loader=$("oksoonLoader"),line=$("oksoonLoadingLine");
   loader.classList.remove("hidden");
   const messages=["“어디… 자네 사주부터 보자꾸나.”","“태어난 날의 기운을 살피고 있네.”","“2027년의 기운과 맞춰봐야지.”","“자, 이제 할머니 말을 들어보게.”"];
