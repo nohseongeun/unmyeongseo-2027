@@ -20,11 +20,13 @@ jobs:
           CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ADMIN_ACCESS_KEY: ${{ secrets.ADMIN_ACCESS_KEY }}
         run: |
           test -n "$CF_DATABASE_ID" || (echo "Set repo variable CF_DATABASE_ID" && exit 1)
           test -n "$CF_ACCOUNT_ID" || (echo "Set secret CLOUDFLARE_ACCOUNT_ID" && exit 1)
           test -n "$CF_API_TOKEN" || (echo "Set secret CLOUDFLARE_API_TOKEN" && exit 1)
           test -n "$OPENAI_API_KEY" || (echo "Set secret OPENAI_API_KEY" && exit 1)
+          test ${#ADMIN_ACCESS_KEY} -ge 24 || (echo "Set secret ADMIN_ACCESS_KEY (at least 24 characters)" && exit 1)
       - name: Configure D1 binding
         env:
           CF_DATABASE_ID: ${{ vars.CF_DATABASE_ID }}
@@ -49,6 +51,13 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: printf %s "$OPENAI_API_KEY" | wrangler secret put OPENAI_API_KEY
+
+      - name: Set admin access secret on Cloudflare
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          ADMIN_ACCESS_KEY: ${{ secrets.ADMIN_ACCESS_KEY }}
+        run: printf %s "$ADMIN_ACCESS_KEY" | wrangler secret put ADMIN_ACCESS_KEY
 
       - name: Test real AI consultation after deployment
         env:
