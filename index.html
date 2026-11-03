@@ -300,7 +300,7 @@ function renderManse(){
  const p=state.p;
  const container=make("section",null,"manse");
  container.append(make("h3","나의 만세력 · 네 기둥","manse-head"));
- addP(container,"태어난 때의 연·월·일·시를 전통 사주팔자의 여덟 글자로 나타낸 표예요.");
+ addP(container,"“이건 네가 태어났을 때의 연·월·일·시를 글자로 펼쳐놓은 만세력이야. 할매가 이걸 보고 풀이하는 거지.”");
  const grid=make("div",null,"manse-grid");
  const columns=[
   ["시주",state.unknown?null:p.getTime(),"태어난 시각"],
@@ -317,7 +317,7 @@ function renderManse(){
  container.append(grid);
  const dayGan=p.getDayGan(),z=p.getDayZhi();
  container.append(make("p","이 중 일주 '"+koreanPillar(p.getDay())+"'에서 윗글자 '"+(ganKo[dayGan]||dayGan)+"'을 나를 대표하는 기운으로 사용해요. "+eGan[dayGan]+"의 성질로 비유하며, 아래 글자 '"+(zhiKo[z]||z)+"'는 "+eZhi[z]+"의 상징도 함께 지녀요.","manse-detail"));
- container.append(make("p","시간을 모르는 경우 시주는 계산하지 않아요. 나머지 세 기둥만으로 제한적으로 해석해요.","note"));
+ container.append(make("p","“태어난 시간을 모르면 시주는 비워두는 게 맞아. 모르는 걸 멋대로 채우지 않겠어.”","note"));
  container.append(make("p","만세력은 자동 계산된 거야. 절입 경계와 출생지 보정, 23시 일주 변경 등 세부 기준은 전문 만세력 대조가 필요할 수 있어.","note"));
  box.append(container);
 }
@@ -556,34 +556,33 @@ const pastScenes={
 };
 const pastSeasons={"子":"서리가 내려 길이 조용해진 겨울밤","丑":"긴 겨울이 끝나기만을 기다리던 창고","寅":"새벽의 산길","卯":"꽃이 피기 시작한 봄 장터","辰":"비 온 뒤 흙냄새가 퍼진 길","巳":"볕이 강해진 여름 들판","午":"한낮의 뜨거운 장터","未":"늦여름 볕 아래의 마을","申":"저녁이 가까워진 길목","酉":"수확을 마친 가을 공방","戌":"찬 바람이 불던 성곽","亥":"밤안개가 내려앉은 강가"};
 function pastLife(target,short){
- const p=state.p,key=state.day,scene=pastScenes[key];
- const dayBranch=p.getDayZhi(),season=pastSeasons[dayBranch]||"계절의 문턱";
- const yearRelation=ten(key,p.getYearGan()),monthRelation=ten(key,p.getMonthGan());
- const opening="“자네, 이건 실제 전생을 알아맞혔다는 말이 아니네. 자네 사주의 '"+state.base.symbol+"'과 '"+(zhiKo[dayBranch]||dayBranch)+"' 기운을 빌려 지어낸 옛이야기일세.”";
- target.append(make("div",opening,"oksoon-intro"));
- section(target,"옛날 어느 삶의 한 장면",[
-  season+" 무렵이었네. "+scene.setting+"에 "+scene.role+"이 살았다고 해보세. 눈에 띄는 영웅은 아니어도 자기 방식으로 하루를 이어가던 사람이었지.",
-  "그 사람의 가장 큰 힘은 "+scene.gift+"이었네. 하지만 그 힘 때문에 오히려 "+scene.regret+"을 마음에 남겼다고 상상해 볼 수 있지."
+ const key=state.day,scene=pastScenes[key],z=state.p.getDayZhi(),season=pastSeasons[z]||"계절의 문턱";
+ target.append(make("div","사주를 소재로 지은 옛날이야기 · 실제 전생을 알아맞힌 결과는 아냐","eyebrow"));
+ say(target,"“자네, 전생이라는 게 실제로 있는지 할매가 증명할 순 없어.”","okbig");
+ say(target,"“다만 네 사주 글자들을 빌려 옛날이야기 한 자락 들려줄게.”");
+ moment(target,"옛날 한 삶의 한 장면",[
+  "“"+season+"이었대.”",
+  "“"+scene.setting+"에 "+scene.role+"이 살았다고 생각해 보자.”",
+  "“그 사람은 "+trimline(scene.gift)+"을 소중하게 여겼지.”",
+  "“하지만 마음 한구석에는 "+trimline(scene.regret)+"을 남겼단다.”"
  ]);
- if(short){
-  target.append(make("div","🔒 이 인물이 놓친 약속과 마지막 선택, 지금의 삶에 남길 조언은 상세 이야기에서 이어지네.","lock"));
- }else{
-  section(target,"돌아보지 못한 약속",[
-   "그 삶에서 가장 중요한 날은 큰 싸움이 일어난 날도, 큰돈을 얻은 날도 아니었네. 누군가 기다리고 있는데도 늘 하던 방식으로 일을 마무리하겠다고 버틴 날이었지. 그날을 다시 떠올린다면 그 사람도 아마 "+scene.regret+"을 후회했을 걸세.",
-   "자네의 현재 삶도 꼭 그렇게 된다는 뜻은 아니야. 오히려 이 이야기는 "+scene.today+"을 잊지 말라는 상징적인 거울로 읽으면 좋겠네."
-  ]);
-  section(target,"이 이야기와 사주가 연결되는 이유",[
-   "일간(태어난 날의 윗글자, 자신을 대표하는 기운)은 '"+key+"'이고, 일지(태어난 날의 아랫글자)는 '"+dayBranch+"'일세. 일간의 상징인 '"+scene.role+"'에 일지가 뜻하는 '"+season+"'의 분위기를 결합해 만든 창작 장면이지.",
-   "태어난 해의 천간 관계를 십성(나와 다른 기운의 관계)으로 보면 '"+yearRelation+"', 달의 천간 관계는 '"+monthRelation+"'로 계산되네. 하지만 이 정보로 전생의 직업, 시대, 성별, 죽음의 원인을 실제로 알아낼 수는 없어. 어디까지나 명리 기호를 이야기의 소재로 쓴 것이야."
-  ]);
-  section(target,"정옥순 할머니가 남기는 한마디",[
-   "“자네, 지난 생의 빚을 갚아야 한다고 겁먹지는 말게. 그건 증명할 수 없는 말이야. 대신 "+scene.today+"을 지금의 삶에서 실천해 보게.”",
-   "이 전생 이야기는 명리학에서 확인할 수 있는 사실이 아니라, 만세력의 상징을 활용한 창작 이야기입니다. 종교적 믿음이나 실제 윤회 경험의 증거로 제공하지 않습니다."
-  ]);
- }
+ if(short){say(target,"“그 뒷이야기는 조금 더 가서 듣거라.”");return;}
+ moment(target,"그 삶에서 못다 한 말",[
+  "“그 사람도 그때로 다시 돌아간다면 다르게 행동하고 싶었겠지.”",
+  "“남에게 잘하려다가 정작 자기가 소중히 여긴 걸 지나쳤는지도 몰라.”",
+  "“하지만 이 이야기가 네 실제 전생이었다는 말은 아니야.”"
+ ]);
+ moment(target,"왜 하필 이 이야기냐면",[
+  "“네 일간은 "+key+"이고 일지는 "+z+"야. 일간은 태어난 날 위 글자, 일지는 아래 글자를 뜻하지.”",
+  "“할매는 이 두 상징을 "+season+"과 "+scene.role+"의 이야기로 풀어낸 거야.”",
+  "“이 글자만 보고 옛날에 무슨 직업을 가졌는지, 어떻게 살았는지 알아낼 수는 없단다.”",
+  "“그러니 겁먹거나 누군가에게 전생의 빚을 갚는다는 말을 듣고 돈을 내지는 말거라.”"
+ ]);
+ moment(target,"할매가 지금 네게 남기는 말",[
+  "“"+trimline(scene.today)+"을 오늘부터 해봐.”",
+  "“과거를 믿기보다 지금 네가 할 수 있는 일을 붙잡는 게 더 낫지.”"
+ ]);
 }
-
-
 function preview(index){
  previewIndex=index;const root=$("previewBody");root.replaceChildren();
  const a=state.annual,g=state.ground,n=state.name,b=state.base;
@@ -667,7 +666,7 @@ function chapter(index){
    "“내 사주랑 맞다는 말보다 계약 조건과 상대의 행동을 확인해야지.”",
    "“특정 해에 무조건 사고가 난다거나 돈벼락이 온다는 말은 해줄 수 없어.”"
   ]);
-  deepReading(root,"brief");
+  say(root,"“대운, 그러니까 열 해씩 바뀐다고 보는 기운은 생년월일만으로 함부로 정확한 시작 시기를 찍지 않을게. 출생 정보와 절입 기준을 더 확인해야 해.”");
  }else if(index===2){
   moment(root,"돈이 들어올 때보다 먼저 볼 것",[
    "“정(丁) 기운과 네 사주를 비교하면 "+trimline(a.money)+"이라는 주제를 읽어.”",
