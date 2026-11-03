@@ -70,7 +70,7 @@ hr{border:0;border-top:1px solid #544632;margin:22px 0}
 <div class="tag">2027년을 위한 첫 번째 메시지</div>
 <h2>새로운 한 해, 나의 가능성을 읽다</h2>
 <p>2027년을 준비하며 나의 방향과 목표를 돌아보세요. 지금은 실제 사주풀이가 아닌, 결과 화면을 미리 살펴보는 체험판입니다.</p>
-<p class="note">※ 기초 사주 계산과 십성 해석 베타가 아래에 표시됩니다. 상세 AI 해석은 아직 구현되지 않았습니다.</p>
+<p class="note">※ 아래에 나의 사주와 2027년 이야기를 쉬운 말로 풀어낸 테스트 결과가 나와요. 자세한 AI 해석은 아직 준비 중이에요.</p>
 </div>
 <div class="card">
 <div class="eyebrow">PREMIUM FORTUNE REPORT</div>
@@ -116,8 +116,8 @@ el("unknown").addEventListener("change",()=>{
 const sections={
  "종합운":["2027년의 전체 흐름","새로운 목표를 설정하고 중요한 선택을 준비하는 한 해를 어떻게 바라볼지 안내하는 구성입니다."],
  "재물운":["돈의 흐름을 읽는 시간","재정적 기회와 소비 습관, 안정적인 자금 관리에 관한 해석을 제공할 예정입니다."],
- "직업운":["일과 기회의 변화","직장과 사업, 새로운 도전에 관한 개인별 해석을 제공할 예정입니다."],
- "연애운":["마음과 인연의 방향","새로운 만남과 기존 관계에 관한 조언을 제공할 예정입니다."],
+   "직업운":"일할 때는 '"+story[fire][0]+"'와 '"+story[earth][0]+"'를 생각해볼 수 있어요. "+story[fire][1],
+   "연애운":"사람과의 관계에서는 '"+story[earth][0]+"'가 하나의 주제예요. "+story[earth][1]+" 다만 만남이나 결혼 시기를 사주로 확정할 수는 없어요."
  "월별운세":["1월부터 12월까지","매월의 주요 주제와 주의점, 실천 조언을 담을 예정입니다."]
 };
 function showTab(k){
@@ -181,7 +181,7 @@ el("restart").addEventListener("click",()=>{
   card.id="realSaju";card.className="card";
   result.insertBefore(card,result.firstChild);
   const heading=document.createElement("h2");
-  heading.textContent="나의 사주팔자 · 계산 결과";
+  heading.textContent="태어난 날에 담긴 나의 기운";
   card.appendChild(heading);
   try{
    if(!window.Solar||!window.Lunar)throw Error("계산 라이브러리를 불러오지 못했습니다. 인터넷 연결을 확인해 주세요.");
@@ -210,7 +210,7 @@ el("restart").addEventListener("click",()=>{
    ];
    if(!unknown)pillars.push(["시주",eight.getTime()]);
    const little=document.createElement("div");
-   little.className="eyebrow";little.textContent="FOUR PILLARS · 만세력";
+   little.className="eyebrow";little.textContent="사주 계산 결과 · 네 가지 기둥";
    card.appendChild(little);
    const date=put("환산 양력: "+solar.getYear()+"년 "+solar.getMonth()+"월 "+solar.getDay()+"일");
    card.appendChild(date);
@@ -237,13 +237,13 @@ el("restart").addEventListener("click",()=>{
     const v=wx[value[0]];
     if(v)elements[v]++;
    });
-   const sub=document.createElement("h2");sub.textContent="나의 일간: "+ko(dayStem)+" · "+wx[dayStem]+" 기운";
+   const sub=document.createElement("h2");sub.textContent="나를 대표하는 기운: "+wx[dayStem]+"("+ko(dayStem)+")";
    card.appendChild(sub);
    card.appendChild(put(traits[dayStem]||"일간에 대한 설명을 준비 중입니다."));
-   card.appendChild(put("천간의 오행 수: "+Object.entries(elements).map(([k,v])=>k+" "+v).join(" · ")));
+   card.appendChild(put("다섯 가지 기운을 간단히 살펴보면: "+Object.entries(elements).map(([k,v])=>k+" "+v).join(" · ")));
    if(unknown)card.appendChild(put("출생시간 미상으로 시주는 계산하지 않았습니다."));
    const note=document.createElement("p");note.className="note";
-   note.textContent="※ 계산 라이브러리 기준의 기초 사주입니다. 오행 수는 천간만 단순 집계하며 지장간·계절 세력을 반영한 강약 분석이 아닙니다. 출생지·태양시 보정, 23시 일주 경계, 한국식 절입 기준은 별도 검증이 필요합니다. 아래의 2027년 프리미엄 운세 문구는 여전히 예시입니다.";
+   note.textContent="※ 위 숫자는 사주 네 기둥의 윗글자만 센 결과예요. 어떤 기운이 강하거나 약하다는 뜻은 아니에요. 태어난 지역과 절기가 바뀌는 정확한 시각은 판매 전 추가 검증이 필요해요.";
    card.appendChild(note);
   }catch(err){
    card.appendChild(put("계산 오류: "+(err.message||String(err))));
@@ -290,7 +290,7 @@ function render(){
  $("v4Reading")?.remove();
  const card=document.createElement("section");card.className="card";card.id="v4Reading";
  const small=document.createElement("div");small.className="eyebrow";small.textContent="2027 PERSONAL READING · BETA";card.appendChild(small);
- const title=document.createElement("h2");title.textContent="나의 2027년 · 정미년 해석";card.appendChild(title);
+ const title=document.createElement("h2");title.textContent="2027년, 나에게 중요한 이야기";card.appendChild(title);
  try{
   if(!window.Solar||!window.Lunar)throw Error("만세력 라이브러리를 불러오지 못했습니다.");
   const y=+$("year").value,m=+$("month").value,d=+$("day").value;
@@ -309,18 +309,18 @@ function render(){
   if(!fire||!earth)throw Error("십성 계산 결과를 확인할 수 없습니다.");
   const annual=Solar.fromYmdHms(2027,7,1,12,0,0).getLunar().getEightChar().getYear();
   if(annual!=="丁未")throw Error("2027년 연주 기준을 확인할 수 없습니다.");
-  line(card,"일간 "+kor[day]+"("+day+")에게 2027년 정화(丁)는 '"+fire+"', 미토(未)의 중심 기운 기토(己)는 '"+earth+"'로 분류됩니다.");
+  line(card,"태어난 날을 대표하는 기운은 "+kor[day]+"("+day+")이에요. 이를 기준으로 2027년에 어떤 점에 관심을 두면 좋을지 살펴봤어요.");
   const a=document.createElement("div");a.className="feature";a.style.marginTop="14px";
-  const ah=document.createElement("div");ah.className="tag";ah.textContent="정화 · "+fire+" · "+story[fire][0];a.appendChild(ah);
+  const ah=document.createElement("div");ah.className="tag";ah.textContent="첫 번째 이야기 · "+story[fire][0];a.appendChild(ah);
   line(a,story[fire][1]);card.appendChild(a);
   const b=document.createElement("div");b.className="feature";b.style.marginTop="12px";
-  const bh=document.createElement("div");bh.className="tag";bh.textContent="미토의 본기 · "+earth+" · "+story[earth][0];b.appendChild(bh);
+  const bh=document.createElement("div");bh.className="tag";bh.textContent="두 번째 이야기 · "+story[earth][0];b.appendChild(bh);
   line(b,story[earth][1]);card.appendChild(b);
   const tabs=document.createElement("div");tabs.className="tabs";card.appendChild(tabs);
   const detail=document.createElement("div");detail.className="feature";card.appendChild(detail);
   const entries={
-   "종합운":"2027년의 주요 해석 단서는 "+fire+"과 "+earth+"입니다. "+story[fire][1]+" "+story[earth][1],
-   "재물운":([fire,earth].some(v=>v==="정재"||v==="편재")?"재성 관계가 포함돼 있어 재정 계획과 거래를 돌아보는 주제로 설명할 수 있습니다. ":"대표 십성에 재성이 직접 드러나지는 않지만 이 사실만으로 재물운의 좋고 나쁨을 판단할 수는 없습니다. ")+"실제 수입이나 투자 성과는 사주로 예측하거나 보장할 수 없습니다.",
+   "종합운":"2027년에는 '"+story[fire][0]+"'와 '"+story[earth][0]+"'를 돌아보세요. "+story[fire][1]+" "+story[earth][1],
+   "재물운":([fire,earth].some(v=>v==="정재"||v==="편재")?"돈을 벌고 관리하는 방법을 돌아보는 해석이 나왔어요. 지출과 계약 조건을 점검해 보세요. ":"돈이 들어올지 줄어들지 사주만으로 알 수는 없어요. 수입과 지출 계획을 살펴보세요. ")+"투자 결과는 사주로 예측할 수 없어요.",
    "직업운":"업무와 협업에서는 '"+story[fire][0]+"' 및 '"+story[earth][0]+"'의 관점을 점검해 보세요. "+story[fire][1],
    "연애운":"연간과 지지 본기의 관계는 각각 "+fire+"과 "+earth+"입니다. 이 분류만으로 연애·결혼 시기나 상대의 행동을 확정할 수는 없습니다. "+story[earth][1]
   };
@@ -335,7 +335,7 @@ function render(){
    button.addEventListener("click",()=>select(k));tabs.appendChild(button);
   });
   select("종합운");
-  line(card,"※ 정미년 해석은 입춘 이후를 기준으로 한 전통 명리학 규칙 기반 시연입니다. 원국 전체의 강약·용신·대운·합충 관계·출생지 보정은 아직 반영하지 않았습니다. 아래의 7,900원 프리미엄 화면은 아직 예시이며 결제할 수 없습니다.","note");
+  line(card,"※ 전통 사주풀이의 일부 규칙을 활용한 테스트 결과예요. 사주 전체를 아직 반영하지 않았으며 미래를 확정적으로 알려주지 않아요. 7,900원 상품은 아직 판매하지 않아요.","note");
  }catch(e){line(card,"해석을 표시하지 못했어요: "+(e.message||"계산 확인 필요"),"note");}
  const saju=$("realSaju");
  if(saju)saju.insertAdjacentElement("afterend",card);
@@ -386,7 +386,7 @@ function monthly(){
  get("v5Monthly")?.remove();
  const card=document.createElement("section");card.className="card";card.id="v5Monthly";
  const over=document.createElement("div");over.className="eyebrow";over.textContent="2027 MONTHLY FORTUNE · BETA";card.appendChild(over);
- const title=document.createElement("h2");title.textContent="2027년 나의 12개월 흐름";card.appendChild(title);
+ const title=document.createElement("h2");title.textContent="2027년, 달마다 살펴볼 이야기";card.appendChild(title);
  try{
   if(!window.Solar||!window.Lunar)throw Error("달력 라이브러리를 읽지 못했습니다.");
   const y=+get("year").value,m=+get("month").value,d=+get("day").value;
@@ -404,7 +404,7 @@ function monthly(){
   }
   const original=born.getLunar().getEightChar();
   const dayStem=original.getDayGan(),dayBranch=original.getDayZhi();
-  paragraph(card,"나의 일간 "+stemMap[dayStem]+"을 기준으로 매월 15일 정오의 절기 월주를 계산해 해석합니다. 각 달의 시작일과 끝일은 절기에 따라 달라지므로, 아래 내용은 그달 전체에 적용되는 예측이 아닙니다.","note");
+  paragraph(card,"태어난 날의 기운과 매달의 기운을 비교했어요. 아래에서 월을 눌러 그달에 생각해볼 주제를 확인해 보세요. 매월 15일을 기준으로 계산하므로 그달 전체의 미래를 예측하는 것은 아니에요.","note");
   const grid=document.createElement("div");grid.style.cssText="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:16px";card.appendChild(grid);
   const entries=[];
   for(let i=1;i<=12;i++){
@@ -420,21 +420,21 @@ function monthly(){
    const data=entries[i-1];if(!data)return;
    buttons.forEach((b,n)=>b.style.borderColor=n===i-1?"#d8b875":"#5a482e");
    detail.replaceChildren();
-   const label=document.createElement("div");label.className="tag";label.textContent=monthNames[i]+" · "+stemMap[data.pillar.charAt(0)]+branchMap[data.pillar.charAt(1)]+" · "+data.ten;detail.appendChild(label);
+   const label=document.createElement("div");label.className="tag";label.textContent=monthNames[i]+" · 이번 달의 이야기";detail.appendChild(label);
    const heading=document.createElement("h2");heading.textContent=themes[data.ten][0];detail.appendChild(heading);
-   paragraph(detail,monthNames[i]+"의 절기 월간이 일간에 "+data.ten+"으로 분류돼, 전통 명리학에서는 '"+themes[data.ten][0]+"'을 하나의 해석 주제로 삼습니다.");
+   paragraph(detail,monthNames[i]+"에는 '"+themes[data.ten][0]+"'를 생각해볼 수 있어요. 전통 사주풀이에서는 태어난 날과 이번 달의 기운을 비교해 이런 주제를 읽어요.");
    paragraph(detail, themes[data.ten][1]+" "+themes[data.ten][2]);
-   if(data.clash)paragraph(detail,"또한 15일 기준 월지와 타고난 일지가 육충 관계로 분류됩니다. 이를 불운의 확정적 징조로 해석하기보다 일정이나 관계의 변화를 점검하는 상징적 단서로 살펴보세요.");
-   paragraph(detail,"해석 기준일: 2027년 "+i+"월 15일 낮 12시 · 절기 월주","note");
+   if(data.clash)paragraph(detail,"이달에는 변화나 부딪힘을 상징하는 관계도 계산돼요. 나쁜 일이 생긴다는 뜻은 아니니, 일정과 대화를 조금 더 꼼꼼히 살펴보는 계기로 삼아보세요.");
+   paragraph(detail,"계산에 사용한 날짜: 2027년 "+i+"월 15일 정오","note");
   }
   entries.forEach(data=>{
    const b=document.createElement("button");b.type="button";b.className="tab";b.style.cssText="border-radius:11px;padding:10px 5px;text-align:center";
-   b.textContent=data.month+"월 "+stemMap[data.pillar.charAt(0)]+branchMap[data.pillar.charAt(1)];
+   b.textContent=data.month+"월 · "+themes[data.ten][0];
    b.addEventListener("click",()=>choose(data.month));
    grid.appendChild(b);buttons.push(b);
   });
   choose(1);
-  paragraph(card,"※ 이 월별 해석은 십성과 일지-월지의 일부 관계만 사용하는 규칙 기반 체험판입니다. 대운, 전체 오행 세력, 용신, 절입 시각의 한국식 검증, 출생지 보정은 아직 반영하지 않았고 미래 사건을 예측하거나 보장하지 않습니다. 1월은 입춘 이전 시기이며, 12개월 모두 고정 월간 운세로 단정할 수 없습니다.","note");
+  paragraph(card,"※ 전통 사주풀이의 일부 규칙을 활용한 체험판이에요. 출생지역과 절기 시각은 더 검증해야 해요. 미래에 일어날 일을 확정적으로 알려주지는 않아요.","note");
  }catch(e){paragraph(card,"월별 분석 오류: "+(e.message||String(e)),"note");}
  const prior=get("v4Reading")||get("realSaju");
  if(prior)prior.insertAdjacentElement("afterend",card);else result.insertBefore(card,result.firstChild);
@@ -445,5 +445,6 @@ get("start")?.addEventListener("click",()=>setTimeout(monthly,160));
 <!-- END UNMYEONGSEO-V5-MONTHLY -->
 
 
+<!-- EASY-KOREAN-V6 -->
 </body>
 </html>
