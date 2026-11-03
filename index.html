@@ -820,27 +820,37 @@ function person(){
 }
 function annualIntro(){
  const root=$("annualIntro");root.replaceChildren();
- root.append(make("div","정옥순 할매가 들려주는 2027년","eyebrow"));
- say(root,"“"+state.name+"아. 2027년은 좋다 나쁘다 한마디로 끝낼 운이 아니야.”","okbig");
- storyIntro(root);
- moment(root,"돈의 흐름",[
-  "“돈 문제에선 "+trimline(state.annual.money)+"이 첫 번째 주제야.”",
-  "“또 하나는 "+trimline(state.ground.money)+"이지.”",
-  "“혹시 계약하거나 누군가와 돈을 나눌 일이 생기면 숫자부터 확인해. 말만 믿고 넘기지는 말고.”"
+ const day=state.day,month=ten(day,state.p.getMonthGan());
+ const year=ten(day,"丁"),land=ten(day,"己");
+ const y=oksoonTenPunch[year],g=oksoonTenPunch[land];
+ const person=oksoonSharp[day],name=oksoonCallName(state.name);
+ const top={
+  "비견":"남하고 보조 맞추다 자네가 원하는 걸 놓치면 안 돼.",
+  "겁재":"남과 비교해서 쫓아가기 시작하면 결국 내 시간과 돈만 잃어.",
+  "식신":"할 생각만 쌓아두면 아무 소용 없어. 작은 결과 하나라도 완성해.",
+  "상관":"하고 싶은 말을 다 하는 것과 잘 전달하는 건 다르지.",
+  "편재":"괜찮아 보이는 제안이 모두 자네 몫은 아니야. 조건부터 따져.",
+  "정재":"한 번에 크게 버는 꿈보다 손에 남는 돈부터 계산해.",
+  "편관":"힘든 일이 생기면 혼자 다 떠안는 버릇부터 버려.",
+  "정관":"남의 기대를 지키느라 정작 내 선택을 미루지 마.",
+  "편인":"머릿속에서만 계속 계산하면 좋은 때도 지나가.",
+  "정인":"준비는 충분할 수도 있어. 이제 실제로 해봐야 할 때지."
+ };
+ root.append(make("div","정옥순 할매가 먼저 짚는 2027년","eyebrow"));
+ say(root,"“"+name+", 올해는 "+y[0]+"야.”","okbig");
+ moment(root,"올해 제일 먼저 찔러볼 약점",[
+  "“"+top[year]+"”",
+  "“자네에게는 "+person[0]+" "+person[1]+" 그 성향을 2027년에 어떻게 쓸지가 중요한 거야.”"
  ]);
- moment(root,"일의 흐름",[
-  "“일에서는 "+trimline(state.annual.work)+"을 살펴보게.”",
-  "“거기에 "+trimline(state.ground.work)+"이란 주제도 붙지.”",
-  "“자네가 선택할 일은 결국 현실 조건을 보고 결정해야 해. 좋은 말에 급하게 계약하지 말거라.”"
+ moment(root,"왜 이렇게 읽느냐면",[
+  "“2027년은 정미(丁未)년이고, 자네 일간(태어난 날 윗글자)은 "+ganKo[day]+"이야. 일간과 올해 정(丁)의 관계는 "+tenEasy(year)+"라고 하지.”",
+  "“이건 자네의 미래를 확정하는 말이 아니라, 명리학에서 올해의 특징을 읽는 방법이야.”"
  ]);
- moment(root,"사람의 흐름",[
-  "“사람 관계에선 "+trimline(state.annual.love)+"을 먼저 생각해 봐.”",
-  "“또 "+trimline(state.ground.love)+"도 무시하지 마.”",
-  "“누굴 만나거나 헤어진다는 날짜를 지어낼 순 없어. 대신 오해가 생기기 전에 말로 확인하는 게 중요해.”"
+ moment(root,"할매의 올해 한 가지 당부",[
+  "“올해를 두고 이것저것 겁먹지 마. "+g[1]+"”",
+  "“돈 이야기는 돈에서, 일 이야기는 일에서 따로 풀어줄게. 여기선 딱 하나만 기억해. "+top[year]+"”"
  ]);
- say(root,"“자네가 지금 가장 궁금한 걸 아래에서 골라봐. 할매가 그 얘기부터 풀어줄 테니까.”");
 }
-
 /* OKSOON-PAST-LIFE-V21: explicitly fictional symbolic storytelling */
 const pastScenes={
 "甲":{role:"산길에 큰 나무를 심고 길을 내던 마을의 길잡이",setting:"비가 오면 흙이 쓸려 내려가던 산골 마을",gift:"혼란스러운 사람들 사이에서 방향을 정하고 한 번 약속한 일을 끝까지 지킨 것",regret:"모두가 같은 속도로 걸을 수 없다는 사실을 늦게 알아차린 것",today:"내 생각이 분명할수록 상대가 따라오고 있는지도 확인하는 일"},
@@ -893,7 +903,7 @@ function preview(index){
   "“그런데 "+trimline(b.blind)+"도 함께 봐야지.”",
   "“이걸 어찌 다스리느냐에 따라 같은 성미도 장점이 되고 짐이 되는 거야.”"
  ]);
- if(index===1){storyIntro(root);say(root,"“좋게 쓰면 "+trimline(a.main)+"이지.”");say(root,"“하지만 "+trimline(g.main)+"이 빠지면 균형이 깨질 수 있어.”");}
+ if(index===1)moment(root,"2027년의 다른 얼굴",["“하늘의 정(丁)과 땅의 미(未)를 따로 비교해야 해. "+oksoonTenPunch[ten(state.day,"己")][0]+"이라는 주제도 함께 보여.”","“새로운 선택이 생긴다면 무조건 좋다 나쁘다 판단하기 전에 내가 감당할 몫이 뭔지 확인하거라.”"]);
  if(index===2)moment(root,"돈 문제",[
   "“돈에선 "+trimline(a.money)+"이 먼저 보여.”",
   "“그리고 "+trimline(g.money)+"도 신경 쓰거라.”",
