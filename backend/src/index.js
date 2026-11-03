@@ -93,7 +93,18 @@ export default {
       instructions:prompt.instructions,input:prompt.input}),
     signal:AbortSignal.timeout(28000)
    });
-   if(!upstream.ok)throw new Error("OPENAI_"+upstream.status);
+   if(!upstream.ok){
+    const details=await upstream.json().catch(()=>({}));
+    const code=String(details.error?.code||"").slice(0,60);
+    const type=String(details.error?.type||"").slice(0,60);
+    // Keep API secrets and upstream error messages out of the public response.
+    if(upstream.status===429 && (code==="insufficient_quota"||type==="insufficient_quota"))
+     throw new Error("API_CREDITS");
+    if(upstream.status===429)throw new Error("API_RATE_LIMIT");
+    if(upstream.status===401||upstream.status===403)throw new Error("API_KEY_INVALID");
+    if(upstream.status===400)throw new Error("API_REQUEST_INVALID");
+    throw new Error("OPENAI_"+upstream.status);
+   }
    const out=await upstream.json();
    const answer=extractText(out);
    if(!answer)throw new Error("EMPTY_ANSWER");
@@ -103,7 +114,16 @@ export default {
   }catch(error){
    // Release the turn on an upstream failure; don't charge for a failed answer.
    await env.DB.prepare("UPDATE sessions SET free_used=0,status='ready' WHERE id=? AND status='processing'").bind(id).run();
-   return json({error:"할매가 잠시 말을 고르는 중이야. 조금 뒤 다시 질문해 줘."},503,headers);
+   const code=String(error?.message||"UNKNOWN");
+   const errors={
+    API_CREDITS:"OpenAI API 결제 잔액이 부족하거나 사용 한도에 도달했어. OpenAI Platform의 Billing에서 크레딧과 한도를 확인해 줘.",
+    API_RATE_LIMIT:"OpenAI API 요청 제한에 걸렸어. 잠시 뒤 다시 시도해 줘.",
+    API_KEY_INVALID:"OpenAI API 키 인증에 실패했어. GitHub의 OPENAI_API_KEY 등록값을 확인해 줘.",
+    API_REQUEST_INVALID:"OpenAI API 요청 설정에 문제가 있어. 관리자에게 알려줘.",
+    EMPTY_ANSWER:"할매가 답변 내용을 받지 못했어. 잠시 뒤 다시 시도해 줘."
+   };
+   const safeCode=/^OPENAI_\d{3}$/.test(code)?code:Object.hasOwn(errors,code)?code:"AI_UNAVAILABLE";
+   return json({code:safeCode,error:errors[code]||"AI 서버에서 답변을 받아오지 못했어. 잠시 뒤 다시 시도해 줘."},503,headers);
   }
  }
 };
