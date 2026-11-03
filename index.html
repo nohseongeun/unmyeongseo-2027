@@ -3,68 +3,151 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>운명서 2027</title>
+<title>운명서 2027 | 당신의 2027년을 미리 읽다</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#11100d;color:#f2dda8;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif}
-main{max-width:480px;margin:auto;padding:35px 22px}
-header{text-align:center;padding:25px 0}
-small{color:#c7a96d;letter-spacing:2px}
-h1{font-size:43px;margin:12px 0}
-p{color:#c5b9a4}
-section{background:#211c15;border:1px solid #56472f;border-radius:18px;padding:22px}
-label{display:block;margin:17px 0 8px;color:#e6d6b9}
-input,select{width:100%;padding:13px 8px;border:1px solid #69583b;border-radius:9px;background:#30281d;color:white;font-size:16px;min-width:0}
-.group{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
-.two{grid-template-columns:repeat(2,minmax(0,1fr))}
-.check{display:flex;align-items:center;gap:10px;color:#ddd}
-.check input{width:auto}
-button{width:100%;margin-top:22px;padding:16px;background:#d8b875;color:#17120a;border:0;border-radius:10px;font-size:16px;font-weight:bold}
-#result{display:none;margin-top:20px}
+html{scroll-behavior:smooth}
+body{margin:0;background:#100e0b;color:#f1e2c5;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;line-height:1.65}
+main{max-width:530px;margin:auto;padding:20px 18px 60px}
+header{text-align:center;padding:42px 5px 30px}
+.eyebrow{color:#d9ba7c;font-size:11px;letter-spacing:2px;font-weight:600}
+h1{font-size:49px;letter-spacing:5px;margin:6px 0;color:#f1d9a0}
+h2{font-size:22px;line-height:1.4;margin:10px 0}
+p{color:#c9bea9;margin:9px 0}
+.star{color:#d6b777;margin:18px}
+.card{background:#211b14;border:1px solid #5a482e;border-radius:20px;padding:23px;margin:14px 0}
+label{display:block;color:#e8d8b7;font-size:14px;margin:17px 0 7px}
+input,select{width:100%;background:#30271b;color:#fff4de;border:1px solid #675539;border-radius:10px;padding:13px 10px;font-size:16px;min-width:0}
+.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.cols.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.check{display:flex;align-items:center;gap:10px}
+.check input{width:19px;height:19px}
+button{cursor:pointer}
+.primary{width:100%;border:0;background:#dec087;color:#1b150d;padding:16px 10px;border-radius:11px;margin-top:22px;font-size:16px;font-weight:750}
+.outline{width:100%;border:1px solid #836a43;background:transparent;color:#f0d49d;padding:13px;border-radius:10px;margin-top:10px;font-size:14px}
+.note{font-size:12px;color:#a89d8d}
+.hidden{display:none!important}
+hr{border:0;border-top:1px solid #544632;margin:22px 0}
+.price{font-weight:800;font-size:30px;color:#f0d399}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:17px 0}
+.tab{border:1px solid #665237;background:#302719;color:#dbc9a9;border-radius:100px;padding:8px 12px;font-size:13px}
+.tab.active{background:#ddbd80;color:#1b150c;font-weight:bold}
+.feature{background:#30271b;border-radius:13px;padding:18px}
+.tag{font-size:12px;color:#dab878;letter-spacing:1px}
+.foot{text-align:center;font-size:12px;color:#887c69;margin-top:32px}
 </style>
 </head>
 <body>
 <main>
-<header><small>運命書 · 2027 EDITION</small><h1>운명서</h1><p>당신의 2027년을 미리 읽다</p></header>
-<section>
+<header>
+<div class="eyebrow">2027 PERSONAL FORTUNE BOOK</div>
+<h1>運命書</h1>
+<p>당신의 2027년을 미리 읽다</p>
+<div class="star">✦ &nbsp; ✧ &nbsp; ✦</div>
+</header>
+<section class="card" id="formCard">
+<div class="eyebrow">YOUR STORY BEGINS</div>
 <h2>나의 운명서 시작하기</h2>
-<label>이름</label><input id="name" placeholder="이름 입력">
-<label>태어난 날짜</label>
-<div class="group"><select id="year"></select><select id="month"></select><select id="day"></select></div>
-<label>양력 / 음력</label>
+<p>태어난 날의 정보를 입력해 주세요.</p>
+<label for="name">이름</label>
+<input id="name" placeholder="이름 입력" autocomplete="off">
+<label>생년월일</label>
+<div class="cols"><select id="year" aria-label="태어난 연도"></select><select id="month" aria-label="태어난 월"></select><select id="day" aria-label="태어난 일"></select></div>
+<label for="calendar">양력 / 음력</label>
 <select id="calendar"><option>양력</option><option>음력</option><option>음력 윤달</option></select>
 <label>태어난 시간</label>
-<label class="check"><input id="unknown" type="checkbox" onchange="toggleTime()">태어난 시간 모름</label>
-<div class="group two" id="timebox"><select id="hour"></select><select id="minute"></select></div>
-<button onclick="preview()">무료 미리보기 확인하기</button>
+<label class="check"><input type="checkbox" id="unknown">태어난 시간 모름</label>
+<div class="cols two" id="timeBox"><select id="hour" aria-label="시"></select><select id="minute" aria-label="분"></select></div>
+<button type="button" class="primary" id="start">나의 운명서 무료로 열어보기 →</button>
+<p class="note">현재는 기능 시연용입니다. 실제 사주 분석 및 개인정보 저장 기능은 연결되지 않았습니다.</p>
 </section>
-<section id="result"></section>
+<section id="result" class="hidden">
+<div class="card">
+<div class="eyebrow">2027 FREE PREVIEW</div>
+<h2 id="resultName"></h2>
+<p id="resultBirth"></p>
+<hr>
+<div class="tag">2027년을 위한 첫 번째 메시지</div>
+<h2>새로운 한 해, 나의 가능성을 읽다</h2>
+<p>2027년을 준비하며 나의 방향과 목표를 돌아보세요. 지금은 실제 사주풀이가 아닌, 결과 화면을 미리 살펴보는 체험판입니다.</p>
+<p class="note">※ 실제 개인별 사주 계산과 운세 해석은 아직 구현되지 않았습니다.</p>
+</div>
+<div class="card">
+<div class="eyebrow">PREMIUM FORTUNE REPORT</div>
+<h2>더 깊이 살펴보는 나의 운명서</h2>
+<p>종합운부터 재물운, 직업운, 연애운, 월별운세까지.</p>
+<div class="tabs" id="tabs"></div>
+<div class="feature">
+<div class="tag" id="tabLabel"></div>
+<h2 id="tabTitle"></h2>
+<p id="tabText"></p>
+<p class="note">예시 구성으로, 입력한 생년월일에 따른 실제 운세가 아닙니다.</p>
+</div>
+<hr>
+<div class="tag">2027 PREMIUM</div>
+<div class="price">7,900원</div>
+<p>개인별 상세 리포트 · 향후 제공 예정</p>
+<button type="button" class="outline" disabled>결제 준비 중 · 현재 구매 불가</button>
+</div>
+<button type="button" class="outline" id="restart">다른 정보로 다시 체험하기</button>
+</section>
+<div class="foot">運命書 © 2027 · 무료 기능 테스트</div>
 </main>
 <script>
-function fill(id,start,end,suffix,reverse=false){
-const s=document.getElementById(id);
-const values=Array.from({length:end-start+1},(_,i)=>start+i);
-if(reverse)values.reverse();
-values.forEach(v=>s.add(new Option(v+suffix,String(v))));
+const el=id=>document.getElementById(id);
+function fill(id,a,b,suffix,reverse){
+ const values=Array.from({length:b-a+1},(_,i)=>a+i);
+ if(reverse)values.reverse();
+ values.forEach(v=>el(id).add(new Option(v+suffix,String(v))));
 }
 fill("year",1900,2026,"년",true);
 fill("month",1,12,"월");
 fill("day",1,31,"일");
 fill("hour",0,23,"시");
 fill("minute",0,59,"분");
-year.value="1991";month.value="10";day.value="21";hour.value="9";minute.value="0";
-function toggleTime(){document.getElementById("timebox").style.display=unknown.checked?"none":"grid"}
-function preview(){
-const n=document.getElementById("name").value.trim();
-const y=+year.value,m=+month.value,d=+day.value;
-if(!n){alert("이름을 입력해 주세요.");return}
-if(d>new Date(y,m,0).getDate()){alert("올바른 날짜를 선택해 주세요.");return}
-const t=unknown.checked?"모름":hour.value+"시 "+minute.value+"분";
-const r=document.getElementById("result");
-r.style.display="block";
-r.innerHTML="<small>2027 FREE PREVIEW</small><h2>"+n.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")+"님의 운명서</h2><p>"+y+"년 "+m+"월 "+d+"일 · "+calendar.value+"</p><p>태어난 시간: "+t+"</p><hr><h3>2027년, 나의 새로운 이야기</h3><p>운명서 무료 테스트에 오신 것을 환영합니다. 실제 사주 계산과 개인별 운세는 아직 연결되지 않았습니다.</p><p>프리미엄 리포트 예정 가격: 7,900원</p>";
-r.scrollIntoView({behavior:"smooth"});
+el("year").value="1991";
+el("month").value="10";
+el("day").value="21";
+el("hour").value="9";
+el("minute").value="0";
+el("unknown").addEventListener("change",()=>{
+ el("timeBox").classList.toggle("hidden",el("unknown").checked);
+});
+const sections={
+ "종합운":["2027년의 전체 흐름","새로운 목표를 설정하고 중요한 선택을 준비하는 한 해를 어떻게 바라볼지 안내하는 구성입니다."],
+ "재물운":["돈의 흐름을 읽는 시간","재정적 기회와 소비 습관, 안정적인 자금 관리에 관한 해석을 제공할 예정입니다."],
+ "직업운":["일과 기회의 변화","직장과 사업, 새로운 도전에 관한 개인별 해석을 제공할 예정입니다."],
+ "연애운":["마음과 인연의 방향","새로운 만남과 기존 관계에 관한 조언을 제공할 예정입니다."],
+ "월별운세":["1월부터 12월까지","매월의 주요 주제와 주의점, 실천 조언을 담을 예정입니다."]
+};
+function showTab(k){
+ document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.textContent===k));
+ el("tabLabel").textContent=k;
+ el("tabTitle").textContent=sections[k][0];
+ el("tabText").textContent=sections[k][1];
 }
+Object.keys(sections).forEach(k=>{
+ const b=document.createElement("button");
+ b.type="button";b.className="tab";b.textContent=k;
+ b.addEventListener("click",()=>showTab(k));
+ el("tabs").appendChild(b);
+});
+showTab("종합운");
+el("start").addEventListener("click",()=>{
+ const n=el("name").value.trim();
+ const y=+el("year").value,m=+el("month").value,d=+el("day").value;
+ if(!n){alert("이름을 입력해 주세요.");return;}
+ if(d>new Date(y,m,0).getDate()){alert("올바른 날짜를 선택해 주세요.");return;}
+ const time=el("unknown").checked?"태어난 시간 모름":el("hour").value+"시 "+el("minute").value+"분";
+ el("resultName").textContent=n+"님의 운명서";
+ el("resultBirth").textContent=y+"년 "+m+"월 "+d+"일 · "+el("calendar").value+" · "+time;
+ el("result").classList.remove("hidden");
+ el("result").scrollIntoView({behavior:"smooth",block:"start"});
+});
+el("restart").addEventListener("click",()=>{
+ el("result").classList.add("hidden");
+ el("formCard").scrollIntoView({behavior:"smooth"});
+});
 </script>
 </body>
 </html>
