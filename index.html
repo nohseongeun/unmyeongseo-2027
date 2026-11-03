@@ -189,6 +189,151 @@ hr{border:0;border-top:1px solid #544632;margin:22px 0}
 })();
 </script>
 <!-- END UNMYEONGSEO-CATALOG-V8 -->
+
+<!-- UNMYEONGSEO-V12-PAGES -->
+<style>
+body.v12-mode #result,body.v12-mode #catalog,body.v12-mode #premiumV9,body.v12-mode .foot{display:none!important}
+#v12Wizard{margin-top:14px}
+.v12-page{display:none}
+.v12-page.active{display:block}
+.v12-progress{display:flex;gap:5px;margin:12px 0 20px}
+.v12-progress span{flex:1;background:#413322;border-radius:8px;height:5px}
+.v12-progress span.current{background:#dcbc83}
+.v12-kicker{font-size:12px;color:#e2c58e;letter-spacing:1px}
+.v12-hero{font-size:25px;color:#f4d69d;line-height:1.5;margin:16px 0;font-weight:750}
+.v12-quote{border-left:3px solid #d8af6b;padding:16px;background:#312519;border-radius:8px;font-size:16px;color:#f4e3bd;line-height:1.85}
+.v12-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:20px 0 14px}
+.v12-tab{padding:13px 7px;border:1px solid #80663f;border-radius:10px;background:#33291e;color:#ead3a7;font-size:14px}
+.v12-tab.active{background:#ddbf84;color:#24180e;font-weight:700}
+.v12-panel{background:#30271b;border:1px solid #665034;border-radius:12px;padding:16px;min-height:170px}
+.v12-panel p{font-size:14px}
+.v12-bottom{display:flex;gap:8px;margin-top:22px}
+.v12-bottom button{flex:1;padding:14px 8px;border-radius:11px;font-size:14px;font-weight:700}
+.v12-back{background:transparent;color:#d9bf91;border:1px solid #776341}
+.v12-next{background:#e4c58d;border:0;color:#271d11}
+.v12-next:disabled{opacity:.65}
+.v12-card{background:#211b14;border:1px solid #655035;border-radius:18px;padding:22px}
+.v12-card h2{font-size:22px}
+.v12-card p{line-height:1.8}
+.v12-center{text-align:center}
+.v12-price{font-size:34px;font-weight:800;color:#f0d19a;margin:15px 0}
+.v12-mini{font-size:12px;color:#ad9c82}
+.v12-offer{border:1px solid #6e593a;border-radius:11px;padding:14px;margin:10px 0;background:#2c241b}
+.v12-offer strong{color:#f1d8a6}
+</style>
+<section id="v12Wizard" class="hidden" aria-label="운명서 단계별 체험">
+ <div class="v12-progress" id="v12Progress" aria-label="진행 단계"></div>
+ <section class="v12-page v12-card" data-step="2">
+  <div class="v12-kicker">02 / 05 · 나의 이야기</div>
+  <h2>태어난 날이 말해주는 나의 모습</h2>
+  <div id="v12Personality"></div>
+  <p class="v12-mini">전통 사주풀이에서 읽는 상징적인 성향이야기예요. 실제 성격을 정확히 판정하는 검사는 아니에요.</p>
+ </section>
+ <section class="v12-page v12-card" data-step="3">
+  <div class="v12-kicker">03 / 05 · 무료 운세 미리보기</div>
+  <h2>2027년, 무엇이 가장 궁금하세요?</h2>
+  <p>궁금한 항목을 골라 일부 이야기를 읽어보세요.</p>
+  <div id="v12Tabs" class="v12-tabs"></div>
+  <div id="v12Preview" class="v12-panel"></div>
+  <p class="v12-mini">일부 주제만 공개한 테스트 버전이며, 사주에 따라 해석이 달라집니다.</p>
+ </section>
+ <section class="v12-page v12-card v12-center" data-step="4">
+  <div class="v12-kicker">04 / 05 · 전체 운명서</div>
+  <h2>나에 관한 이야기, 여기서 끝이 아니에요</h2>
+  <p>돈과 일, 사랑, 한 해의 열두 달까지 더 깊게 살펴보는 운명서를 준비하고 있어요.</p>
+  <div class="v12-price">7,900원</div>
+  <div class="v12-offer">✦ 타고난 성향과 강점
+  <p>✦ 2027년 종합운 · 재물운 · 일과 관계</p>
+  <p>✦ 달마다 생각해볼 주제와 실천 조언</p></div>
+  <button class="v12-next" type="button" disabled style="width:100%;padding:15px;border-radius:11px">전체 리포트 결제 · 준비 중</button>
+  <p class="v12-mini">현재 실제 결제 및 유료 콘텐츠 제공은 불가능해요.</p>
+ </section>
+ <section class="v12-page v12-card" data-step="5">
+  <div class="v12-kicker">05 / 05 · 추가 상품 안내</div>
+  <h2>더 알고 싶은 이야기도 준비 중이에요</h2>
+  <p>전체 운명서 외에 특히 궁금한 주제만 깊게 다루는 별도 상품도 검토 중이에요.</p>
+  <div class="v12-offer"><strong>💞 우리 둘의 궁합</strong><p>서로의 성향을 비교하며 소통 방식을 돌아보는 보고서</p><div class="v12-mini">가격 미정 · 준비 중</div></div>
+  <div class="v12-offer"><strong>💰 나의 재물 성향 자세히 보기</strong><p>돈과 관련된 습관과 선택을 깊이 돌아보는 보고서</p><div class="v12-mini">가격 미정 · 준비 중</div></div>
+  <p class="v12-mini">※ 실제 결제와 유료 리포트는 아직 제공되지 않는 개발용 미리보기예요.</p>
+ </section>
+ <nav class="v12-bottom" aria-label="운명서 페이지 이동">
+  <button type="button" class="v12-back" id="v12Back">이전으로</button>
+  <button type="button" class="v12-next" id="v12Next">다음 이야기 보기 →</button>
+ </nav>
+ <p id="v12PageCaption" class="v12-mini v12-center"></p>
+</section>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const wizard=$("v12Wizard"),form=$("formCard");
+if(!wizard||!form||!$("start"))return;
+document.body.classList.add("v12-mode");
+let step=1;
+const tabs=["나의 성향","재물운","직업운","연애운","월별운세","기회·주의"];
+const tabButtons=[];
+function go(num){
+ step=Math.max(1,Math.min(5,num));
+ form.classList.toggle("hidden",step!==1);
+ wizard.classList.toggle("hidden",step===1);
+ wizard.querySelectorAll(".v12-page").forEach(page=>page.classList.toggle("active",Number(page.dataset.step)===step));
+ const bar=$("v12Progress");bar.replaceChildren();
+ for(let i=1;i<=5;i++){const sp=document.createElement("span");if(i<=step)sp.className="current";bar.append(sp);}
+ $("v12Back").textContent=step===2?"입력 수정":"이전으로";
+ $("v12Next").textContent=step===5?"처음부터 다시 보기":step===4?"추가 상품 살펴보기 →":"다음 이야기 보기 →";
+ $("v12PageCaption").textContent=step+" / 5 단계";
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function copyPreview(index){
+ const source=$("v11Card");
+ if(!source)return;
+ const original=source.querySelectorAll(".v11-tab")[index];
+ if(!original)return;
+ original.click();
+ const content=source.querySelector(".v11-detail");
+ if(content){const area=$("v12Preview");area.replaceChildren();area.append(content.cloneNode(true));}
+ tabButtons.forEach((button,i)=>button.classList.toggle("active",i===index));
+}
+function sync(){
+ const source=$("v11Card"),target=$("v12Personality");
+ target.replaceChildren();
+ if(!source){
+  target.append(document.createTextNode("운세 결과를 불러오지 못했어요. 날짜를 다시 확인해 주세요."));
+  return false;
+ }
+ const title=source.querySelector(".v11-hero"),quote=source.querySelector(".v11-quote");
+ if(!quote||!title){target.append(document.createTextNode("사주 해석에 필요한 정보를 확인해 주세요."));return false;}
+ const profile=quote.nextElementSibling;
+ const h=document.createElement("div");h.className="v12-hero";h.textContent=title.textContent;target.append(h);
+ const q=document.createElement("div");q.className="v12-quote";q.textContent=quote.textContent;target.append(q);
+ if(profile&&profile.tagName==="P"){const p=document.createElement("p");p.textContent=profile.textContent;target.append(p);}
+ const nextNote=profile?.nextElementSibling;
+ if(nextNote&&nextNote.tagName==="P"){const p=document.createElement("p");p.textContent=nextNote.textContent;target.append(p);}
+ copyPreview(0);
+ return true;
+}
+tabs.forEach((name,index)=>{
+ const b=document.createElement("button");b.type="button";b.className="v12-tab";b.textContent=name;
+ b.addEventListener("click",()=>copyPreview(index));
+ $("v12Tabs").append(b);tabButtons.push(b);
+});
+$("start").addEventListener("click",()=>{
+ const n=$("name").value.trim(),y=$("year").value,m=$("month").value,d=$("day").value;
+ if(!n||!y||!m||!d)return;
+ if(!$("unknown").checked&&(!$("hour").value||!$("minute").value))return;
+ if($("calendar").value==="양력"&&Number(d)>new Date(Number(y),Number(m),0).getDate())return;
+ setTimeout(()=>{if(!$("result").classList.contains("hidden")&&sync())go(2);},310);
+});
+$("v12Back").addEventListener("click",()=>go(step-1));
+$("v12Next").addEventListener("click",()=>{
+ if(step===5){$("result").classList.add("hidden");go(1);}
+ else go(step+1);
+});
+$("restart")?.addEventListener("click",()=>go(1));
+})();
+</script>
+<!-- END UNMYEONGSEO-V12-PAGES -->
+
 </main>
 <script>
 const el=id=>document.getElementById(id);
