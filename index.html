@@ -1625,6 +1625,37 @@ function oksoonHumanReading(root,index){
  }
 }
 
+
+function oksoonEmotionalContext(root,index){
+ const p=state.p,d=state.day,voice=oksoonEmotion[d],c=state.context||{},month=ten(d,p.getMonthGan()),w=oksoonMonthlyWound[month];
+ const show=(title,lines)=>moment(root,title,lines.map(x=>"“"+x+"”"));
+ const work={
+  office:["직장이라는 자리에서 받는 상처","직장에서는 일을 잘하는 사람보다 감정을 잘 감추는 사람이 유리해 보일 때가 있지. 자네는 "+voice[0]+"이니 "+voice[1]+".","상사의 칭찬 하나에도 기운이 나고, 무심한 말에는 하루 종일 마음이 걸릴 수 있어. 그건 직장 생활을 못한다는 뜻이 아니라 인정과 존중이 자네에게 어떤 의미인지 보여주는 장면이야."],
+  business:["사업하는 사람의 외로움","사업은 자네가 결정하고 책임지는 일이 많지. "+voice[2]+".","거래가 잘됐을 땐 누구나 웃지만 일이 틀어졌을 땐 내 판단을 전부 탓하게 될 수도 있어. 장사 수완과 마음의 무게는 별개인데, 자네는 그 둘을 섞어 느끼기 쉬운 성향으로 읽히는구먼."],
+  freelance:["프리랜서가 느끼는 평가의 무게","프리랜서는 결과물만 평가받는다고 생각하기 쉽지만 실제로는 내가 만든 것과 나 자신을 떼어놓기가 어렵지. "+voice[1]+".","잘했다는 말에 안도했다가 작은 수정 요청에 자신감을 잃는 장면이 생길 수도 있어. 자네가 "+voice[3]+"을 바라는 마음이 일에도 묻어나는 거야."],
+  search:["새로운 일을 기다리는 마음","일을 찾는 시기에는 작은 연락 한 통에도 마음이 들떴다 가라앉을 수 있어. "+voice[0]+"이라서 "+voice[2]+".","기다림이 길어지면 기회가 없는 게 아니라 내가 부족한 사람인 것처럼 느끼기 쉬워. 하지만 그 감정이 실제 능력의 증거는 아니지."],
+  other:["사람이 나를 평가하는 순간","어떤 일을 하든 평가받는 자리에 서면 마음이 움직이지. "+voice[1]+".","그때 자네는 "+voice[2]+". 스스로를 보호하던 방식이 오히려 다른 사람과의 거리를 만들 수 있겠지."]
+ };
+ const love={
+  single:["새로운 인연이 시작될 때","처음엔 괜찮은 척하다가 좋아질수록 기대가 커질 수 있지. 자네가 바라는 건 "+voice[3]+"이니까.","연락 하나가 늦어지면 상대 마음을 확인하기도 전에 스스로 물러나거나 애써 무심한 척할 수도 있어. 모두에게 그렇다는 건 아니지만 자네 사주에서 읽는 마음의 방향은 그런 쪽이야."],
+  dating:["오래 만난 사이에서 더 아픈 말","가까울수록 사소한 말이 더 아프지. 자네는 "+voice[1]+".","서로 사랑한다고 믿으면서도 '그 정도는 알아줄 줄 알았어'라는 말이 쌓일 수 있어. 그때 자네는 "+voice[2]+". 그래서 다툼이 끝나도 마음이 늦게 풀릴 수 있지."],
+  married:["함께 사는 사람 앞에서 숨기는 마음","부부나 동거하는 사이에는 하루의 가장 약한 얼굴도 보여주게 되지. 자네가 "+voice[0]+"이라고 해도 늘 강할 수는 없어.","집안일이나 생활비 이야기가 사실은 '내가 이렇게 하는 걸 알아주긴 해?'라는 마음으로 번질 수 있어. "+voice[3]+"이 채워지지 않을 때 서운함이 깊어지는 거지."],
+  other:["관계가 불분명할 때의 속마음","좋아하는지 미워하는지 마음이 복잡할 때는 머리와 가슴이 다른 말을 하지. 자네는 "+voice[2]+".","그 관계가 자네에게 왜 특별한지 생각하면 "+voice[3]+"과 이어질 수도 있겠어. 상대의 실제 마음은 상대에게 물어야 알지."]
+ };
+ if(index===2){
+  show("직업에 따라 돈이 다르게 아픈 이유",(work[c.work]||work.other).slice(1));
+  show("돈을 잃는 것과 인정받지 못하는 것은 달라",["돈이 나갔다는 사실보다 누군가 내 노력을 가볍게 여겼다고 느낄 때 마음에 더 오래 남을 수 있어.","월간 "+tenEasy(month)+"의 해석은 "+w[0]+"을 건드리지. "+w[1]+". 단순히 돈이 많고 적음만으로는 설명할 수 없는 성미야."]);
+ }else if(index===3){
+  const t=work[c.work]||work.other;show(t[0],t.slice(1));
+  show("일터에서 유독 피하고 싶은 장면",["자네가 정말 듣기 싫은 말은 '일을 못한다'보다 내 진심이 가볍게 평가받는 말일 수도 있어.",""+w[0]+"이면 자네는 "+voice[2]+". 그러니 직업운을 볼 때 일의 종류보다 평가와 인정에 대한 마음도 같이 읽는 거야."]);
+ }else if(index===4){
+  const t=love[c.love]||love.other;show(t[0],t.slice(1));
+  show("싸움이 끝나도 서운함이 남는 이유",["상대가 미안하다고 해도 내 마음을 제대로 이해했는지 의심이 남을 수 있어. 자네는 "+voice[3]+"을 원하니까.","월간의 "+tenEasy(month)+" 관계에서는 "+w[1]+". 그게 꼭 나쁜 관계라는 뜻은 아니지만 서로 다른 상처의 언어를 쓰는 셈이지."]);
+ }else if(index===5){
+  show("누구에게도 말하지 못하는 날",["어떤 날은 내 문제를 말하면 상대가 부담스러워할까 봐 혼자 견딜 수 있어. "+voice[2]+".","그럴 때 실제로 일어난 일보다 앞으로 벌어질 일을 머릿속에서 더 크게 그릴 수도 있겠지. 이건 명리의 성향 이야기이지 마음 상태를 진단하는 건 아니야."]);
+ }
+}
+
 function chapter(index){
  chapterIndex=index;
  const root=$("chapterBody");root.replaceChildren();
@@ -1632,7 +1663,7 @@ function chapter(index){
  root.append(make("h2",heading));
  if(index===6){monthReport(root)}
  else if(index===9){renderCompatibility(root)}
- else{oksoonHumanReading(root,index);if(index===1)renderDaewoon(root);}
+ else{oksoonHumanReading(root,index);oksoonEmotionalContext(root,index);if(index===1)renderDaewoon(root);}
  [...$("chapters").children].forEach((t,i)=>t.classList.toggle("active",i===index));
 }
 
