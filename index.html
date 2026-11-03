@@ -254,4 +254,97 @@ el("restart").addEventListener("click",()=>{
 })();
 </script>
 <!-- 운명서 계산 모듈 끝 -->
-</html></body>
+
+<!-- UNMYEONGSEO-V4-2027: Rule-based interpretation beta -->
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const idx={"甲":0,"乙":0,"丙":1,"丁":1,"戊":2,"己":2,"庚":3,"辛":3,"壬":4,"癸":4};
+const parity={"甲":0,"乙":1,"丙":0,"丁":1,"戊":0,"己":1,"庚":0,"辛":1,"壬":0,"癸":1};
+const kor={"甲":"갑","乙":"을","丙":"병","丁":"정","戊":"무","己":"기","庚":"경","辛":"신","壬":"임","癸":"계"};
+function god(a,b){
+ const x=idx[a],y=idx[b],same=parity[a]===parity[b];
+ if(x===undefined||y===undefined)return null;
+ if(x===y)return same?"비견":"겁재";
+ if((x+1)%5===y)return same?"식신":"상관";
+ if((x+2)%5===y)return same?"편재":"정재";
+ if((y+1)%5===x)return same?"편인":"정인";
+ if((y+2)%5===x)return same?"편관":"정관";
+}
+const story={
+ "비견":["자기주도와 동료","자신의 기준을 지키면서도 비슷한 입장의 사람들과 어떻게 협력할지 살펴보세요."],
+ "겁재":["경쟁과 협업","경쟁 상황에서 자원과 역할을 명확히 정하는 것이 중요한 주제로 해석됩니다."],
+ "식신":["실력과 꾸준함","기술을 꾸준히 다듬어 자신만의 성과를 쌓는 태도가 주제가 됩니다."],
+ "상관":["표현과 새 시도","새로운 생각을 드러내되 약속과 규칙을 점검하는 균형에 관심을 가져보세요."],
+ "편재":["기회 탐색과 거래","제안이 생겼을 때 기대 수익뿐 아니라 비용과 계약 조건을 함께 검토해 보세요."],
+ "정재":["생활과 재정 관리","지출 구조와 장기 계획을 정리하는 실천이 좋은 출발점이 될 수 있습니다."],
+ "편관":["도전과 압박","새로운 책임을 어떻게 감당할지 고민하며 무리한 일정을 피하는 전략을 생각해 보세요."],
+ "정관":["역할과 신뢰","일의 절차를 정돈하고 맡은 책임을 성실히 수행하는 관점으로 읽어볼 수 있습니다."],
+ "편인":["탐구와 변화","익숙한 해답 외의 가능성을 탐색하되 실행 가능한 한 가지를 선택해 보세요."],
+ "정인":["배움과 기반","경험과 배움을 정리하고 주변의 지원을 활용하는 관점으로 읽어볼 수 있습니다."]
+};
+function line(parent,txt,cls){const p=document.createElement("p");p.textContent=txt;if(cls)p.className=cls;parent.appendChild(p);}
+function render(){
+ const result=$("result");if(!result||result.classList.contains("hidden"))return;
+ $("v4Reading")?.remove();
+ const card=document.createElement("section");card.className="card";card.id="v4Reading";
+ const small=document.createElement("div");small.className="eyebrow";small.textContent="2027 PERSONAL READING · BETA";card.appendChild(small);
+ const title=document.createElement("h2");title.textContent="나의 2027년 · 정미년 해석";card.appendChild(title);
+ try{
+  if(!window.Solar||!window.Lunar)throw Error("만세력 라이브러리를 불러오지 못했습니다.");
+  const y=+$("year").value,m=+$("month").value,d=+$("day").value;
+  const timeUnknown=$("unknown").checked,hr=timeUnknown?12:+$("hour").value,min=timeUnknown?0:+$("minute").value;
+  let solar;
+  if($("calendar").value==="양력"){solar=Solar.fromYmdHms(y,m,d,hr,min,0);}
+  else {
+   const lm=$("calendar").value==="음력 윤달"?-m:m;
+   solar=Lunar.fromYmdHms(y,lm,d,hr,min,0).getSolar();
+   const back=solar.getLunar();
+   if(back.getYear()!==y||back.getMonth()!==lm||back.getDay()!==d)throw Error("음력 날짜와 윤달을 확인해 주세요.");
+  }
+  const pillar=solar.getLunar().getEightChar();
+  const day= pillar.getDayGan();
+  const fire=god(day,"丁"),earth=god(day,"己");
+  if(!fire||!earth)throw Error("십성 계산 결과를 확인할 수 없습니다.");
+  const annual=Solar.fromYmdHms(2027,7,1,12,0,0).getLunar().getEightChar().getYear();
+  if(annual!=="丁未")throw Error("2027년 연주 기준을 확인할 수 없습니다.");
+  line(card,"일간 "+kor[day]+"("+day+")에게 2027년 정화(丁)는 '"+fire+"', 미토(未)의 중심 기운 기토(己)는 '"+earth+"'로 분류됩니다.");
+  const a=document.createElement("div");a.className="feature";a.style.marginTop="14px";
+  const ah=document.createElement("div");ah.className="tag";ah.textContent="정화 · "+fire+" · "+story[fire][0];a.appendChild(ah);
+  line(a,story[fire][1]);card.appendChild(a);
+  const b=document.createElement("div");b.className="feature";b.style.marginTop="12px";
+  const bh=document.createElement("div");bh.className="tag";bh.textContent="미토의 본기 · "+earth+" · "+story[earth][0];b.appendChild(bh);
+  line(b,story[earth][1]);card.appendChild(b);
+  const tabs=document.createElement("div");tabs.className="tabs";card.appendChild(tabs);
+  const detail=document.createElement("div");detail.className="feature";card.appendChild(detail);
+  const entries={
+   "종합운":"2027년의 주요 해석 단서는 "+fire+"과 "+earth+"입니다. "+story[fire][1]+" "+story[earth][1],
+   "재물운":([fire,earth].some(v=>v==="정재"||v==="편재")?"재성 관계가 포함돼 있어 재정 계획과 거래를 돌아보는 주제로 설명할 수 있습니다. ":"대표 십성에 재성이 직접 드러나지는 않지만 이 사실만으로 재물운의 좋고 나쁨을 판단할 수는 없습니다. ")+"실제 수입이나 투자 성과는 사주로 예측하거나 보장할 수 없습니다.",
+   "직업운":"업무와 협업에서는 '"+story[fire][0]+"' 및 '"+story[earth][0]+"'의 관점을 점검해 보세요. "+story[fire][1],
+   "연애운":"연간과 지지 본기의 관계는 각각 "+fire+"과 "+earth+"입니다. 이 분류만으로 연애·결혼 시기나 상대의 행동을 확정할 수는 없습니다. "+story[earth][1]
+  };
+  function select(k){
+   [...tabs.children].forEach(v=>v.classList.toggle("active",v.textContent===k));
+   detail.replaceChildren();
+   const label=document.createElement("div");label.className="tag";label.textContent=k;detail.appendChild(label);
+   line(detail,entries[k]);
+  }
+  Object.keys(entries).forEach(k=>{
+   const button=document.createElement("button");button.className="tab";button.type="button";button.textContent=k;
+   button.addEventListener("click",()=>select(k));tabs.appendChild(button);
+  });
+  select("종합운");
+  line(card,"※ 정미년 해석은 입춘 이후를 기준으로 한 전통 명리학 규칙 기반 시연입니다. 원국 전체의 강약·용신·대운·합충 관계·출생지 보정은 아직 반영하지 않았습니다. 아래의 7,900원 프리미엄 화면은 아직 예시이며 결제할 수 없습니다.","note");
+ }catch(e){line(card,"해석을 표시하지 못했어요: "+(e.message||"계산 확인 필요"),"note");}
+ const saju=$("realSaju");
+ if(saju)saju.insertAdjacentElement("afterend",card);
+ else result.insertBefore(card,result.firstChild);
+}
+$("start")?.addEventListener("click",()=>setTimeout(render,90));
+})();
+</script>
+<!-- END UNMYEONGSEO-V4-2027 -->
+
+</body>
+</html>
