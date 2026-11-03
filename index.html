@@ -149,5 +149,109 @@ el("restart").addEventListener("click",()=>{
  el("formCard").scrollIntoView({behavior:"smooth"});
 });
 </script>
-</body>
+</body><!-- 운명서 실제 만세력 계산 모듈 v3 -->
+<script src="https://cdn.jsdelivr.net/npm/lunar-javascript@1.7.7/lunar.min.js"></script>
+<script>
+(function(){
+ const $=id=>document.getElementById(id);
+ const ganKo={"甲":"갑","乙":"을","丙":"병","丁":"정","戊":"무","己":"기","庚":"경","辛":"신","壬":"임","癸":"계"};
+ const zhiKo={"子":"자","丑":"축","寅":"인","卯":"묘","辰":"진","巳":"사","午":"오","未":"미","申":"신","酉":"유","戌":"술","亥":"해"};
+ const wx={"甲":"목","乙":"목","丙":"화","丁":"화","戊":"토","己":"토","庚":"금","辛":"금","壬":"수","癸":"수"};
+ const traits={
+  "甲":"갑목은 큰 나무에 비유하며, 성장과 원칙을 중시하는 성향으로 해석합니다.",
+  "乙":"을목은 풀과 덩굴에 비유하며, 유연함과 적응력을 중시하는 성향으로 해석합니다.",
+  "丙":"병화는 태양에 비유하며, 표현력과 활력을 중시하는 성향으로 해석합니다.",
+  "丁":"정화는 촛불에 비유하며, 세심함과 집중력을 중시하는 성향으로 해석합니다.",
+  "戊":"무토는 산에 비유하며, 안정감과 책임감을 중시하는 성향으로 해석합니다.",
+  "己":"기토는 밭에 비유하며, 돌봄과 실용성을 중시하는 성향으로 해석합니다.",
+  "庚":"경금은 강철에 비유하며, 결단력과 추진력을 중시하는 성향으로 해석합니다.",
+  "辛":"신금은 보석에 비유하며, 섬세함과 완성도를 중시하는 성향으로 해석합니다.",
+  "壬":"임수는 큰 바다에 비유하며, 포용력과 유연한 사고를 중시하는 성향으로 해석합니다.",
+  "癸":"계수는 이슬과 비에 비유하며, 관찰력과 감수성을 중시하는 성향으로 해석합니다."
+ };
+ const ko=s=>[...s].map(c=>ganKo[c]||zhiKo[c]||c).join("");
+ function put(line){
+  const p=document.createElement("p");p.textContent=line;return p;
+ }
+ function render(){
+  const result=$("result");
+  if(!result||result.classList.contains("hidden"))return;
+  document.getElementById("realSaju")?.remove();
+  const card=document.createElement("div");
+  card.id="realSaju";card.className="card";
+  result.insertBefore(card,result.firstChild);
+  const heading=document.createElement("h2");
+  heading.textContent="나의 사주팔자 · 계산 결과";
+  card.appendChild(heading);
+  try{
+   if(!window.Solar||!window.Lunar)throw Error("계산 라이브러리를 불러오지 못했습니다. 인터넷 연결을 확인해 주세요.");
+   const y=+$("year").value,m=+$("month").value,d=+$("day").value;
+   const unknown=$("unknown").checked;
+   const h=unknown?12:+$("hour").value;
+   const min=unknown?0:+$("minute").value;
+   const type=$("calendar").value;
+   let solar;
+   if(type==="양력"){
+    if(d>new Date(y,m,0).getDate())throw Error("올바른 날짜를 선택해 주세요.");
+    solar=Solar.fromYmdHms(y,m,d,h,min,0);
+   }else{
+    const lunarMonth=type==="음력 윤달"?-m:m;
+    const lunar=Lunar.fromYmdHms(y,lunarMonth,d,h,min,0);
+    solar=lunar.getSolar();
+    const back=solar.getLunar();
+    if(back.getYear()!==y||back.getMonth()!==lunarMonth||back.getDay()!==d)
+     throw Error("선택한 음력 날짜 또는 윤달이 존재하지 않습니다.");
+   }
+   const eight=solar.getLunar().getEightChar();
+   const pillars=[
+    ["연주",eight.getYear()],
+    ["월주",eight.getMonth()],
+    ["일주",eight.getDay()]
+   ];
+   if(!unknown)pillars.push(["시주",eight.getTime()]);
+   const little=document.createElement("div");
+   little.className="eyebrow";little.textContent="FOUR PILLARS · 만세력";
+   card.appendChild(little);
+   const date=put("환산 양력: "+solar.getYear()+"년 "+solar.getMonth()+"월 "+solar.getDay()+"일");
+   card.appendChild(date);
+   const grid=document.createElement("div");
+   grid.style.cssText="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:15px 0";
+   pillars.forEach(([label,value])=>{
+    const cell=document.createElement("div");
+    cell.style.cssText="background:#30271b;border-radius:12px;padding:14px;text-align:center";
+    const sub=document.createElement("div");
+    sub.style.cssText="font-size:12px;color:#d9ba7c";
+    sub.textContent=label;
+    const main=document.createElement("div");
+    main.style.cssText="font-size:25px;font-weight:bold;color:#f1d9a0";
+    main.textContent=ko(value);
+    const chars=document.createElement("div");
+    chars.style.cssText="font-size:13px;color:#b8aa92";
+    chars.textContent=value;
+    cell.append(sub,main,chars);grid.appendChild(cell);
+   });
+   card.appendChild(grid);
+   const dayStem=eight.getDayGan();
+   const elements={"목":0,"화":0,"토":0,"금":0,"수":0};
+   pillars.forEach(([,value])=>{
+    const v=wx[value[0]];
+    if(v)elements[v]++;
+   });
+   const sub=document.createElement("h2");sub.textContent="나의 일간: "+ko(dayStem)+" · "+wx[dayStem]+" 기운";
+   card.appendChild(sub);
+   card.appendChild(put(traits[dayStem]||"일간에 대한 설명을 준비 중입니다."));
+   card.appendChild(put("천간의 오행 수: "+Object.entries(elements).map(([k,v])=>k+" "+v).join(" · ")));
+   if(unknown)card.appendChild(put("출생시간 미상으로 시주는 계산하지 않았습니다."));
+   const note=document.createElement("p");note.className="note";
+   note.textContent="※ 계산 라이브러리 기준의 기초 사주입니다. 오행 수는 천간만 단순 집계하며 지장간·계절 세력을 반영한 강약 분석이 아닙니다. 출생지·태양시 보정, 23시 일주 경계, 한국식 절입 기준은 별도 검증이 필요합니다. 아래의 2027년 프리미엄 운세 문구는 여전히 예시입니다.";
+   card.appendChild(note);
+  }catch(err){
+   card.appendChild(put("계산 오류: "+(err.message||String(err))));
+  }
+ }
+ const start=$("start");
+ if(start)start.addEventListener("click",()=>setTimeout(render,0));
+})();
+</script>
+<!-- 운명서 계산 모듈 끝 -->
 </html>
