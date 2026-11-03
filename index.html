@@ -253,6 +253,7 @@ header{position:relative}
 <footer>진도 정옥순 할머니의 귀신사주 · 창작 캐릭터 · 전통 명리 규칙을 활용한 해석 체험</footer>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/lunar-javascript@1.7.7/lunar.min.js"></script>
+<script src="./config.js?v=30"></script>
 <script>
 (function(){
 "use strict";
@@ -618,9 +619,12 @@ function chatBubble(feed,who,words,isMe){
 function chatApi(){return String(window.OKSOON_CHAT_API||"").trim().replace(/\/$/,"");}
 async function chatStart(){
  const url=chatApi();if(!url)return null;
- const response=await fetch(url+"/api/session",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:"{}"});
+ let previous=null;
+ try{previous=localStorage.getItem("oksoon-chat-session-v1")}catch(e){}
+ const response=await fetch(url+"/api/session",{method:"POST",credentials:"omit",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:previous||null})});
  const json=await response.json().catch(()=>({}));
  if(!response.ok||!json.sessionId)throw Error(json.error||"상담방 연결이 되지 않았어.");
+ try{localStorage.setItem("oksoon-chat-session-v1",json.sessionId)}catch(e){}
  return json;
 }
 function chatRequestPayload(){
@@ -679,7 +683,7 @@ async function sendChat(){
  const feed=$("chatFeed");chatBubble(feed,"자네",question,true);
  $("chatStatus").textContent="“잠깐 있어 봐… 자네 만세력을 다시 살펴볼게.”";
  try{
-  const response=await fetch(chatApi()+"/api/chat",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({...chatRequestPayload(),sessionId:chatSession})});
+  const response=await fetch(chatApi()+"/api/chat",{method:"POST",credentials:"omit",headers:{"Content-Type":"application/json"},body:JSON.stringify({...chatRequestPayload(),sessionId:chatSession})});
   const result=await response.json().catch(()=>({}));
   if(!response.ok){
    if(response.status===402||result.code==="FREE_LIMIT")setChatState(0,true);
@@ -702,6 +706,28 @@ function person(){
  say(root,"“그중 윗글자 "+(ganKo[day]||day)+"는 자네 자신을 나타내는 기운이지. "+b.symbol+" 같은 성질로 풀이한단다.”");
  say(root,"“자네는 "+trimline(b.headline)+" 쪽으로 읽혀.”");
  say(root,"“하지만 글자 하나로 자네 인생을 다 알아맞힌다고 하면 그건 거짓말이야. 다른 글자도 보고 자네 처지도 들어봐야 해.”");
+
+ moment(root,"네가 결정하는 방식부터 보자",[
+  "“어떤 사람은 일을 시작하기 전에 먼저 움직이고, 어떤 사람은 마음속 기준이 설 때까지 기다리지.”",
+  "“자네는 "+trimline(b.headline)+"로 읽히니, 큰 결정을 앞두고 무엇에 납득해야 움직이는지 떠올려봐.”",
+  "“잘 풀리는 때와 괜히 지치는 때는 성격보다 선택하는 방식의 차이일 수도 있단다.”"
+ ]);
+ moment(root,"태어난 달의 기운은 또 다르지",[
+  "“자네 월주는 "+koreanPillar(p.getMonth())+"이야. 태어난 달의 기운도 사람의 행동을 풀이할 때 빼놓지 않는 거다.”",
+  "“일간과 월간의 관계를 십성으로 풀면 "+ten(day,p.getMonthGan())+"이라는 이름을 붙이지.”",
+  state.month?"“그 관계의 중요한 화두는 "+trimline(state.month.title)+"이라고 읽는구나.”":"“다만 달의 기운만으로 모든 일을 확정하진 않아.”",
+  "“같은 날 태어났어도 자란 환경과 겪은 일은 다르니, 그건 꼭 구분해야 해.”"
+ ]);
+ moment(root,"네 마음이 쉽게 지치는 순간",[
+  "“속으로는 "+trimline(b.inside)+"이 일어날 수 있어.”",
+  "“그걸 감추고 계속 같은 방식으로 버티면, 정작 필요한 말을 늦게 하게 될지도 모르지.”",
+  "“자네가 가까운 사람 앞에서 어떤 말을 참는지 한 번 생각해보거라.”"
+ ]);
+ moment(root,"할매가 보는 사람과 거리",[
+  "“사람을 가까이 둘 때는 "+trimline(b.love)+"처럼 풀어볼 수 있겠구나.”",
+  "“서로 좋아해도 거리와 연락의 기준이 다르면 오해가 생기기 쉬워.”",
+  "“이건 미래의 누군가를 미리 알아맞혔다는 뜻이 아니라 자네가 편한 관계의 조건을 짚는 거야.”"
+ ]);
  moment(root,"겉으로 보이는 네 얼굴",[
   "“겉에선 "+trimline(b.outside)+"이 나타날 수 있어.”",
   "“그런데 속에서는 "+trimline(b.inside)+"도 같이 움직이는 걸로 풀어보는 거야.”",
