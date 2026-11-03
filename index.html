@@ -1061,5 +1061,137 @@ $("start")?.addEventListener("click",()=>setTimeout(()=>{
 </script>
 <!-- END UNMYEONGSEO-V13-COPY -->
 
+
+<!-- UNMYEONGSEO-V14-RICH-STORY -->
+<style>
+.v14-section{margin:19px 0;padding:17px 0 3px;border-top:1px solid #5b4830}
+.v14-section h3{color:#f0d5a1;font-size:18px;line-height:1.45;margin:0 0 10px}
+.v14-section p{font-size:15px;line-height:1.95;color:#e1d4bc;margin:10px 0}
+.v14-high{color:#f6d99e;font-weight:700}
+.v14-story-top{font-size:14px;color:#d7bc8b;margin:12px 0}
+.v14-fortune{border:1px solid #715838;border-radius:13px;background:#31261b;padding:17px;margin:17px 0}
+.v14-fortune h3{font-size:18px;color:#f3d5a1;margin:0 0 10px}
+.v14-fortune p{font-size:14px;line-height:1.9}
+.v14-fortune ul{padding-left:19px;font-size:14px;line-height:1.9;color:#ead4ae}
+.v14-divider{margin-top:18px;color:#d7b77b;font-size:14px;font-weight:700}
+</style>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const stems={
+ "甲":{name:"큰 나무",outer:"한 번 방향을 정하면 쉽게 흔들리지 않는 모습",inside:"무언가를 결정하기 전에는 스스로 납득할 만한 이유가 필요한 편",strong:"일의 중심을 잡고 꾸준히 밀어붙이는 힘",soft:"내가 당연하다고 여긴 기준이 상대에게는 부담이 될 수 있다는 점",work:"성장할 수 있는 목표가 분명한 환경에서 힘을 내는 편",rel:"말보다 행동으로 마음을 증명하고 싶어하는 모습"},
+ "乙":{name:"풀과 덩굴",outer:"주변 분위기를 읽고 자연스럽게 어울리는 모습",inside:"부드럽게 보이더라도 내게 중요한 일은 쉽게 포기하고 싶지 않은 마음",strong:"예상하지 못한 변화에서도 다른 길을 찾아가는 적응력",soft:"상대에게 맞추다 내 속마음을 늦게 꺼낼 수 있다는 점",work:"사람과 상황을 살피며 일의 빈틈을 메우는 환경에서 힘을 내는 편",rel:"큰 말 한마디보다 세심한 관심에서 애정을 표현하는 모습"},
+ "丙":{name:"햇빛",outer:"생각과 기분을 비교적 분명하게 드러내는 모습",inside:"주변에 좋은 에너지를 전하고 싶지만 반응이 없으면 마음이 급해질 수 있는 면",strong:"기회를 발견하면 시작할 수 있는 추진력",soft:"빠른 판단이 누군가의 속도를 앞지를 수 있다는 점",work:"의견을 표현하고 움직일 여지가 있을 때 힘을 내는 편",rel:"함께 웃고 새로운 경험을 나누는 데서 친밀감을 느끼는 모습"},
+ "丁":{name:"작은 등불",outer:"섬세하고 조심스럽게 주변을 살피는 모습",inside:"겉으로는 차분해 보여도 한 사람의 말이나 작은 사건을 오래 생각할 수 있는 마음",strong:"작은 차이를 발견하고 끝까지 집중하는 힘",soft:"모든 걱정을 혼자 해결하려 하면 쉽게 지칠 수 있다는 점",work:"깊이 파고들 수 있는 역할에서 힘을 내는 편",rel:"상대가 필요로 하는 것을 미리 알아차리려는 모습"},
+ "戊":{name:"큰 산",outer:"쉽게 흔들리지 않고 책임을 지려는 모습",inside:"누군가 기대어도 괜찮은 사람이 되고 싶지만 가끔은 나도 기대고 싶은 마음",strong:"긴 시간이 필요한 일을 안정적으로 지키는 힘",soft:"익숙한 방식을 지키느라 새로운 선택을 늦출 수 있다는 점",work:"맡은 책임과 역할이 명확할 때 힘을 내는 편",rel:"쉽게 말하기보다 시간을 들여 신뢰를 쌓는 모습"},
+ "己":{name:"잘 가꾼 밭",outer:"작고 현실적인 문제를 꼼꼼하게 챙기는 모습",inside:"누군가를 돕는 데 익숙하지만 정작 내 몫은 뒤로 미룰 수 있는 마음",strong:"한 번의 큰 성과보다 생활 속 결과를 쌓아가는 힘",soft:"모든 일을 직접 챙기려다 부담이 커질 수 있다는 점",work:"계획을 실제 운영과 관리로 연결하는 환경에서 힘을 내는 편",rel:"상대의 일상과 작은 필요를 챙겨 마음을 전하는 모습"},
+ "庚":{name:"단단한 쇠",outer:"문제를 보면 어떻게 정리할지 먼저 생각하는 모습",inside:"분명한 기준을 지키고 싶어 답답한 상황을 오래 참기 어려울 수도 있는 마음",strong:"필요한 때 결정을 내리고 실행하는 힘",soft:"맞는 말도 전달하는 방식에 따라 다르게 들릴 수 있다는 점",work:"문제를 해결하고 결과를 확인할 수 있을 때 힘을 내는 편",rel:"돌려 말하기보다 정확하게 이야기해 주길 바라는 모습"},
+ "辛":{name:"세공한 보석",outer:"작은 부분까지 기준이 분명하고 세밀한 모습",inside:"스스로 만족할 만한 완성도에 이르기 전에는 마음을 놓기 어려운 면",strong:"흐트러진 부분을 발견해 더 좋은 결과로 다듬는 힘",soft:"완벽을 기다리는 동안 시도할 기회를 놓칠 수 있다는 점",work:"품질과 정확성을 인정받는 역할에서 힘을 내는 편",rel:"관계에서도 말투와 약속 같은 작은 표현을 중요하게 여기는 모습"},
+ "壬":{name:"넓은 바다",outer:"서로 다른 생각을 비교적 넓게 받아들이는 모습",inside:"가능성이 많다는 것은 즐겁지만 무엇을 먼저 할지 정하는 것이 어려울 수도 있는 마음",strong:"새로운 연결과 아이디어를 발견하는 힘",soft:"관심이 여러 곳으로 향하면 마무리가 뒤로 밀릴 수 있다는 점",work:"사람·정보·기회를 연결하는 역할에서 힘을 내는 편",rel:"서로의 생각과 자유로운 시간을 존중하려는 모습"},
+ "癸":{name:"조용히 내리는 비",outer:"큰 소리보다 세심한 관찰로 상황을 이해하는 모습",inside:"말하지 않은 감정까지 짐작하느라 혼자 생각이 길어질 수 있는 마음",strong:"작은 신호를 놓치지 않고 공감하는 힘",soft:"추측이 사실인 것처럼 마음에 남지 않도록 확인하는 태도",work:"세부 정보를 모으고 차분히 판단하는 역할에서 힘을 내는 편",rel:"상대의 말과 분위기를 오래 기억하는 모습"}
+};
+const emphasis={
+ "비견":["자기 생각을 밀고 나갈 때","내 기준을 분명히 하면서도 비슷한 목표를 가진 사람의 의견을 함께 듣는 일이 중요해 보여요."],
+ "겁재":["경쟁과 협력 사이에서","역할을 나누거나 돈을 함께 쓸 때 처음부터 기준을 분명히 정해보는 쪽이 어울려요."],
+ "식신":["꾸준히 실력을 쌓을 때","하루아침의 성과보다 지금 할 수 있는 일을 반복하며 내 것으로 만드는 방식이 잘 맞는 주제예요."],
+ "상관":["내 생각을 새롭게 표현할 때","새로운 방법을 시도하고 싶어질 수 있다는 상징으로 읽어요. 다만 약속이나 절차도 함께 살피는 게 좋아요."],
+ "편재":["새로운 제안을 만날 때","기회를 넓게 보되 비용과 시간을 충분히 검토하고 내 상황에 맞는 선택을 하는 것이 중요해 보여요."],
+ "정재":["돈과 생활을 정돈할 때","수입만큼 반복되는 지출과 생활 습관을 돌아보고, 오래 유지할 수 있는 계획을 생각해볼 수 있어요."],
+ "편관":["새로운 책임을 앞둘 때","도전을 피하라는 뜻이 아니라, 감당할 수 있는 속도와 일정을 먼저 정해보자는 이야기예요."],
+ "정관":["약속을 지키고 신뢰를 만들 때","맡은 일을 차근차근 정리하고 서로의 기대를 분명히 하는 태도가 해석의 중심이에요."],
+ "편인":["새로운 답을 찾고 싶을 때","다른 관점을 배우는 건 좋지만 실제 행동으로 옮길 작은 목표도 함께 정하면 좋겠어요."],
+ "정인":["배움을 내 것으로 만들 때","좋은 조언을 받아들이고 기본기를 다지는 시간을 하나의 주제로 생각해볼 수 있어요."]
+};
+const indices={"甲":0,"乙":0,"丙":1,"丁":1,"戊":2,"己":2,"庚":3,"辛":3,"壬":4,"癸":4};
+const yin={"甲":0,"乙":1,"丙":0,"丁":1,"戊":0,"己":1,"庚":0,"辛":1,"壬":0,"癸":1};
+const branches={
+"子":["생각을 정리하고 정보를 모으는 태도","속으로 충분히 생각한 다음 행동하려는 모습"],
+"丑":["차근차근 일상을 다지는 태도","작은 약속을 지키며 안정감을 찾는 모습"],
+"寅":["새로운 목표를 향해 움직이는 태도","지금보다 나아지고 싶은 마음"],
+"卯":["관계와 분위기를 세심하게 살피는 태도","주변과 조화를 이루려는 모습"],
+"辰":["현실적인 계획과 가능성을 함께 살피는 태도","하고 싶은 것과 해야 할 것을 저울질하는 모습"],
+"巳":["집중해서 결과를 끌어내는 태도","내가 맡은 일을 제대로 하고 싶은 마음"],
+"午":["생각과 감정을 비교적 적극적으로 표현하는 태도","관심 있는 일에는 빨리 움직이고 싶은 마음"],
+"未":["주변을 챙기며 내 생활도 꾸리는 태도","서로 편안한 관계를 만들고 싶은 마음"],
+"申":["새로운 정보와 방법을 찾는 태도","더 효율적인 방법을 고민하는 모습"],
+"酉":["작은 차이와 약속을 중요하게 보는 태도","모호한 것보다 분명한 기준을 원하는 마음"],
+"戌":["신뢰와 책임을 오래 지키려는 태도","쉽게 포기하고 싶지 않은 마음"],
+"亥":["여러 가능성을 상상하며 준비하는 태도","어떤 선택이 나답게 느껴질지 고민하는 모습"]
+};
+function ten(a,b){const x=indices[a],y=indices[b],same=yin[a]===yin[b];if(x===undefined||y===undefined)return null;if(x===y)return same?"비견":"겁재";if((x+1)%5===y)return same?"식신":"상관";if((x+2)%5===y)return same?"편재":"정재";if((y+1)%5===x)return same?"편인":"정인";if((y+2)%5===x)return same?"편관":"정관";return null;}
+function make(tag,text,cls){const v=document.createElement(tag);if(text)v.textContent=text;if(cls)v.className=cls;return v;}
+function section(target,heading,paragraphs){
+ const block=make("section",null,"v14-section");block.append(make("h3",heading));
+ for(const p of paragraphs)block.append(make("p",p));
+ target.append(block);
+}
+function getPillar(){
+ if(!window.Solar||!window.Lunar)throw Error("사주 계산 달력을 불러오지 못했어요.");
+ const y=Number($("year").value),m=Number($("month").value),d=Number($("day").value);
+ const h=$("unknown").checked?12:Number($("hour").value),mn=$("unknown").checked?0:Number($("minute").value);
+ let date;
+ if($("calendar").value==="양력"){
+  if(d>new Date(y,m,0).getDate())throw Error("날짜가 올바르지 않아요.");
+  date=Solar.fromYmdHms(y,m,d,h,mn,0);
+ }else{
+  const lm=$("calendar").value==="음력 윤달"?-m:m;
+  date=Lunar.fromYmdHms(y,lm,d,h,mn,0).getSolar();
+  const check=date.getLunar();if(check.getYear()!==y||check.getMonth()!==lm||check.getDay()!==d)throw Error("음력 날짜를 확인해 주세요.");
+ }
+ return date.getLunar().getEightChar();
+}
+function build(){
+ const target=$("v12Personality"),page3=$("v12Tabs");
+ if(!target||!page3||$("v12Wizard")?.classList.contains("hidden"))return;
+ try{
+  const p=getPillar(),d=p.getDayGan(),z=p.getDayZhi(),m=p.getMonthGan();
+  const person=stems[d],branch=branches[z],month=ten(d,m),year=ten(d,"丁"),ground=ten(d,"己");
+  if(!person||!branch||!emphasis[year]||!emphasis[ground])throw Error("해석을 생성할 수 없어요.");
+  const firstName=($("name").value.trim()||"고객")+"님";
+  target.replaceChildren();
+  target.append(make("div","나를 이해하는 첫 번째 이야기","v14-story-top"));
+  target.append(make("div",firstName+"은 "+person.outer+"을 지닌 사람으로 해석돼요.","v12-hero"));
+  target.append(make("div","다만 겉으로 보이는 모습이 전부는 아니에요. "+person.inside+"도 함께 들여다볼 수 있어요.","v12-quote"));
+  section(target,"겉으로 보이는 나와 속마음",[
+   "전통 사주에서는 태어난 날의 기운을 '"+person.name+"'에 비유해요. "+firstName+"에게는 "+person.outer+"이 하나의 특징으로 읽혀요. 하지만 이것만으로 성격을 단정할 수는 없어요. 실제 경험과 비교하면서 읽어보세요.",
+   "마음속에서는 "+person.inside+"이 나타날 수 있다고 풀이해요. 그래서 누군가는 당신을 이렇게 보고, 당신 스스로는 조금 다르게 느끼는 일이 있을 수도 있어요. 두 모습이 다르다고 해서 어느 쪽이 틀린 건 아니에요."
+  ]);
+  section(target,"내가 가진 장점과 조심할 점",[
+   "이 사주를 긍정적으로 읽으면 '"+person.strong+"'이 강점으로 이야기돼요. 특히 무언가를 오래 이어가야 하거나 내 판단이 필요한 상황에서 이 장점이 드러나는지 돌아보세요.",
+   "반대로 '"+person.soft+"'도 기억해 두면 좋아요. 좋은 성향도 지나치면 나를 피곤하게 만들 수 있거든요. 부족해서 고쳐야 한다는 뜻이 아니라, 나에게 필요한 균형을 찾아보자는 이야기예요."
+  ]);
+  section(target,"사람들과 있을 때의 나",[
+   "태어난 날의 아래 글자는 '"+branch[0]+"'를 상징하는 것으로 읽어요. '"+person.rel+"'에 더해 "+branch[1]+"도 관계를 이해하는 작은 단서가 될 수 있어요.",
+   "가까운 사람과 생각이 어긋났다면 누가 맞는지부터 가리기보다, 내가 어떤 마음을 기대했는지 먼저 말해보세요. 관계에서 편안함을 느끼는 방식은 사람마다 다르니까요."
+  ]);
+  section(target,"일할 때 나타나는 내 모습",[
+   "일에서는 '"+person.work+"'이라는 해석을 참고할 수 있어요. 일의 성과가 언제 나올지를 맞히는 운세가 아니라, 내가 어떤 방식으로 움직일 때 편안할지 돌아보는 이야기예요.",
+   month&&emphasis[month]?"태어난 달의 기운과 비교했을 때는 '"+emphasis[month][0]+"'이라는 또 다른 주제도 나타나요. "+emphasis[month][1]:"일을 고를 때는 주변의 평가뿐 아니라 나에게 중요한 기준도 확인해 보세요."
+  ]);
+  section(target,"그래서 2027년에는?",[
+   "2027년에 눈여겨볼 첫 번째 이야기는 '"+emphasis[year][0]+"'이에요. "+emphasis[year][1],
+   "여기에 '"+emphasis[ground][0]+"'이라는 주제도 함께 나타나요. "+emphasis[ground][1]+" 두 해석이 동시에 나온다고 해서 어떤 사건이 반드시 일어난다는 뜻은 아니에요.",
+   firstName+"에게 올해가 어떤 의미가 될지는 결국 실제 선택과 생활에 달려 있어요. 다음 페이지에서는 이 두 주제가 돈과 일, 사랑에 각각 어떻게 연결되는지 짧게 살펴볼게요."
+  ]);
+  const intro=$("v14Fortune")||make("div",null,"v14-fortune");intro.id="v14Fortune";intro.replaceChildren();
+  intro.append(make("div","2027년 전체 흐름 · 먼저 읽어보세요","v12-kicker"));
+  intro.append(make("h3",firstName+"의 2027년, 두 가지 이야기"));
+  intro.append(make("p","첫 번째는 '"+emphasis[year][0]+"'이에요. "+emphasis[year][1]));
+  intro.append(make("p","두 번째는 '"+emphasis[ground][0]+"'이에요. "+emphasis[ground][1]));
+  intro.append(make("p","사주가 미래를 정해주는 것은 아니에요. 아래에서 관심 있는 분야를 고르면 이 해석을 돈·일·사람 관계에 연결해 조금 더 살펴볼 수 있어요."));
+  const container=page3.parentNode;
+  container.insertBefore(intro,page3);
+  const tail=$("v14Divider")||make("div","관심 있는 분야의 첫 번째 이야기를 눌러보세요","v14-divider");tail.id="v14Divider";
+  container.insertBefore(tail,page3);
+ }catch(e){
+  target.append(make("p","자세한 풀이를 불러오지 못했어요: "+(e.message||String(e)),"note"));
+ }
+}
+$("start")?.addEventListener("click",()=>setTimeout(build,570));
+})();
+</script>
+<!-- END UNMYEONGSEO-V14-RICH-STORY -->
+
 </body>
 </html>
