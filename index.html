@@ -968,6 +968,12 @@ function premiumDepth(root,index){
 }
 
 
+function oksoonCallName(name){
+ if(!name||name==="손님")return "자네";
+ const last=name.charCodeAt(name.length-1);
+ if(last>=0xAC00&&last<=0xD7A3)return name+(((last-0xAC00)%28)?"아":"야");
+ return name+" 자네";
+}
 const oksoonSharp={
  "甲":["네가 고집 센 걸 자꾸 소신이라고 부르지?","목표는 잘 잡는데 네가 옳다고 믿는 순간 남의 말은 귀에 잘 안 들어와. 추진력은 무기지만 협의까지 건너뛰면 독단이야."],
  "乙":["웃으며 맞춰주는 것 같아도 속으로는 선을 긋는 사람이야.","싫다고 말할 때를 놓치고 혼자 참고 있지. 착한 게 아니라 갈등을 뒤로 미루는 거야."],
@@ -993,7 +999,7 @@ const oksoonTenPunch={
  "정인":["배우고 준비하며 기반을 닦는 시기","배움에는 강하지만 준비가 끝날 때만 기다리면 시작할 기회가 사라져."]
 };
 function oksoonPremiumEditorial(root,index){
- const p=state.p, day=state.day,name=state.name==="손님"?"자네":state.name+"아",v=directProfiles[day];
+ const p=state.p, day=state.day,name=oksoonCallName(state.name),v=directProfiles[day];
  const m=ten(day,p.getMonthGan()),ym=ten(day,"丁"),lm=ten(day,"己");
  const yearly=oksoonTenPunch[ym],earth=oksoonTenPunch[lm],monthly=oksoonTenPunch[m];
  const personal=oksoonSharp[day],c=state.context||{};
@@ -1097,7 +1103,7 @@ function monthReport(root){
   const p=Solar.fromYmdHms(2027,month,15,12,0,0).getLunar().getEightChar();
   const k=ten(state.day,p.getMonthGan()),t=themes[k],d=monthlyActions[k],ritual=symbols[state.day];
   detail.append(make("h3",month+"월 · "+monthlyVerdicts[k].split(".")[0]));
-  say(detail,"“"+state.name+"아, "+monthlyVerdicts[k]+"”","okbig");
+  say(detail,"“"+oksoonCallName(state.name)+", "+monthlyVerdicts[k]+"”","okbig");
   moment(detail,"왜 이런 풀이가 나왔느냐",[
    "“"+month+"월 중순의 월주는 "+koreanPillar(p.getMonth())+"야. 월주란 그때의 계절을 두 글자로 표현한 거지.”",
    "“자네 일간 "+ganKo[state.day]+"와 그 달의 윗글자 "+ganKo[p.getMonthGan()]+"는 "+tenEasy(k)+" 관계야. 그래서 이 해석이 나온단다.”"
