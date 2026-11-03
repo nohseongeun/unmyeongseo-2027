@@ -111,16 +111,16 @@ header{position:relative}
 .oksoon-phrase{font-size:18px;font-weight:750;color:#f4dcb5}
 .oksoon-intro{border-left:3px solid #b89a70;background:#352c24;padding:13px 12px;margin:12px 0;font-size:15px;line-height:1.8;color:#f1dcc0;font-weight:700}
 .oksoon-loader{position:fixed;inset:0;z-index:9999;background:rgba(11,10,10,.97);display:grid;place-items:center;padding:20px;text-align:center}
-.oksoon-loader-in{width:min(340px,100%);color:#e9d6b3}
+.oksoon-loader-in{width:min(390px,100%);color:#e9d6b3}
 .oksoon-loader-in img{width:160px;height:185px;border-radius:12px;object-fit:cover;object-position:center 30%;filter:grayscale(1);border:1px solid #9f8767;margin:0 auto 22px;display:block}
 .oksoon-loader-in h2{font-size:20px;margin:22px 0;color:#f6debb;min-height:68px}
 .oksoon-loader-in p{font-size:12px;color:#b2a18a}
-.oksoon-review-samples{margin-top:17px;padding:13px;border:1px solid #85745488;border-radius:13px;background:#201d18dd;text-align:left}
-.oksoon-review-label{font-size:11px;color:#dbbd89;letter-spacing:.025em;margin-bottom:8px;font-weight:700}
-.oksoon-review-item{font-size:12px;color:#e9dac4;line-height:1.65;padding:7px 0;border-top:1px solid #7b6c533a}
-.oksoon-review-item:first-child{border-top:0}
-.oksoon-review-item:before{content:"❝";color:#d4b073;margin-right:6px}
-@media(max-height:700px){.oksoon-loader-in img{height:115px;width:100px;margin-bottom:8px}.oksoon-loader-in h2{margin:8px 0;min-height:48px}.oksoon-review-item{font-size:11px;padding:4px 0}}
+.oksoon-review-samples{margin-top:20px;padding:19px 17px 16px;border:1px solid #b89d6a88;border-radius:15px;background:#201d18e8;text-align:center;min-height:155px;box-shadow:0 10px 28px #0005}
+.oksoon-review-label{font-size:12px;color:#dbbd89;letter-spacing:.025em;margin-bottom:14px;font-weight:700}
+.oksoon-review-item{font-size:19px;font-weight:750;color:#fff0d7;line-height:1.6;padding:6px 0;min-height:75px;display:flex;align-items:center;justify-content:center;animation:oksoonReviewEnter .42s ease-out both;text-wrap:balance}
+@keyframes oksoonReviewEnter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.oksoon-review-counter{font-size:11px;color:#a99b83;margin-top:11px;letter-spacing:.14em}
+@media(max-height:700px){.oksoon-loader-in img{height:115px;width:100px;margin-bottom:8px}.oksoon-loader-in h2{margin:8px 0;min-height:48px}.oksoon-review-samples{margin-top:10px;padding:12px;min-height:116px}.oksoon-review-item{font-size:16px;padding:3px 0;min-height:55px}}@media(prefers-reduced-motion:reduce){.oksoon-review-item{animation:none}}
 .oksoon-bar{height:4px;background:#403327;border-radius:10px;overflow:hidden}
 .oksoon-bar span{height:100%;display:block;width:100%;transform-origin:left center;background:#dcc095;animation:oksoonWait 2.8s ease forwards}
 @keyframes oksoonWait{from{transform:scaleX(0)}to{transform:scaleX(1)}}
@@ -1183,20 +1183,21 @@ $("begin").addEventListener("click",()=>{
    "“뻔한 운세보다 제 습관을 구체적으로 이야기해주는 게 좋았어요.”"
   ];
   const reviewList=$("oksoonReviewList");
-  const showExampleReviews=(offset)=>{
+  const showExampleReviews=(index)=>{
    if(!oksoonBusy)return;
    reviewList.replaceChildren();
-   for(let j=0;j<3;j++)reviewList.append(make("div",exampleReviews[(offset+j)%exampleReviews.length],"oksoon-review-item"));
+   reviewList.append(make("div",exampleReviews[index%exampleReviews.length],"oksoon-review-item"));
+   reviewList.append(make("div",String(index%exampleReviews.length+1)+" / "+exampleReviews.length,"oksoon-review-counter"));
   };
   showExampleReviews(0);
-  setTimeout(()=>showExampleReviews(3),1400);
+  for(let i=1;i<5;i++)setTimeout(()=>showExampleReviews(i),i*900);
   setTimeout(()=>{
    try{
     renderManse();person();renderChat();annualIntro();preview(0);
     $("reportTitle").textContent=state.name+"님의 2027년 귀신사주";chapter(0);page(2);
    }catch(err){$("formError").textContent=err.message||"풀이를 준비하지 못했어요.";}
    finally{loader.classList.add("hidden");oksoonBusy=false;$("begin").disabled=false;}
-  },2800);
+  },4700);
  }catch(err){$("formError").textContent=err.message||"입력 내용을 확인해 주세요.";}
 });
 names.forEach((name,i)=>{const b=make("button",name,"tab");b.type="button";b.addEventListener("click",()=>preview(i));$("previewTabs").append(b);});
