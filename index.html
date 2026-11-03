@@ -524,6 +524,7 @@ function storyIntro(target){
    Requires a separately deployed server. Never store the OpenAI API key in this file.
    window.OKSOON_CHAT_API can be configured in public config.js after deployment. */
 let chatSession=null,chatLeft=1,chatBusy=false;
+let adminKey=""; // Runtime memory only. Never store admin credentials in URL, HTML or localStorage.
 function chatBubble(feed,who,words,isMe){
  const bubble=make("div",null,"chat-bubble"+(isMe?" mine":""));
  bubble.append(make("div",who,"chat-role"));
@@ -553,15 +554,39 @@ function setChatState(remaining,locked){
  chatLeft=remaining;
  const textarea=$("chatQuestion"),send=$("chatSend");
  if(!textarea||!send)return;
- textarea.disabled=locked;
- send.disabled=locked||chatBusy||!chatSession;
- $("chatCounter").textContent="할매 무료상담 · "+Math.max(0,chatLeft)+"회 남음";
- if(locked){textarea.placeholder="무료 상담 1회를 사용했어. 추가 상담 상품은 준비 중이야.";send.textContent="추가 상담 준비 중";}
- else send.textContent="할매한테 물어보기";
+ const admin=Boolean(adminKey);
+ textarea.disabled=locked&&!admin;
+ send.disabled=(locked&&!admin)||chatBusy||!chatSession;
+ $("chatCounter").textContent=admin?"관리자 검수 모드 · 반복 질문 가능":"할매 무료상담 · "+Math.max(0,chatLeft)+"회 남음";
+ if(locked&&!admin){textarea.placeholder="무료 상담 1회를 사용했어. 추가 상담 상품은 준비 중이야.";send.textContent="추가 상담 준비 중";}
+ else{textarea.placeholder="예: 할매, 2027년 내 재물운은 어때?";send.textContent=admin?"관리자 질문 보내기":"할매한테 물어보기";}
 }
 function renderChat(){
  const root=$("oksoonChat");if(!root)return;root.replaceChildren();
- root.append(make("div","할매에게 질문 한 번은 무료","eyebrow"));
+ root.append(make("div",devPreview?"관리자 검수 · 할매 상담":"할매에게 질문 한 번은 무료","eyebrow"));
+ if(devPreview){
+  const panel=make("section",null,"chat-note");
+  panel.append(make("strong","관리자 전용 상담 테스트"));
+  panel.append(make("p","서버에 설정한 관리자 인증키로 로그인하면 무료 횟수와 관계없이 반복 질문할 수 있어. AI 사용료는 발생해.","chat-sub"));
+  const field=make("input");field.type="password";field.autocomplete="off";field.placeholder="관리자 인증키 입력";field.setAttribute("aria-label","관리자 인증키");field.id="adminAccessInput";panel.append(field);
+  const button=make("button","관리자 인증하기","secondary");button.type="button";button.style.marginTop="8px";panel.append(button);
+  const feedback=make("div","","chat-role");feedback.setAttribute("role","status");feedback.style.marginTop="8px";panel.append(feedback);
+  button.addEventListener("click",async()=>{
+   const candidate=field.value.trim();if(!candidate){feedback.textContent="관리자 인증키를 입력해 줘.";return;}
+   button.disabled=true;feedback.textContent="서버에서 관리자 권한 확인 중…";
+   try{
+    const response=await fetch(chatApi()+"/api/admin/check",{method:"POST",credentials:"omit",headers:{"Content-Type":"application/json"},body:JSON.stringify({adminKey:candidate}),signal:AbortSignal.timeout(13000)});
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok||!data.admin)throw Error(data.error||"관리자 인증에 실패했어.");
+    adminKey=candidate;
+    field.value="";field.remove();button.remove();
+    feedback.textContent="관리자 인증 성공! 이제 질문을 계속할 수 있어.";
+    setChatState(chatLeft,false);
+    $("chatStatus").textContent="관리자 질문 테스트가 열렸어.";
+   }catch(error){feedback.textContent=error.message||"관리자 인증 서버를 확인해 줘.";button.disabled=false;}
+  });
+  root.append(panel);
+ }
  root.append(make("h3","“궁금한 게 있으면 하나 물어봐. 자네 팔자랑 같이 풀어줄게.”"));
  root.append(make("p","만세력을 바탕으로 할매가 대화하듯 답해줘. 미래의 사건이나 돈 들어올 날짜를 정확히 알아맞힐 수 있다는 뜻은 아니야.","chat-sub"));
  const counter=make("div","할매 무료상담 · 1회 남음","chat-role");counter.id="chatCounter";root.append(counter);
@@ -604,23 +629,24 @@ function renderChat(){
  connect();
 }
 async function sendChat(){
- if(chatBusy||chatLeft<1||!chatSession)return;
+ if(chatBusy||(chatLeft<1&&!adminKey)||!chatSession)return;
  const question=$("chatQuestion").value.trim();
  if(question.length<2||question.length>500){$("chatStatus").textContent="질문은 2~500글자로 적어줘.";return;}
  chatBusy=true;setChatState(chatLeft,false);
  const feed=$("chatFeed");chatBubble(feed,"자네",question,true);
  $("chatStatus").textContent="“잠깐 있어 봐… 자네 만세력을 다시 살펴볼게.”";
  try{
-  const response=await fetch(chatApi()+"/api/chat",{method:"POST",credentials:"omit",headers:{"Content-Type":"application/json"},body:JSON.stringify({...chatRequestPayload(),sessionId:chatSession})});
+  const response=await fetch(chatApi()+"/api/chat",{method:"POST",credentials:"omit",headers:{"Content-Type":"application/json"},body:JSON.stringify({...chatRequestPayload(),sessionId:chatSession,...(adminKey?{adminKey}:{})})});
   const result=await response.json().catch(()=>({}));
   if(!response.ok){
    if(response.status===402||result.code==="FREE_LIMIT")setChatState(0,true);
+   if(result.code==="ADMIN_AUTH_FAILED"){adminKey="";setChatState(chatLeft,chatLeft===0);}
    throw Error(result.error||"할매 상담이 잠시 연결되지 않았어.");
   }
   chatBubble(feed,"정옥순 할매",result.answer||"미안하구나. 다시 확인해 볼게.",false);
   $("chatQuestion").value="";
   chatLeft=Number(result.remaining);
-  $("chatStatus").textContent=chatLeft===0?"무료 상담 한 번을 마쳤어. 추가 상담 상품은 준비 중이야.":"답변이 도착했어.";
+  $("chatStatus").textContent=adminKey?"관리자 답변이 도착했어. 계속 질문해 봐.":chatLeft===0?"무료 상담 한 번을 마쳤어. 추가 상담 상품은 준비 중이야.":"답변이 도착했어.";
  }catch(e){$("chatStatus").textContent=e.message||"답변을 받지 못했어. 다시 시도해 줘.";}
  finally{chatBusy=false;setChatState(chatLeft,chatLeft===0);}
 }
