@@ -224,14 +224,10 @@ header{position:relative}
  <div id="manseChart"></div><div id="personBody"></div><section id="oksoonChat" class="chat-shell" aria-label="정옥순 할매 상담방"></section>
 </section>
 <section class="page card" id="page3">
-<div class="eyebrow">03 / 05 · 정옥순 할매 무료상담</div>
-<h2>“자네, 딱 하나만 물어봐.”</h2>
-<p class="note">할매가 만세력과 자네가 들려준 이야기를 참고해 답하는 상담이야. 무료 질문은 1회, 전체 풀이와 분야별 풀이·추가 상담은 각각 별도 상품이야.</p>
-<div id="consultMessages" class="consult-chat" role="log" aria-live="polite"><div class="consult-bubble granny"><strong>정옥순 할매</strong><p>“태어난 날의 기운을 봤으니 이제 자네 말도 들어보자. 돈이든 사람이든 뭐가 제일 마음에 걸리냐?”</p></div></div>
-<form id="consultForm"><label for="consultQuestion">할매한테 물어볼 한 가지</label><textarea id="consultQuestion" rows="3" maxlength="600" placeholder="예: 돈이 언제 들어올까요?" required></textarea><button id="consultSubmit" class="primary" type="submit">할매에게 물어보기 · 무료 1회</button></form>
-<p id="consultStatus" class="note" role="status" aria-live="polite">상담 서버가 연결되면 직접 질문할 수 있어. 아직은 실제 답변을 생성하지 않아.</p>
-<div id="consultLocked" class="consult-lock hidden"><h3>“오늘 무료 질문은 여기까지란다.”</h3><p>더 궁금하면 추가 상담 상품에서 이어가면 돼. 가격은 아직 정하지 않았어.</p><button class="secondary" type="button" disabled>추가 상담 · 준비 중</button></div>
-<div class="consult-preview"><h3>“새해 기운도 짚어보자꾸나.”</h3><div id="annualIntro"></div><div class="tabs" id="previewTabs"></div><div class="hint" id="previewBody" aria-live="polite"></div><div class="lock"><strong>🔒 더 깊은 풀이는 별도 상품에서</strong><p id="previewLock"></p></div></div>
+<div class="eyebrow">03 / 05 · 할매가 들려주는 2027년</div>
+<h2>“자, 새해 운도 한번 짚어보자꾸나.”</h2>
+<p class="note">무료 질문은 앞 페이지에서 한 번만 할 수 있어. 여기서는 2027년 운세의 전체 흐름을 읽어봐.</p>
+<div class="consult-preview"><div id="annualIntro"></div><div class="tabs" id="previewTabs"></div><div class="hint" id="previewBody" aria-live="polite"></div><div class="lock"><strong>🔒 더 깊은 풀이는 별도 상품에서</strong><p id="previewLock"></p></div></div>
 <p class="note">정옥순 할매는 창작 캐릭터야. 사주 해석은 전통 명리학에 따른 상징적 설명이며 실제 미래의 일을 확정적으로 예언하지 않아.</p>
 </section>
 <section class="page card" id="page4">
@@ -256,7 +252,7 @@ header{position:relative}
 <footer>진도 정옥순 할머니의 귀신사주 · 창작 캐릭터 · 전통 명리 규칙을 활용한 해석 체험</footer>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/lunar-javascript@1.7.7/lunar.min.js"></script>
-<script src="./config.js?v=33"></script>
+<script src="./config.js?v=39"></script>
 <script>
 (function(){
 "use strict";
@@ -524,94 +520,6 @@ function storyIntro(target){
 }
 
 /* OKSOON-CONFIRMATION-V29 — distinguish symbolic inference from user-confirmed reality */
-const confirmationOptions=[
- {id:"direct",label:"내가 직접 확인해야 편해",detail:"맡긴 일이라도 진행 상황과 마무리를 직접 확인할 때 마음이 놓이는 편"},
- {id:"delegate",label:"남에게 맡겨도 편해",detail:"역할이 정해지면 상대를 믿고 맡기는 편"},
- {id:"varies",label:"상황에 따라 달라",detail:"중요도와 상대방의 경험에 따라 직접 챙길지 결정하는 편"}
-];
-function confirmationInfo(){
- return confirmationOptions.find(x=>x.id===state?.confirmation)||null;
-}
-function personalAdvice(topic){
- const answer=state?.confirmation;
- if(!answer)return [
-  "“이건 자네가 직접 확인해줘야 할 부분이야. 아직 대답하지 않았다면 사주만 보고 성미를 단정하지 않을게.”"
- ];
- const data={
-  direct:{
-   nature:"“자네가 직접 확인해야 편하다고 했지. 이건 내가 알아맞힌 게 아니고 네가 직접 알려준 성미야.”",
-   risk:"“그렇다면 중요한 일에서 확인을 너무 늦게 하거나, 작은 일까지 일일이 떠안을 때 지치기 쉽겠구나.”",
-   money:"“돈이 오가는 일에는 정산 날짜와 금액을 직접 확인하되, 모든 잔일을 혼자 맡지는 마.”",
-   work:"“업무는 중간 확인 날짜를 먼저 정하고, 맡긴 사람에게 확인 항목 세 가지 정도만 공유해.”",
-   love:"“상대가 알아서 해주기를 기다리기보다 내가 확인하고 싶은 부분을 미리 말해. 감시처럼 들리지 않게 이유도 설명하고.”",
-   month:"“이번 달 중요한 일이 있다면 확인할 날을 미리 정해두고, 나머지는 내려놓는 연습을 해.”"
-  },
-  delegate:{
-   nature:"“자네는 남에게 맡겨도 편하다고 했구나. 그건 네가 직접 알려준 사실이야. 할매가 사주로 알아맞힌 척하지 않을게.”",
-   risk:"“그렇다면 믿고 맡긴 일의 결과를 너무 늦게 발견하지 않도록 마감과 결과만은 확인할 필요가 있어.”",
-   money:"“돈 문제에서는 사람을 믿는 것과 거래 증빙을 남기는 걸 따로 생각해. 정산일과 입금 여부는 꼭 기록해.”",
-   work:"“맡길 때 책임자와 납기만 명확히 정하고, 마감 직전에 한 번 결과를 확인해.”",
-   love:"“상대에게 자유를 주는 건 좋지만 서로 기대하는 약속이 같다는 전제는 하지 마.”",
-   month:"“이번 달에는 맡긴 일 중 마감이 가까운 것만 목록으로 확인해 봐.”"
-  },
-  varies:{
-   nature:"“자네는 상황에 따라 다르다고 했지. 그건 사주 풀이가 아니라 네가 직접 확인해준 성향이야.”",
-   risk:"“그렇다면 어떤 일은 직접 챙기고 어떤 일은 맡기는지, 기준이 분명하지 않을 때 피곤해질 수 있어.”",
-   money:"“큰돈, 해지하기 어려운 계약은 직접 확인하고 소액의 반복 업무는 절차를 정해서 맡겨.”",
-   work:"“실수 비용이 큰 일만 직접 확인하고, 나머지는 중간 보고 방식만 맞춰봐.”",
-   love:"“상대에게 기대하는 것이 상황마다 달라질 수 있으니, 이번 일에서 원하는 방식을 먼저 설명해.”",
-   month:"“이번 달에는 일이 생길 때마다 금액·중요도·책임 범위를 기준으로 직접 확인할지를 정해봐.”"
-  }
- };
- const d=data[answer];if(!d)return [];
- if(topic==="work")return [d.nature,d.work];
- if(topic==="money")return [d.nature,d.money];
- if(topic==="love")return [d.nature,d.love];
- if(topic==="month")return [d.month];
- return [d.nature,d.risk,"“이번 조언은 네 대답을 반영한 거야. 만세력에서 읽은 기운과는 구분해서 생각하자.”"];
-}
-function appendConfirmation(target,topic){
- const info=confirmationInfo(),box=make("div",null,"confirmation-applied");
- box.append(make("div",info?"고객이 직접 확인해 준 정보":"아직 확인되지 않은 실제 성향","confirmation-source"));
- if(info)box.append(make("p","자네의 답: "+info.label,"confirmation-answer"));
- for(const line of personalAdvice(topic))say(box,line);
- target.append(box);
-}
-function buildQuestion(target){
- const panel=make("section",null,"confirmation-panel");panel.id="confirmationPanel";
- panel.append(make("div","정옥순 할매가 묻는 한 가지 · 실제 경험 확인","eyebrow"));
- panel.append(make("h3","“자네, 하나만 묻자. 남한테 일을 맡기면 마음이 어떠냐?”"));
- panel.append(make("p","사주로 읽은 성향이 실제 자네 모습과 같은지는 자네가 알려줘야 해. 맞고 틀림은 없어.","confirmation-explain"));
- const options=make("div",null,"confirmation-options");
- const status=make("div",null,"confirmation-result");status.id="confirmationResult";status.setAttribute("aria-live","polite");
- function display(){
-  options.replaceChildren();
-  for(const option of confirmationOptions){
-   const btn=make("button",option.label,"confirmation-option"+(state.confirmation===option.id?" selected":""));
-   btn.type="button";btn.setAttribute("aria-pressed",String(state.confirmation===option.id));
-   btn.addEventListener("click",()=>{
-    state.confirmation=option.id;display();
-    annualIntro();preview(previewIndex);chapter(chapterIndex);
-   });
-   options.append(btn);
-  }
-  status.replaceChildren();
-  status.append(make("div","명리 해석 · 태어난 일간과 월간을 비교한 상징적 성향","confirmation-source"));
-  status.append(make("p","“만세력은 자네가 어떤 성질을 가졌을지 짚는 출발점일 뿐이야. 실제 행동은 자네 말을 먼저 들어야지.”"));
-  const chosen=confirmationInfo();
-  if(chosen){
-   status.append(make("div","본인이 직접 확인한 성향","confirmation-source"));
-   status.append(make("p",chosen.detail,"confirmation-answer"));
-   personalAdvice("general").forEach(line=>say(status,line));
-  }else{
-   status.append(make("p","아직 대답 전이니 이 질문에서 성향을 확정하지 않을게.","confirmation-explain"));
-  }
- }
- panel.append(options);panel.append(status);
- target.append(panel);display();
-}
-
-
 /* OKSOON AI CHAT V30
    Requires a separately deployed server. Never store the OpenAI API key in this file.
    window.OKSOON_CHAT_API can be configured in public config.js after deployment. */
@@ -638,7 +546,7 @@ function chatRequestPayload(){
   chart:{year:p.getYear(),month:p.getMonth(),day:p.getDay(),time:state.unknown?null:p.getTime(),
     dayMaster:state.day,calendar:state.calendar,unknownTime:state.unknown},
   clientContext:state.context||{},
-  confirmedPreference:state.confirmation||null
+  confirmedPreference:null
  };
 }
 function setChatState(remaining,locked){
@@ -759,7 +667,6 @@ function person(){
   "“일지라고 하는 날의 아랫글자는 "+(zhiKo[p.getDayZhi()]||p.getDayZhi())+"인데, 전통적으로 "+trimline(branchHints[p.getDayZhi()])+"이란 뜻도 붙여.”",
   "“잘하는 게 뭔지 모르겠으면 남들이 여러 번 네게 맡겼던 일을 생각해봐.”"
  ]);
- buildQuestion(root);
  moment(root,"이건 정말 조심해야 해",[
   "“좋은 성미도 지나치면 그게 독이 되는 법이지.”",
   "“자네 사주를 상징적으로 풀면 "+trimline(b.blind)+"을 경계할 만해.”",
@@ -789,7 +696,6 @@ function annualIntro(){
  root.append(make("div","정옥순 할매가 들려주는 2027년","eyebrow"));
  say(root,"“"+state.name+"아. 2027년은 좋다 나쁘다 한마디로 끝낼 운이 아니야.”","okbig");
  storyIntro(root);
- appendConfirmation(root,"general");
  moment(root,"돈의 흐름",[
   "“돈 문제에선 "+trimline(state.annual.money)+"이 첫 번째 주제야.”",
   "“또 하나는 "+trimline(state.ground.money)+"이지.”",
@@ -861,9 +767,6 @@ function preview(index){
   "“이걸 어찌 다스리느냐에 따라 같은 성미도 장점이 되고 짐이 되는 거야.”"
  ]);
  if(index===1){storyIntro(root);say(root,"“좋게 쓰면 "+trimline(a.main)+"이지.”");say(root,"“하지만 "+trimline(g.main)+"이 빠지면 균형이 깨질 수 있어.”");}
- if(index===2)appendConfirmation(root,"money");
- if(index===3)appendConfirmation(root,"work");
- if(index===4)appendConfirmation(root,"love");
  if(index===2)moment(root,"돈 문제",[
   "“돈에선 "+trimline(a.money)+"이 먼저 보여.”",
   "“그리고 "+trimline(g.money)+"도 신경 쓰거라.”",
@@ -912,7 +815,6 @@ function chapter(index){
  root.append(make("div","정옥순 할매의 상세 풀이 · "+headings[index],"eyebrow"));
  say(root,"“"+n+"아, 이번엔 "+headings[index]+"부터 들려줄게.”","okbig");
  if(index===0){
-  appendConfirmation(root,"general");
   moment(root,"자네 타고난 기운",[
    "“일주는 "+koreanPillar(state.p.getDay())+"이야. 태어난 날의 위아래 글자라는 뜻이지.”",
    "“윗글자를 "+b.symbol+"에 비유하니 "+trimline(b.headline)+"이란 해석이 나오는 거야.”",
@@ -939,7 +841,6 @@ function chapter(index){
   ]);
   say(root,"“대운, 그러니까 열 해씩 바뀐다고 보는 기운은 생년월일만으로 함부로 정확한 시작 시기를 찍지 않을게. 출생 정보와 절입 기준을 더 확인해야 해.”");
  }else if(index===2){
-  appendConfirmation(root,"money");
   moment(root,"돈이 들어올 때보다 먼저 볼 것",[
    "“정(丁) 기운과 네 사주를 비교하면 "+trimline(a.money)+"이라는 주제를 읽어.”",
    "“미(未)의 중심 기운에서는 "+trimline(g.money)+"도 함께 보지.”",
@@ -948,7 +849,6 @@ function chapter(index){
    "“누가 돈을 벌 수 있다고 장담하면 거기서부터 의심해.”"
   ]);
  }else if(index===3){
-  appendConfirmation(root,"work");
   moment(root,"일은 네 선택이 만든다",[
    "“자네는 "+trimline(b.work)+"을 좋아하는지 확인해 봐.”",
    "“올해는 "+trimline(a.work)+"을 살피는 쪽으로 풀어보겠어.”",
@@ -957,7 +857,6 @@ function chapter(index){
    "“이직이나 사업 시작 날짜를 맞힌다고 말하는 건 책임 없는 소리야. 현실 조건을 봐야 해.”"
   ]);
  }else if(index===4){
-  appendConfirmation(root,"love");
   moment(root,"연애와 결혼의 기운",[
    "“자네는 "+trimline(b.love)+"이 한 가지 성향으로 읽혀.”",
    "“2027년에는 "+trimline(a.love)+"이라는 이야기도 나오는구나.”",
@@ -972,7 +871,6 @@ function chapter(index){
    "“어디가 아프거나 이상이 반복되면 바로 병원에서 확인해. 사주는 진단서가 아니야.”"
   ]);
  }else if(index===6){
-  appendConfirmation(root,"month");
   monthReport(root);
  }else if(index===7){
   moment(root,"올해 자네가 해야 할 일",[
@@ -1001,7 +899,6 @@ function monthReport(root){
   const pillar=Solar.fromYmdHms(2027,month,15,12,0,0).getLunar().getEightChar();
   const k=ten(state.day,pillar.getMonthGan()),t=themes[k];
   detail.append(make("h3",month+"월 · "+t.title));
-  if(confirmationInfo())say(detail,personalAdvice("month")[0]);
   say(detail,"“"+month+"월 중순의 기운과 자네 일간의 관계는 "+k+"이야. 쉽게 말하면 "+trimline(t.main)+"이라는 뜻이지.”");
   say(detail,"“돈은 "+trimline(t.money)+"부터 챙겨.”");
   say(detail,"“일은 "+trimline(t.work)+"을 조심해서 봐.”");
@@ -1029,66 +926,12 @@ for(const id of ["hour","minute"]){
 syncBirthTime();
 
 /* CONSULTATION-V32: browser sends one user question to privately deployed server; never embeds an AI key. */
-const CONSULT_API_ORIGIN=window.OKSOON_API_ORIGIN||"";
-const consultation={token:null,used:false,busy:false};
-function consultBubble(who,message){
- const item=make("div",null,"consult-bubble "+(who==="visitor"?"visitor":"granny"));
- item.append(make("strong",who==="visitor"?"자네가 한 말":"정옥순 할매"));
- item.append(make("p",message));$("consultMessages").append(item);
- item.scrollIntoView({block:"nearest",behavior:"smooth"});
-}
-function consultProfile(){
- return {name:state.name,calendar:state.calendar,birthday:state.birthday,unknown:state.unknown,
-  pillars:{year:state.p.getYear(),month:state.p.getMonth(),day:state.p.getDay(),hour:state.unknown?null:state.p.getTime()},
-  userProvided:state.context};
-}
-function consultReset(){
- consultation.token=null;consultation.used=false;consultation.busy=false;
- $("consultForm").classList.remove("hidden");$("consultLocked").classList.add("hidden");
- $("consultQuestion").value="";$("consultSubmit").disabled=false;
- $("consultStatus").textContent="상담 서버가 연결되면 직접 질문할 수 있어.";
- $("consultMessages").replaceChildren();
- consultBubble("granny","“태어난 날의 기운을 봤으니 이제 자네 말도 들어보자. 돈이든 사람이든 뭐가 제일 마음에 걸리냐?”");
-}
-function consultFinish(){
- consultation.used=true;$("consultForm").classList.add("hidden");
- $("consultLocked").classList.remove("hidden");$("consultStatus").textContent="무료 질문 1회 사용 완료";
-}
-$("consultForm").addEventListener("submit",async event=>{
- event.preventDefault();
- if(!state||consultation.busy||consultation.used)return;
- const question=$("consultQuestion").value.trim();if(!question)return;
- if(!CONSULT_API_ORIGIN){
-  $("consultStatus").textContent="실제 AI 상담 서버를 아직 연결하지 않았어. 정해진 대답을 가짜 상담처럼 보여주지는 않을게.";
-  return;
- }
- consultation.busy=true;$("consultSubmit").disabled=true;
- $("consultStatus").textContent="“할매가 자네 말을 듣고 만세력을 살펴보는 중이야…”";
- try{
-  if(!consultation.token){
-   const init=await fetch(CONSULT_API_ORIGIN+"/api/session",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({profile:consultProfile()})});
-   const data=await init.json();if(!init.ok)throw Error(data.error||"상담을 시작하지 못했어");
-   consultation.token=data.token;
-  }
-  const resp=await fetch(CONSULT_API_ORIGIN+"/api/consult",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+consultation.token},body:JSON.stringify({question})});
-  const data=await resp.json();
-  if(!resp.ok){
-   if(resp.status===403&&data.code==="LIMIT_REACHED"){consultFinish();return;}
-   throw Error(data.error||"상담 연결이 끊겼어");
-  }
-  consultBubble("visitor",question);consultBubble("granny",data.answer);consultFinish();
- }catch(error){
-  $("consultStatus").textContent=error.message||"상담 연결에 실패했어. 다시 시도해봐.";
-  $("consultSubmit").disabled=false;
- }finally{consultation.busy=false;}
-});
-
 let oksoonBusy=false;
 $("begin").addEventListener("click",()=>{
  if(oksoonBusy)return;
  $("formError").textContent="";
  try{
-  state=validate();consultReset();oksoonBusy=true;$("begin").disabled=true;
+  state=validate();oksoonBusy=true;$("begin").disabled=true;
   const loader=$("oksoonLoader"),line=$("oksoonLoadingLine");
   loader.classList.remove("hidden");
   const messages=["“어디… 자네 사주부터 보자꾸나.”","“태어난 날의 기운을 살피고 있네.”","“2027년의 기운과 맞춰봐야지.”","“자, 이제 할머니 말을 들어보게.”"];
