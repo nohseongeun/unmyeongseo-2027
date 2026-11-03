@@ -49,3 +49,38 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: printf %s "$OPENAI_API_KEY" | wrangler secret put OPENAI_API_KEY
+
+      - name: Test real AI consultation after deployment
+        env:
+          WORKER_URL: https://oksoon-grandma-chat.dongyon28.workers.dev
+        run: |
+          node <<'NODE'
+          const base=process.env.WORKER_URL;
+          const origin="https://nohseongeun.github.io";
+          async function call(path,body){
+            const response=await fetch(base+path,{
+              method:"POST",
+              headers:{"content-type":"application/json","origin":origin},
+              body:JSON.stringify(body),
+              signal:AbortSignal.timeout(35000)
+            });
+            const data=await response.json().catch(()=>({error:"Non-JSON response"}));
+            if(!response.ok){
+              console.error(path+" FAILED ("+response.status+"): "+String(data.code||"")+" "+String(data.error||"Unexpected server error"));
+              process.exit(1);
+            }
+            return data;
+          }
+          (async()=>{
+            const session=await call("/api/session",{});
+            console.log("Session API OK; remaining free turns:",session.remaining);
+            const res=await call("/api/chat",{
+              sessionId:session.sessionId,
+              question:"올해 내가 참고할 점 하나만 간단히 알려줘.",
+              chart:{year:"丙寅",month:"甲子",day:"乙丑",time:null},
+              clientContext:{}
+            });
+            if(!res.answer)throw Error("AI returned no answer");
+            console.log("AI Chat API OK; answer received ("+res.answer.length+" chars).");
+          })().catch(e=>{console.error("Smoke test failed: "+e.message);process.exit(1);});
+          NODE
