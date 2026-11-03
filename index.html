@@ -212,7 +212,7 @@ header{position:relative}
 </section>
 <section class="page card" id="page5">
  <div class="eyebrow">05 / 05 · 전체 풀이 검수</div><h2 id="reportTitle">2027년 귀신사주</h2>
- <p>실제 결제 전 내용을 확인하는 <strong>무료 개발용 미리보기</strong>예요. 장을 골라 읽을 수 있어요.</p>
+ <p>실제 결제 전 내용을 확인하는 <strong>무료 개발용 미리보기</strong>예요. 장을 골라 읽을 수 있어요. 전생 항목은 사주 상징을 소재로 한 창작 이야기입니다.</p>
  <div class="chapter-tabs" id="chapters"></div>
  <div class="chapter-text" id="chapterBody" aria-live="polite"></div>
  <div class="notice">※ AI가 생성한 결과가 아니라 전통 사주 규칙 일부를 활용한 문장형 테스트 리포트입니다. 한국식 절입 시각, 출생지 보정, 대운·용신·신강약 등을 종합 검증한 유료 상품은 아직 아니에요.</div>
@@ -227,7 +227,7 @@ header{position:relative}
 (function(){
 "use strict";
 const $=id=>document.getElementById(id);
-const names=["성향","종합운","재물운","직업·사업","연애·관계","건강·생활","12개월","실천 조언"];
+const names=["성향","종합운","재물운","직업·사업","연애·관계","건강·생활","12개월","실천 조언","전생 이야기"];
 const profiles={
  "甲":{symbol:"큰 나무",headline:"남의 말보다 스스로 납득하는 일이 중요한 사람",outside:"처음에는 조용히 상황을 살펴보더라도 마음속 기준이 정리되면 꾸준히 밀고 나가려는 모습",inside:"겉에서는 괜찮다고 말해도 내 방식이 존중받지 못할 때 마음이 복잡해질 수 있는 면",strong:"목표가 생기면 쉽게 포기하지 않고 방향을 유지하는 힘",blind:"내 기준이 상대에게는 조금 높은 기준일 수 있다는 점",work:"성장할 방향과 맡은 역할이 또렷할 때 자신의 힘을 오래 쓰는 방식",love:"말보다 행동과 약속으로 신뢰를 쌓는 방식",focus:"사람들의 속도가 다르다는 걸 인정하면서도 나다운 목표를 지키는 것"},
  "乙":{symbol:"풀과 덩굴",headline:"부드럽게 맞추면서도 속에는 자기 기준이 있는 사람",outside:"분위기를 살피고 사람마다 다른 방법으로 대화하려는 모습",inside:"괜찮아 보일 때도 속으로는 생각이 많고 내 진짜 마음을 뒤늦게 이야기할 수 있는 면",strong:"길이 막히면 다른 길을 찾아내는 유연함과 인내심",blind:"상대에게 맞추는 사이 내 마음을 오래 미루게 될 수 있다는 점",work:"상황과 사람을 조율하며 작은 빈틈을 메우는 방식",love:"눈에 띄는 큰 표현보다 세심한 관심으로 마음을 전하는 방식",focus:"누군가를 배려하는 만큼 나의 마음도 적절한 순간에 표현하는 것"},
@@ -254,7 +254,7 @@ const themes={
 };
 const branchHints={"子":"생각을 충분히 정리한 뒤 움직이려는 마음","丑":"작은 일을 차분히 지켜내려는 마음","寅":"새로운 목표를 향해 나아가려는 마음","卯":"주변 분위기와 관계를 세심하게 살피는 마음","辰":"해야 할 일과 하고 싶은 일을 함께 비교하는 마음","巳":"한 가지에 집중해 결과를 만들고 싶은 마음","午":"내 생각과 감정을 적극적으로 표현하고 싶은 마음","未":"가까운 사람과 일상을 안정되게 만들고 싶은 마음","申":"새로운 방법과 정보를 찾아보고 싶은 마음","酉":"분명한 약속과 기준을 중요하게 여기는 마음","戌":"책임과 신뢰를 오래 지키고 싶은 마음","亥":"다른 가능성을 상상하고 준비하고 싶은 마음"};
 const idx={"甲":0,"乙":0,"丙":1,"丁":1,"戊":2,"己":2,"庚":3,"辛":3,"壬":4,"癸":4},yy={"甲":0,"乙":1,"丙":0,"丁":1,"戊":0,"己":1,"庚":0,"辛":1,"壬":0,"癸":1},clashes={"子":"午","丑":"未","寅":"申","卯":"酉","辰":"戌","巳":"亥","午":"子","未":"丑","申":"寅","酉":"卯","戌":"辰","亥":"巳"};
-const chapterNames=["타고난 나","2027년 종합","돈·재물","직장·사업","사랑·관계","생활·마음","12개월","실천 가이드"];
+const chapterNames=["타고난 나","2027년 종합","돈·재물","직장·사업","사랑·관계","생활·마음","12개월","실천 가이드","전생 이야기"];
 let state=null,step=1,chapterIndex=0,previewIndex=0,monthIndex=1;
 function make(tag,content,cls){const x=document.createElement(tag);if(content!==undefined&&content!==null)x.textContent=content;if(cls)x.className=cls;return x}
 function addP(parent,text){parent.append(make("p",text))}
@@ -503,6 +503,49 @@ function annualIntro(){
  addP(box,reason.action);addP(box,reason.evidence);root.append(box);
  deepReading(root,"brief");
 }
+
+/* OKSOON-PAST-LIFE-V21: explicitly fictional symbolic storytelling */
+const pastScenes={
+"甲":{role:"산길에 큰 나무를 심고 길을 내던 마을의 길잡이",setting:"비가 오면 흙이 쓸려 내려가던 산골 마을",gift:"혼란스러운 사람들 사이에서 방향을 정하고 한 번 약속한 일을 끝까지 지킨 것",regret:"모두가 같은 속도로 걸을 수 없다는 사실을 늦게 알아차린 것",today:"내 생각이 분명할수록 상대가 따라오고 있는지도 확인하는 일"},
+"乙":{role:"다친 사람을 돌보면서 약초를 가꾸던 정원의 일꾼",setting:"좁은 골목과 작은 약초밭이 이어지던 오래된 고을",gift:"사람마다 다른 사정을 알아차리고 막힌 길에서도 다른 방법을 찾아낸 것",regret:"남의 부탁을 들어주느라 자신의 길을 결정하는 일을 미룬 것",today:"남을 도울 때도 내가 감당할 몫을 먼저 정하는 일"},
+"丙":{role:"밤길에 불을 밝히고 소식을 전하던 횃불 전달자",setting:"산과 강을 넘어 소식이 오가던 먼 길",gift:"어둠 속에서 먼저 움직이며 두려워하던 사람들에게 길을 보여준 것",regret:"서두르는 마음에 함께 걷는 사람의 준비를 확인하지 못한 것",today:"마음이 급할수록 결정을 하루쯤 늦춰보는 일"},
+"丁":{role:"작은 등불 아래에서 편지를 써주던 서책방의 필사자",setting:"밤이면 종이와 먹 냄새가 짙어지던 작은 서책방",gift:"남들이 넘긴 글자와 마음의 틈을 오래 들여다본 것",regret:"남의 슬픔을 오래 품다가 정작 자신의 말을 남기지 못한 것",today:"상대의 기분을 헤아리는 만큼 내 속마음도 문장으로 전하는 일"},
+"戊":{role:"허물어진 담을 다시 쌓으며 고을을 지키던 석공",setting:"폭우 뒤 무너진 성벽을 다시 세워야 했던 마을",gift:"어려운 때에도 자리를 지키고 사람들이 의지할 구조를 만든 것",regret:"도움을 청하면 약해 보일까 봐 끝까지 혼자 짐을 진 것",today:"내가 감당할 일과 도움을 청할 일을 분리하는 일"},
+"己":{role:"굶주린 이웃에게 곡식을 나누던 창고의 관리자",setting:"한 해 수확을 아껴 써야 했던 작은 평야 마을",gift:"눈에 잘 띄지 않는 살림을 지켜 모두의 일상을 이어간 것",regret:"남에게 나눠줄 몫을 계산하다 자기 식구의 피로는 놓친 것",today:"책임지는 사람의 몫에 내 휴식도 넣는 일"},
+"庚":{role:"무뎌진 칼과 도구를 고치던 대장장이",setting:"쇠를 두드리는 소리가 하루 종일 울리던 장터",gift:"복잡한 문제를 나누어 보고 쓸모 있는 답을 만들어낸 것",regret:"옳은 말을 하면서도 그 말을 듣는 사람의 마음을 살피지 못한 것",today:"정확한 판단만큼 전달하는 방식도 다듬는 일"},
+"辛":{role:"하나의 장신구를 여러 날 다듬던 세공 장인",setting:"작은 흠집조차 눈에 띄던 조용한 공방",gift:"대부분이 지나치는 차이를 알아채고 가치를 지켜낸 것",regret:"완벽한 작품을 기다리다 누구에게도 보여주지 못한 것",today:"완성되기 전이라도 나의 결과를 세상에 내놓는 일"},
+"壬":{role:"바다 건너 사람과 물건을 잇던 뱃사공",setting:"밀물과 썰물에 따라 표정이 달라지던 오래된 포구",gift:"멀리 떨어진 사람과 소식을 이어 새로운 길을 발견한 것",regret:"갈 수 있는 길이 너무 많아 한곳에 오래 머물지 못한 것",today:"가능성을 넓히되 지금 책임질 하나의 일을 완수하는 일"},
+"癸":{role:"비 오는 날 사람의 사연을 적어두던 기록자",setting:"빗소리가 처마를 두드리던 한적한 주막",gift:"작은 말과 눈빛을 기억하고 보이지 않던 사정을 기록한 것",regret:"모든 사람의 속마음을 혼자 헤아리느라 자신의 평온을 잃은 것",today:"마음속 추측과 직접 확인한 사실을 분리하는 일"}
+};
+const pastSeasons={"子":"서리가 내려 길이 조용해진 겨울밤","丑":"긴 겨울이 끝나기만을 기다리던 창고","寅":"새벽의 산길","卯":"꽃이 피기 시작한 봄 장터","辰":"비 온 뒤 흙냄새가 퍼진 길","巳":"볕이 강해진 여름 들판","午":"한낮의 뜨거운 장터","未":"늦여름 볕 아래의 마을","申":"저녁이 가까워진 길목","酉":"수확을 마친 가을 공방","戌":"찬 바람이 불던 성곽","亥":"밤안개가 내려앉은 강가"};
+function pastLife(target,short){
+ const p=state.p,key=state.day,scene=pastScenes[key];
+ const dayBranch=p.getDayZhi(),season=pastSeasons[dayBranch]||"계절의 문턱";
+ const yearRelation=ten(key,p.getYearGan()),monthRelation=ten(key,p.getMonthGan());
+ const opening="“자네, 이건 실제 전생을 알아맞혔다는 말이 아니네. 자네 사주의 '"+state.base.symbol+"'과 '"+(zhiKo[dayBranch]||dayBranch)+"' 기운을 빌려 지어낸 옛이야기일세.”";
+ target.append(make("div",opening,"oksoon-intro"));
+ section(target,"옛날 어느 삶의 한 장면",[
+  season+" 무렵이었네. "+scene.setting+"에 "+scene.role+"이 살았다고 해보세. 눈에 띄는 영웅은 아니어도 자기 방식으로 하루를 이어가던 사람이었지.",
+  "그 사람의 가장 큰 힘은 "+scene.gift+"이었네. 하지만 그 힘 때문에 오히려 "+scene.regret+"을 마음에 남겼다고 상상해 볼 수 있지."
+ ]);
+ if(short){
+  target.append(make("div","🔒 이 인물이 놓친 약속과 마지막 선택, 지금의 삶에 남길 조언은 상세 이야기에서 이어지네.","lock"));
+ }else{
+  section(target,"돌아보지 못한 약속",[
+   "그 삶에서 가장 중요한 날은 큰 싸움이 일어난 날도, 큰돈을 얻은 날도 아니었네. 누군가 기다리고 있는데도 늘 하던 방식으로 일을 마무리하겠다고 버틴 날이었지. 그날을 다시 떠올린다면 그 사람도 아마 "+scene.regret+"을 후회했을 걸세.",
+   "자네의 현재 삶도 꼭 그렇게 된다는 뜻은 아니야. 오히려 이 이야기는 "+scene.today+"을 잊지 말라는 상징적인 거울로 읽으면 좋겠네."
+  ]);
+  section(target,"이 이야기와 사주가 연결되는 이유",[
+   "일간(태어난 날의 윗글자, 자신을 대표하는 기운)은 '"+key+"'이고, 일지(태어난 날의 아랫글자)는 '"+dayBranch+"'일세. 일간의 상징인 '"+scene.role+"'에 일지가 뜻하는 '"+season+"'의 분위기를 결합해 만든 창작 장면이지.",
+   "태어난 해의 천간 관계를 십성(나와 다른 기운의 관계)으로 보면 '"+yearRelation+"', 달의 천간 관계는 '"+monthRelation+"'로 계산되네. 하지만 이 정보로 전생의 직업, 시대, 성별, 죽음의 원인을 실제로 알아낼 수는 없어. 어디까지나 명리 기호를 이야기의 소재로 쓴 것이야."
+  ]);
+  section(target,"정옥순 할머니가 남기는 한마디",[
+   "“자네, 지난 생의 빚을 갚아야 한다고 겁먹지는 말게. 그건 증명할 수 없는 말이야. 대신 "+scene.today+"을 지금의 삶에서 실천해 보게.”",
+   "이 전생 이야기는 명리학에서 확인할 수 있는 사실이 아니라, 만세력의 상징을 활용한 창작 이야기입니다. 종교적 믿음이나 실제 윤회 경험의 증거로 제공하지 않습니다."
+  ]);
+ }
+}
+
 function preview(index){
  previewIndex=index;
  const {base:b,annual:a,ground:g,day}=state;
@@ -515,6 +558,7 @@ function preview(index){
  if(index===5){title="내 마음과 생활을 돌보는 방법";lines=["올해의 기운에서는 "+a.main+"을 살펴볼 수 있어요.","그러면서 "+g.main+"도 떠올려 보세요. 일정과 휴식처럼 직접 바꿀 수 있는 일부터 생각해 보세요."];locked="생활 리듬과 스트레스 관리에 대한 일반적인 실천 조언";}
  if(index===6){const p=Solar.fromYmdHms(2027,1,15,12,0,0).getLunar().getEightChar();const x=themes[ten(day,p.getMonthGan())];title="1월 중순에는 '"+x.title+"'";lines=["1월 15일을 기준으로 살펴보면 "+x.main+"이라는 주제가 나타나요.","매달 절기가 바뀌므로 달 전체에 같은 운세가 적용된다는 뜻은 아니에요."];locked="2~12월의 흐름 · 각 달의 돈·일·관계에 관한 조언";}
  if(index===7){title="올해 내가 직접 바꿀 수 있는 한 가지";lines=["먼저 "+a.tip+"를 시도해 보세요.","또 하나는 "+g.tip+"예요. 운세가 아니라 실천을 통해 내 생활을 돌아보는 작은 출발점이에요."];locked="올해의 세 가지 실천 · 매달 점검할 항목";}
+ if(index===8){title="자네 사주의 기운으로 지은 전생 이야기";lines=["할머니가 들려주는 전생 이야기는 실제 전생을 알아맞히는 점괘가 아니라 만세력의 상징으로 지은 이야기일세.","자네에게는 "+pastScenes[state.day].role+"의 이야기가 펼쳐진다네. 그 사람이 가장 후회한 일은 "+pastScenes[state.day].regret+"이었지."];locked="그 삶에서 놓친 약속 · 마지막 장면 · 지금 삶에 남기는 조언";}
  if(index===2)lines.push(contextAdvice("money"));
  if(index===3)lines.push(contextAdvice("work"));
  if(index===4)lines.push(contextAdvice("love"));
@@ -546,6 +590,7 @@ function chapter(index){
   section(root,"올해의 세 가지 실천",["첫째, "+a.tip+".","둘째, "+g.tip+".","셋째, 한 달에 한 번 내가 잘한 일과 다시 시도하고 싶은 일을 나누어 적어보세요."]);
   section(root,"마지막으로 남기는 이야기",["운세 문장은 내 삶을 대신 결정하는 답안지가 아니에요. 와닿는 부분은 참고하고 그렇지 않은 부분은 흘려보내도 괜찮아요.","2027년을 좋게 만드는 것은 어느 하루의 문구보다 지금부터 반복하는 작은 선택일 수 있어요."]);
  }
+ if(index===8)pastLife(root,false);
  if(index===1)deepReading(root,"full");
  [...$("chapters").children].forEach((b,i)=>b.classList.toggle("active",i===index));
 }
