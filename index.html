@@ -106,6 +106,89 @@ hr{border:0;border-top:1px solid #544632;margin:22px 0}
 <button type="button" class="outline" id="restart">다른 정보로 다시 체험하기</button>
 </section>
 <div class="foot">運命書 © 2027 · 무료 기능 테스트</div>
+<!-- UNMYEONGSEO-CATALOG-V8 -->
+<section class="card" id="catalog">
+ <div class="eyebrow">2027 FORTUNE MENU · 무료 탐색</div>
+ <h2>가장 궁금한 운세부터 골라보세요</h2>
+ <p>재물, 일, 사랑, 건강까지. 보고 싶은 주제를 누르면 어떤 이야기를 읽을 수 있는지 알려드려요.</p>
+ <div class="catalog-grid" id="catalogButtons"></div>
+ <div class="catalog-description" id="catalogDescription" aria-live="polite"></div>
+ <hr>
+ <div class="eyebrow">PREMIUM FORTUNE BOOK</div>
+ <h2>2027년 운명서 전체 보기</h2>
+ <p>타고난 성향부터 돈·일·사랑·12개월 운세까지 하나의 리포트로 읽는 상품을 준비하고 있어요.</p>
+ <div class="catalog-cost">7,900원</div>
+ <button type="button" class="catalog-disabled" disabled>전체 운명서 · 결제 준비 중</button>
+ <p class="note">지금은 결과 구성 미리보기예요. 결제하거나 유료 결과를 받는 기능은 아직 열리지 않았어요.</p>
+ <hr>
+ <div class="eyebrow">SPECIAL REPORTS · 선택 추가 상품</div>
+ <h2>이것도 더 궁금하다면?</h2>
+ <p>전체 운명서와 별도로, 특히 궁금한 주제만 깊이 살펴보는 상품을 준비 중이에요.</p>
+ <div class="catalog-offer">
+  <div class="eyebrow">COUPLE REPORT</div>
+  <h3>💞 우리 둘의 궁합</h3>
+  <p>서로의 성향, 편안한 소통 방식, 다툼을 줄이는 팁까지 함께 살펴보는 리포트.</p>
+  <div class="catalog-tag">예정 가격 미정</div>
+  <button class="catalog-disabled" type="button" disabled>궁합 리포트 · 준비 중</button>
+ </div>
+ <div class="catalog-offer">
+  <div class="eyebrow">MONEY DEEP DIVE</div>
+  <h3>💰 나의 재물 성향 깊이 보기</h3>
+  <p>돈을 대하는 태도, 계획을 세우는 방법, 재정 관리에 관한 상세한 사주 해석.</p>
+  <div class="catalog-tag">예정 가격 미정</div>
+  <button class="catalog-disabled" type="button" disabled>재물 심층 리포트 · 준비 중</button>
+ </div>
+</section>
+<script>
+(function(){
+ "use strict";
+ const buttons=document.getElementById("catalogButtons");
+ const detail=document.getElementById("catalogDescription");
+ if(!buttons||!detail)return;
+ const menu=[
+  ["✨","2027년 종합운","올해 전체 이야기","한 해의 큰 흐름을 이해하기 쉬운 말로 풀어드릴게요. 특히 어떤 점을 준비하고 돌아보면 좋을지 살펴봅니다."],
+  ["💰","돈과 재물운","수입과 지출 이야기","돈을 대하는 태도와 재정 계획을 전통 사주풀이 관점에서 살펴봅니다. 실제 수익을 보장하거나 투자 판단을 대신하지 않아요."],
+  ["💼","직장·사업운","일과 새로운 기회","일할 때의 강점, 협업 방식, 새로운 일을 고민할 때 생각해 볼 점을 담을 예정이에요."],
+  ["💕","연애·결혼운","마음과 관계","새로운 만남과 이미 이어온 관계에서 서로를 이해하는 방법을 돌아보는 내용을 준비 중이에요."],
+  ["🌿","건강·생활운","나를 돌보는 시간","스트레스와 생활 리듬을 돌아보는 콘텐츠를 준비 중이에요. 의료 진단이나 질병 예측은 하지 않아요."],
+  ["📅","12개월 운세","1월부터 12월까지","매달의 전통 명리학적 주제를 쉬운 말로 살펴보는 리포트를 준비 중이에요."],
+  ["🧭","타고난 성향","나라는 사람","태어난 날의 사주를 참고해 강점과 생각하는 방식을 돌아보는 내용을 보여드려요."],
+  ["🎯","기회와 주의점","한 해의 실천 가이드","운세를 단정적인 예언보다 실제로 참고할 수 있는 작은 행동 조언으로 바꿔드립니다."]
+ ];
+ const nodes=[];
+ function choose(index){
+  nodes.forEach((button,i)=>button.classList.toggle("active",index===i));
+  const item=menu[index];
+  detail.replaceChildren();
+  const subtitle=document.createElement("div");
+  subtitle.className="eyebrow";
+  subtitle.textContent=item[2];
+  const title=document.createElement("h2");
+  title.textContent=item[0]+" "+item[1];
+  const body=document.createElement("p");
+  body.textContent=item[3];
+  const note=document.createElement("p");
+  note.className="note";
+  note.textContent="이 메뉴는 상품 구성 미리보기예요. 실제 맞춤 해석은 별도 검증 후 제공돼요.";
+  detail.append(subtitle,title,body,note);
+ }
+ menu.forEach((item,index)=>{
+  const b=document.createElement("button");
+  b.type="button";
+  b.className="catalog-tile";
+  b.setAttribute("aria-label",item[1]+" 내용 보기");
+  const icon=document.createElement("span");icon.className="catalog-ico";icon.textContent=item[0];
+  const label=document.createElement("span");label.textContent=item[1];
+  const tag=document.createElement("span");tag.className="catalog-tag";tag.textContent=item[2];
+  b.append(icon,label,tag);
+  b.addEventListener("click",()=>choose(index));
+  buttons.appendChild(b);
+  nodes.push(b);
+ });
+ choose(0);
+})();
+</script>
+<!-- END UNMYEONGSEO-CATALOG-V8 -->
 </main>
 <script>
 const el=id=>document.getElementById(id);
@@ -467,89 +550,7 @@ get("start")?.addEventListener("click",()=>setTimeout(monthly,160));
 <!-- EASY-KOREAN-V6 -->
 <!-- BLANK-BIRTH-DEFAULTS-V7 -->
 
-<!-- UNMYEONGSEO-CATALOG-V8 -->
-<section class="card" id="catalog">
- <div class="eyebrow">2027 FORTUNE MENU · 무료 탐색</div>
- <h2>가장 궁금한 운세부터 골라보세요</h2>
- <p>재물, 일, 사랑, 건강까지. 보고 싶은 주제를 누르면 어떤 이야기를 읽을 수 있는지 알려드려요.</p>
- <div class="catalog-grid" id="catalogButtons"></div>
- <div class="catalog-description" id="catalogDescription" aria-live="polite"></div>
- <hr>
- <div class="eyebrow">PREMIUM FORTUNE BOOK</div>
- <h2>2027년 운명서 전체 보기</h2>
- <p>타고난 성향부터 돈·일·사랑·12개월 운세까지 하나의 리포트로 읽는 상품을 준비하고 있어요.</p>
- <div class="catalog-cost">7,900원</div>
- <button type="button" class="catalog-disabled" disabled>전체 운명서 · 결제 준비 중</button>
- <p class="note">지금은 결과 구성 미리보기예요. 결제하거나 유료 결과를 받는 기능은 아직 열리지 않았어요.</p>
- <hr>
- <div class="eyebrow">SPECIAL REPORTS · 선택 추가 상품</div>
- <h2>이것도 더 궁금하다면?</h2>
- <p>전체 운명서와 별도로, 특히 궁금한 주제만 깊이 살펴보는 상품을 준비 중이에요.</p>
- <div class="catalog-offer">
-  <div class="eyebrow">COUPLE REPORT</div>
-  <h3>💞 우리 둘의 궁합</h3>
-  <p>서로의 성향, 편안한 소통 방식, 다툼을 줄이는 팁까지 함께 살펴보는 리포트.</p>
-  <div class="catalog-tag">예정 가격 미정</div>
-  <button class="catalog-disabled" type="button" disabled>궁합 리포트 · 준비 중</button>
- </div>
- <div class="catalog-offer">
-  <div class="eyebrow">MONEY DEEP DIVE</div>
-  <h3>💰 나의 재물 성향 깊이 보기</h3>
-  <p>돈을 대하는 태도, 계획을 세우는 방법, 재정 관리에 관한 상세한 사주 해석.</p>
-  <div class="catalog-tag">예정 가격 미정</div>
-  <button class="catalog-disabled" type="button" disabled>재물 심층 리포트 · 준비 중</button>
- </div>
-</section>
-<script>
-(function(){
- "use strict";
- const buttons=document.getElementById("catalogButtons");
- const detail=document.getElementById("catalogDescription");
- if(!buttons||!detail)return;
- const menu=[
-  ["✨","2027년 종합운","올해 전체 이야기","한 해의 큰 흐름을 이해하기 쉬운 말로 풀어드릴게요. 특히 어떤 점을 준비하고 돌아보면 좋을지 살펴봅니다."],
-  ["💰","돈과 재물운","수입과 지출 이야기","돈을 대하는 태도와 재정 계획을 전통 사주풀이 관점에서 살펴봅니다. 실제 수익을 보장하거나 투자 판단을 대신하지 않아요."],
-  ["💼","직장·사업운","일과 새로운 기회","일할 때의 강점, 협업 방식, 새로운 일을 고민할 때 생각해 볼 점을 담을 예정이에요."],
-  ["💕","연애·결혼운","마음과 관계","새로운 만남과 이미 이어온 관계에서 서로를 이해하는 방법을 돌아보는 내용을 준비 중이에요."],
-  ["🌿","건강·생활운","나를 돌보는 시간","스트레스와 생활 리듬을 돌아보는 콘텐츠를 준비 중이에요. 의료 진단이나 질병 예측은 하지 않아요."],
-  ["📅","12개월 운세","1월부터 12월까지","매달의 전통 명리학적 주제를 쉬운 말로 살펴보는 리포트를 준비 중이에요."],
-  ["🧭","타고난 성향","나라는 사람","태어난 날의 사주를 참고해 강점과 생각하는 방식을 돌아보는 내용을 보여드려요."],
-  ["🎯","기회와 주의점","한 해의 실천 가이드","운세를 단정적인 예언보다 실제로 참고할 수 있는 작은 행동 조언으로 바꿔드립니다."]
- ];
- const nodes=[];
- function choose(index){
-  nodes.forEach((button,i)=>button.classList.toggle("active",index===i));
-  const item=menu[index];
-  detail.replaceChildren();
-  const subtitle=document.createElement("div");
-  subtitle.className="eyebrow";
-  subtitle.textContent=item[2];
-  const title=document.createElement("h2");
-  title.textContent=item[0]+" "+item[1];
-  const body=document.createElement("p");
-  body.textContent=item[3];
-  const note=document.createElement("p");
-  note.className="note";
-  note.textContent="이 메뉴는 상품 구성 미리보기예요. 실제 맞춤 해석은 별도 검증 후 제공돼요.";
-  detail.append(subtitle,title,body,note);
- }
- menu.forEach((item,index)=>{
-  const b=document.createElement("button");
-  b.type="button";
-  b.className="catalog-tile";
-  b.setAttribute("aria-label",item[1]+" 내용 보기");
-  const icon=document.createElement("span");icon.className="catalog-ico";icon.textContent=item[0];
-  const label=document.createElement("span");label.textContent=item[1];
-  const tag=document.createElement("span");tag.className="catalog-tag";tag.textContent=item[2];
-  b.append(icon,label,tag);
-  b.addEventListener("click",()=>choose(index));
-  buttons.appendChild(b);
-  nodes.push(b);
- });
- choose(0);
-})();
-</script>
-<!-- END UNMYEONGSEO-CATALOG-V8 -->
+
 
 </body>
 </html>
