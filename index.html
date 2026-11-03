@@ -967,84 +967,90 @@ function premiumDepth(root,index){
  }
 }
 
-function chapter(index){
- chapterIndex=index;const root=$("chapterBody");root.replaceChildren();
- const a=state.annual,g=state.ground,b=state.base,n=state.name;
- const headings=["너의 타고난 성미","2027년에 들어오는 기운","돈을 대하는 팔자","일과 진로","사람과 인연","건강과 생활","열두 달의 흐름","할매가 남기는 당부","전생 이야기"];
- root.append(make("div","정옥순 할매의 상세 풀이 · "+headings[index],"eyebrow"));
- say(root,"“"+n+"아, 이번엔 "+headings[index]+"부터 들려줄게.”","okbig");
- if(index!==6 && index!==8) say(root,"“"+verdictLine(["person","annual","money","work","love","health",null,"guide"][index])+"”","okbig");
+
+const oksoonSharp={
+ "甲":["네가 고집 센 걸 자꾸 소신이라고 부르지?","목표는 잘 잡는데 네가 옳다고 믿는 순간 남의 말은 귀에 잘 안 들어와. 추진력은 무기지만 협의까지 건너뛰면 독단이야."],
+ "乙":["웃으며 맞춰주는 것 같아도 속으로는 선을 긋는 사람이야.","싫다고 말할 때를 놓치고 혼자 참고 있지. 착한 게 아니라 갈등을 뒤로 미루는 거야."],
+ "丙":["기회를 발견하면 발부터 움직이는 사람이야.","시작은 남보다 빠른데 마무리가 늦어질 수 있어. '일단 해보자'로 벌인 일을 누가 끝내는지 확인해야 해."],
+ "丁":["사람들이 지나친 말까지 혼자 되감기하는 스타일이야.","세심함은 재능인데 생각이 많아서 완성한 것도 다시 고치고 있어. 완벽한 결과보다 제때 내놓는 게 먼저야."],
+ "戊":["다들 너한테 기대는데 정작 넌 기댈 곳이 없다고 느끼기 쉬워.","무슨 일이든 책임지니까 주변은 네가 안 힘든 줄 알아. 못 하겠다는 말을 안 하면 남의 짐까지 네 몫이 돼."],
+ "己":["남 챙기느라 네 일은 늘 마지막이야.","일을 관리하는 실력은 좋지만 손을 안 대는 곳이 없어. 계속 다 해주면 사람들은 고마워하기보다 당연하게 여겨."],
+ "庚":["옳은 말만 하면 사람들이 다 납득할 줄 알지?","판단력이 문제가 아니야. 네 말이 맞아도 너무 날카롭게 던지면 마음이 닫혀. 정답보다 전달 방식을 고쳐야 해."],
+ "辛":["남들은 충분히 잘했다고 하는데 너 혼자 흠을 찾아.","기준이 높은 건 재산이지만 완벽할 때까지 붙잡으면 기회가 지나가. 90점에서 끝낼 줄도 알아야 해."],
+ "壬":["생각나는 길이 너무 많아 한 길만 못 고르는 편이야.","아이디어는 넘치는데 실행할 사람이 네 몸 하나뿐이잖아. 열 개 시작하지 말고 하나를 끝내야 빛이 나."],
+ "癸":["남의 말투 하나에 머릿속으로 이야기를 열 편 쓰지?","사람 마음을 세밀히 살피지만 짐작을 사실처럼 믿는 게 문제야. 혼자 결론 내리지 말고 직접 물어봐."]
+};
+const oksoonTenPunch={
+ "비견":["내가 결정해야 직성이 풀리는 시기","남이 끌고 가는 일엔 쉽게 지쳐. 대신 내 주장이 너무 강하면 협력할 사람이 멀어져."],
+ "겁재":["비교와 경쟁에 마음이 달아오르는 시기","남이 잘되면 자극을 받는 구조로 읽어. 하지만 이기려는 마음에 돈이나 시간을 먼저 내주면 손해야."],
+ "식신":["기술과 결과물을 쌓아야 하는 시기","말만 하지 말고 손으로 완성해야 해. 한 번 크게 벌이기보다 작은 결과를 계속 쌓는 쪽이 맞아."],
+ "상관":["할 말을 참기 어려운 시기","틀린 건 틀렸다고 말하고 싶지. 좋은 아이디어라도 상대를 깎아내리듯 말하면 반발부터 사."],
+ "편재":["기회와 사람을 따라 움직이는 시기","새 제안에 눈이 가겠지만 전부 내 기회는 아니야. 계약서에 없는 약속은 믿지 마."],
+ "정재":["돈과 생활의 질서를 세우는 시기","눈에 보이는 수입과 지출을 챙겨야 마음이 놓여. 화려한 한 방보다 남는 돈을 만드는 게 핵심이야."],
+ "편관":["압박 속에서 승부를 보는 시기","책임이 생기면 오히려 정신이 번쩍 들지. 하지만 부담을 혼자 껴안으면 몸과 관계가 먼저 지쳐."],
+ "정관":["규칙과 평가를 신경 쓰는 시기","신뢰를 쌓기 좋은 구조로 풀이해. 문제는 남의 기준을 지키다 내 선택이 늦어지는 거야."],
+ "편인":["혼자 파고들고 남다른 답을 찾는 시기","남이 지나친 걸 찾아내는 감각이 있어. 대신 머릿속 검토만 끝없이 하면 현실이 안 바뀌어."],
+ "정인":["배우고 준비하며 기반을 닦는 시기","배움에는 강하지만 준비가 끝날 때만 기다리면 시작할 기회가 사라져."]
+};
+function oksoonPremiumEditorial(root,index){
+ const p=state.p, day=state.day,name=state.name==="손님"?"자네":state.name+"아",v=directProfiles[day];
+ const m=ten(day,p.getMonthGan()),ym=ten(day,"丁"),lm=ten(day,"己");
+ const yearly=oksoonTenPunch[ym],earth=oksoonTenPunch[lm],monthly=oksoonTenPunch[m];
+ const personal=oksoonSharp[day],c=state.context||{};
+ const pillars=[["태어난 해",p.getYear()],["태어난 달",p.getMonth()],["태어난 날",p.getDay()],["태어난 시각",p.getTime()]].filter(x=>x[1]);
+ const pair=[];for(let i=0;i<pillars.length;i++)for(let j=i+1;j<pillars.length;j++)
+   if(clashes[pillars[i][1][1]]===pillars[j][1][1])pair.push(pillars[i][0]+"과 "+pillars[j][0]+"의 "+zhiKo[pillars[i][1][1]]+"·"+zhiKo[pillars[j][1][1]]+" 충");
+ const annualClashes=pillars.filter(x=>clashes[x[1][1]]==="未").map(x=>x[0]+"의 "+zhiKo[x[1][1]]+"와 2027년 미(未)");
+ const count=countElements(p);
+ const baseStem=ganKo[day], yearTip="2027년 정(丁)은 "+tenEasy(ym)+"이고, 미(未)의 중심 글자 기(己)는 "+tenEasy(lm)+"야.";
+ const fresh=(heading,paragraphs)=>moment(root,heading,paragraphs.map(x=>"“"+x+"”"));
+ const clashText=pair.length?"네 원국에는 "+pair.join(", ")+"이 보여. 충(서로 맞부딪히는 관계)이란 뜻인데, 전통적으로 생각과 행동 사이의 마찰로 해석하지. 실제 사고나 이별을 뜻하는 건 아니야.":"네 원국에서 대표 지지끼리 직접 맞부딪히는 육충은 확인되지 않아. 없는 충을 있다고 꾸며 말하지 않겠어.";
+ const annualText=annualClashes.length?"2027년에는 "+annualClashes.join(", ")+"가 충 관계야. 변화가 닥친다고 겁먹지 말고, 중요한 계약이나 대화에서 서두르지 말라는 신호로 받아들여.":"2027년 미(未)와 원국 지지 사이에 직접적인 육충은 확인되지 않아. 그래서 무조건 격변의 해라고 떠드는 풀이에는 속지 마.";
+ const counts=Object.entries(count).map(([k,n])=>k+" "+n+"개").join(" · ");
+ const preface=make("div","할매의 속 시원한 풀이 · "+(index===0?"본성":index===1?"2027년":index===2?"재물":index===3?"일":index===4?"인연":index===5?"생활":index===7?"처방":"이야기"),"eyebrow");
+ root.append(preface);
  if(index===0){
-  moment(root,"자네 타고난 기운",[
-   "“일주는 "+koreanPillar(state.p.getDay())+"이야. 태어난 날의 위아래 글자라는 뜻이지.”",
-   "“윗글자를 "+b.symbol+"에 비유하니 "+trimline(b.headline)+"이란 해석이 나오는 거야.”",
-   "“"+directProfiles[state.day].outer+"”",
-   "“"+directProfiles[state.day].strength+"”",
-   "“"+directProfiles[state.day].weak+"”"
-  ]);
-  moment(root,"그걸 인생에 어떻게 쓰냐면",[
-   "“사람 앞에서는 "+trimline(b.love)+"을 해 왔는지 생각해.”",
-   "“일할 땐 "+trimline(b.work)+"이 편했는지도 보렴.”",
-   "“맞지 않는 부분은 억지로 우기지 말자. 네 삶의 실제 경험이 더 중요해.”"
-  ]);
- }else if(index===1){
-  storyIntro(root);
-  moment(root,"좋게 나타난다면",[
-   "“"+trimline(a.main)+"이 좋은 선택의 방향이 될 수 있어.”",
-   "“또 "+trimline(g.main)+"으로 균형을 잡을 수 있지.”",
-   "“작은 목표를 정하고 실행한 날짜와 결과를 적어보렴.”"
-  ]);
-  moment(root,"조심해야 할 때",[
-   "“해석이 마음에 든다고 돈이나 약속을 급하게 결정하지는 마.”",
-   "“내 사주랑 맞다는 말보다 계약 조건과 상대의 행동을 확인해야지.”",
-   "“특정 해에 무조건 사고가 난다거나 돈벼락이 온다는 말은 해줄 수 없어.”"
-  ]);
-  say(root,"“대운, 그러니까 열 해씩 바뀐다고 보는 기운은 생년월일만으로 함부로 정확한 시작 시기를 찍지 않을게. 출생 정보와 절입 기준을 더 확인해야 해.”");
- }else if(index===2){
-  moment(root,"돈이 들어올 때보다 먼저 볼 것",[
-   "“정(丁) 기운과 네 사주를 비교하면 "+trimline(a.money)+"이라는 주제를 읽어.”",
-   "“미(未)의 중심 기운에서는 "+trimline(g.money)+"도 함께 보지.”",
-   "“"+trimline(contextAdvice("money"))+"”",
-   "“수입은 사주보다 장부가 정확하니, 실제 고정비와 남길 돈을 먼저 계산하거라.”",
-   "“누가 돈을 벌 수 있다고 장담하면 거기서부터 의심해.”"
-  ]);
- }else if(index===3){
-  moment(root,"일은 네 선택이 만든다",[
-   "“자네는 "+trimline(b.work)+"을 좋아하는지 확인해 봐.”",
-   "“올해는 "+trimline(a.work)+"을 살피는 쪽으로 풀어보겠어.”",
-   "“또 "+trimline(g.work)+"도 놓치지 말고.”",
-   "“"+trimline(contextAdvice("work"))+"”",
-   "“이직이나 사업 시작 날짜를 맞힌다고 말하는 건 책임 없는 소리야. 현실 조건을 봐야 해.”"
-  ]);
- }else if(index===4){
-  moment(root,"연애와 결혼의 기운",[
-   "“자네는 "+trimline(b.love)+"이 한 가지 성향으로 읽혀.”",
-   "“2027년에는 "+trimline(a.love)+"이라는 이야기도 나오는구나.”",
-   "“그리고 "+trimline(g.love)+"도 생각해야지.”",
-   "“"+trimline(contextAdvice("love"))+"”",
-   "“누굴 만나고 언제 결혼한다는 건 사주만으론 알 수 없어. 서로의 말과 행동을 제일 먼저 봐.”"
-  ]);
- }else if(index===5){
-  moment(root,"몸은 운세로 판단하지 마",[
-   "“너무 무리하고도 괜찮다고 버티는 날이 있는지 봐.”",
-   "“잠, 밥, 쉬는 시간을 먼저 챙기거라.”",
-   "“어디가 아프거나 이상이 반복되면 바로 병원에서 확인해. 사주는 진단서가 아니야.”"
-  ]);
- }else if(index===6){
-  monthReport(root);
- }else if(index===7){
-  moment(root,"올해 자네가 해야 할 일",[
-   "“첫째, "+trimline(a.tip)+"부터 해.”",
-   "“둘째, "+trimline(g.tip)+"도 놓치지 마.”",
-   "“셋째, 한 달에 한 번 돈과 일, 가까운 사람과의 관계를 실제로 점검해.”",
-   "“아무리 운을 봐도 오늘 행동하지 않으면 내일은 그냥 내일이야.”"
-  ]);
- }else if(index===8){
+  fresh(personal[0],[name+", "+personal[1],v.outer+" "+v.weak]);
+  fresh("할매가 그렇게 보는 이유",["일간(태어난 날 윗글자)은 "+baseStem+"이야. "+v.symbol+"로 빗대는 성격의 중심이지. 월주(태어난 달의 두 글자) "+koreanPillar(p.getMonth())+"를 함께 보니 월간과 일간의 관계는 "+tenEasy(m)+"이야.",monthly[0]+". "+monthly[1],"일지(태어난 날 아랫글자)는 "+zhiKo[p.getDayZhi()]+"야. "+branchTemper[p.getDayZhi()]]);
+  fresh("장점이 독이 되는 순간",["이 사주의 강점은 "+v.strength+" 그런데 같은 힘이 지나치면 "+v.weak,clashText,"좋은 말만 해주면 상담이 아니라 아첨이지. 자네가 가장 자주 부딪히는 상황을 딱 하나 떠올려 보게."]);
+  fresh("오행은 숫자로 딱 보여줄게",["오행(나무·불·흙·쇠·물)의 겉글자 개수는 "+counts+"야. 이건 보이는 글자만 세었다는 뜻이고, 안 보이는 글자가 있어도 곧장 기운이 부족하다는 소리는 아니야."]);
+ } else if(index===1){
+  fresh("2027년, 자네에게 들어오는 주제",[name+", "+yearly[0]+". "+yearly[1],yearTip,"2027년 정미(丁未)는 불의 정(丁)과 흙의 미(未)가 만나는 해로 읽어. 자네에게 똑같이 좋은 해라고 떠들 수는 없지."]);
+  fresh("올해 조심할 약점",["2027년의 또 다른 주제는 "+earth[0]+"야. "+earth[1],annualText,"사주가 말하는 건 선택의 성격이지, 실제 사건이 발생하는 날짜가 아니야."]);
+  fresh("돈·일·사람, 셋으로 갈라 보자",["돈: "+v.money+" "+state.annual.money+"부터 살펴.","일: "+v.career+" "+state.ground.work+"을 놓치지 마.","사람: "+v.romance+" "+state.annual.love+"도 챙겨."]);
+ } else if(index===2){
+  fresh("돈 앞에서 자네가 반복할 실수",[name+", "+v.money,"자네에게 올해 정(丁)은 "+tenEasy(ym)+"이야. "+yearly[1],"미(未)의 중심 글자는 "+tenEasy(lm)+"이지. "+earth[1]]);
+  fresh("할매가 돈 이야기에서 먼저 보는 것",["재성(돈과 현실적인 관리에 연결해 읽는 십성)을 보는 일과 실제 통장에 돈이 있는 일은 달라. 수입을 알아야 돈복을 현실로 바꾸는 거야.","들어오는 돈을 적고 고정비를 빼. 카드 할부와 자동결제도 따로 적어. 남은 돈이 진짜 내 돈이지.","누가 '무조건 번다'고 권하면 적어도 하루는 기다려. 정산일·해지 조건·손해 한도를 먼저 확인하거라."]);
+  fresh("자네 상황에 맞는 한 가지 처방",[contextAdvice("money"),"이번 주부터 7일 동안 하루 지출을 기록해. 한 달이 지나면 쓰지 말아야 할 곳이 눈에 들어올 거야."]);
+ } else if(index===3){
+  fresh("일이 풀릴 때와 꼬일 때",[name+", "+v.career,"일간 "+baseStem+"와 월간 "+ganKo[p.getMonthGan()]+"은 "+tenEasy(m)+" 관계야. "+monthly[1],"자네 직업 상황에서 당장 할 일은 "+contextAdvice("work")]);
+  fresh("2027년의 직업 기질",["올해 천간의 관계는 "+tenEasy(ym)+"이야. "+yearly[1],"큰 계약이나 새로운 일은 역할·대금·마감일을 문서로 정해. 감정이 좋아서 얼른 시작했다가 나중에 싸우는 건 피해야지.",annualText]);
+  fresh("할매의 4주 처방",["1주 차에는 가장 큰 일 한 가지를 정해. 2주 차에는 남에게 보여줄 결과물을 만들어.","3주 차에는 피드백을 받고, 4주 차에는 안 되는 일은 접어. 일을 많이 벌이는 게 능력이 아니야."]);
+ } else if(index===4){
+  fresh("좋아하는 사람 앞에서 드러나는 얼굴",[name+", "+v.romance,"자네의 일지 "+zhiKo[p.getDayZhi()]+"는 가까운 관계를 읽을 때 살피는 자리야. "+branchTemper[p.getDayZhi()],"상대가 무슨 생각을 하는지는 상대의 사주와 실제 말을 들어야 알지. 자네 사주만 보고 상대 속마음까지 맞힌다는 건 허풍이야."]);
+  fresh("2027년 관계에서 가장 조심할 것",["올해 관계의 기준도 "+tenEasy(ym)+"과 "+tenEasy(lm)+"로 풀어. "+yearly[1],contextAdvice("love"),clashText]);
+  fresh("그 사람과 대화할 때는",["누가 잘못했는지만 따지지 마. '그때 어떤 행동이 서운했어. 다음에는 이렇게 해줬으면 좋겠어'라고 말해.","상대 생년월일을 입력하지 않았다면 궁합을 계산하지 않았다는 사실부터 확인해야 해."]);
+ } else if(index===5){
+  fresh("몸과 마음이 지치는 이유를 짚자",[name+", "+personal[1],v.weak,"평소 과하게 떠안는 일 하나를 줄여. 의무보다 쉬는 시간을 먼저 적어놓는 것도 실력이야."]);
+  fresh("생활 처방은 구체적으로",["이번 주 7일 동안 잠든 시각과 일어난 시각을 적어. 매일 비슷한 시각에 쉬는 시간을 잡아봐.","피로나 증상이 오래가면 사주가 아니라 진료로 확인해야 해. 할매가 아픈 병을 맞힌다고 허풍치진 않겠어."]);
+ } else if(index===7){
+  fresh("자네에게 내리는 세 가지 지시",["첫째, "+v.weak,"둘째, "+yearly[1],"셋째, 매주 같은 요일에 돈·일·사람 관계 중 미뤄둔 문제 하나를 끝내."]);
+  fresh("30일 처방전",["1주 차에 미뤄둔 일 하나를 고르고, 2주 차에 그 일을 마무리해.","3주 차에는 남에게 부탁할 일 하나를 맡겨. 4주 차에는 나아진 부분과 여전히 막힌 부분을 구분해.",annualText]);
+ } else if(index===8){
   pastLife(root,false);
  }
- if(index===0)renderTemper(root);
- if(index===1)renderDaewoon(root);
- premiumDepth(root,index);
+ if(index!==8&&index!==5){
+  const title="오늘부터 써먹을 할매의 한마디";
+  fresh(title,["네 사주에선 "+tenEasy(m)+" 관계와 "+baseStem+" 일간을 함께 봤어. "+personal[0],"어려운 말 다 빼고 한마디로 끝내자. "+(index===4?v.romance:index===3?v.career:index===2?v.money:v.weak)]);
+ }
+}
+function chapter(index){
+ chapterIndex=index;
+ const root=$("chapterBody");root.replaceChildren();
+ const heading=chapterNames[index];
+ root.append(make("h2",heading));
+ if(index===6){monthReport(root)}
+ else{oksoonPremiumEditorial(root,index);if(index===1)renderDaewoon(root);}
  [...$("chapters").children].forEach((t,i)=>t.classList.toggle("active",i===index));
 }
 function monthReport(root){
