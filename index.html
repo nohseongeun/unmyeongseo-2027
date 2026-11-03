@@ -297,6 +297,65 @@ const directProfiles={
  "壬":{core:"너는 자유로운 아이디어형이야. 한 가지 길만 가라고 하면 숨이 막혀.",outer:"겉으론 여유롭고 개방적이지만 속으로는 선택지가 너무 많아 흔들려.",strength:"사람과 정보를 연결하고 새로운 기회를 찾는 데 강해.",weak:"시작만 여러 개 하고 끝내지 못하면 실력이 묻혀.",money:"기회에 눈이 빠르지만 분산 지출을 조심해. 먼저 하나를 검증해.",career:"사람·정보·기획을 잇는 일이 맞아. 우선순위 없이 벌리면 손해야.",romance:"독립적인 시간을 원해. 연락과 거리의 기준을 서로 맞춰야 해."},
  "癸":{core:"너는 관찰형이야. 말수는 적어도 속으로는 사람과 상황을 계속 분석해.",outer:"겉은 조용하고 부드럽지만 속으로는 감정의 변화에 민감해.",strength:"작은 신호를 읽고 남이 놓친 문제를 발견해.",weak:"확인하지 않은 추측을 사실처럼 믿으면 혼자 상처받아.",money:"신중하게 판단하는 편이지만 걱정만 하다가 기회를 놓치지 마.",career:"분석·정리·관찰이 필요한 일에 강해. 생각을 결과로 보여줘야 해.",romance:"상대의 작은 변화도 알아채. 마음을 추측하지 말고 직접 물어봐."}
 };
+const tenTemper={
+ "비견":["자기주장이 강해","남의 지시보다 자기 방식으로 움직이려 해","협업할 때 고집 때문에 부딪치기 쉬워"],
+ "겁재":["경쟁심이 강해","내 몫과 상대 몫을 민감하게 따져","비교가 심해지면 돈과 인간관계에서 충돌해"],
+ "식신":["꾸준히 실력을 쌓는 타입이야","말보다 결과물로 보여줘","안정만 찾으면 변화를 늦게 받아들여"],
+ "상관":["말과 표현이 날카로워","정해진 방식보다 내 아이디어를 밀어","솔직한 말이 상대에게 공격적으로 들릴 수 있어"],
+ "편재":["기회를 빨리 포착해","사람과 거래, 새로운 일에 관심이 많아","한꺼번에 너무 많이 벌이면 돈과 시간이 새"],
+ "정재":["실리를 따져","안정적인 수입과 정확한 약속을 중요하게 봐","안전만 계산하면 과감한 선택을 놓쳐"],
+ "편관":["압박 앞에서 승부욕이 올라와","책임과 도전을 피해가지 않으려 해","긴장한 채 끝까지 버티다가 지쳐"],
+ "정관":["원칙과 책임을 중요하게 여겨","규칙이 분명해야 마음이 편해","남의 평가에 맞추느라 자기 뜻을 미룰 수 있어"],
+ "편인":["남들이 안 보는 부분을 파고들어","혼자 생각하고 분석하는 시간이 필요해","생각이 깊어질수록 실행을 미룰 수 있어"],
+ "정인":["배우고 준비하는 데 강해","확실히 이해한 뒤 움직이려 해","준비만 계속하다 시작을 놓칠 수 있어"]
+};
+const branchTemper={
+ "子":"상황을 살피고 나서 속내를 꺼내는 편이야.",
+ "丑":"쉽게 마음을 바꾸지 않아. 한번 정하면 오래 끌고 가.",
+ "寅":"결정하면 움직임이 빨라. 답답한 상황을 못 참아.",
+ "卯":"관계의 분위기와 말투를 예민하게 살펴.",
+ "辰":"현실적인 계산과 하고 싶은 마음이 자주 부딪쳐.",
+ "巳":"일단 꽂힌 일엔 집중력이 강해. 신경이 곤두서기 쉬워.",
+ "午":"감정 표현이 뚜렷해. 좋고 싫은 티가 나는 편이야.",
+ "未":"가까운 사람의 일까지 챙겨. 그래서 쉽게 부담을 떠안을 수 있어.",
+ "申":"상황 판단이 빨라. 필요하면 방향을 확 바꾸는 편이야.",
+ "酉":"기준이 높아. 작은 실수도 그냥 넘어가기 어려워.",
+ "戌":"책임과 의리를 중요하게 봐. 서운한 일이 오래 남기 쉬워.",
+ "亥":"혼자 생각하는 시간이 필요해. 새로운 가능성에 마음이 움직여."
+};
+function detailedTemper(){
+ const p=state.p, m=ten(state.day,p.getMonthGan()), t=tenTemper[m];
+ const e=countElements(p), order=Object.entries(e).sort((x,y)=>y[1]-x[1]);
+ const max=order[0][1], leaders=order.filter(x=>x[1]===max).map(x=>x[0]);
+ const lowest=order.filter(x=>x[1]===0).map(x=>x[0]);
+ return {
+  main:"월주 "+koreanPillar(p.getMonth())+"의 월간 "+ganKo[p.getMonthGan()]+"은 네 일간 "+ganKo[state.day]+"에게 "+m+"이야. 이 관계는 "+t[0]+". "+t[1]+". 문제는 "+t[2]+".",
+  day:"일주 "+koreanPillar(p.getDay())+"의 일지 "+zhiKo[p.getDayZhi()]+"는 가까운 관계와 일상적인 반응을 읽는 자리야. "+branchTemper[p.getDayZhi()],
+  elements:"사주 겉글자 "+(p.getTime()?"8":"6")+"개를 보면 "+leaders.join("·")+" 기운이 "+max+"개로 가장 두드러져. "+(lowest.length?lowest.join("·")+"은 표면에 안 보여. 그렇다고 아예 없는 기운이나 부족한 성격이라고 단정하면 안 돼.":"다른 기운도 함께 섞여 있어.")+" 이건 천간과 지지의 대표 오행을 단순 집계한 결과야.",
+  limitation:"성격은 이 간지 조합을 바탕으로 한 명리학적 해석이야. 실제 성격검사 결과나 확인된 개인 이력은 아니야."
+ };
+}
+function renderTemper(root){
+ const t=detailedTemper();
+ moment(root,"태어난 달까지 합쳐 본 성격",["“"+t.main+"”","“"+t.day+"”"]);
+ moment(root,"오행 구성은 이렇게 읽어",["“"+t.elements+"”"]);
+}
+function renderDaewoon(root){
+ const d=state.daewoon||[];
+ if(!d.length){
+  moment(root,"대운은 현재 시작 시기를 확인할 수 없어",[
+   "“대운은 10년 단위 운의 흐름이야. 지금 입력된 정보에는 검증된 대운 시작 나이가 없어.”",
+   "“정확하지 않은 나이와 연도를 지어내서 어느 때 성공하거나 실패한다고 말하진 않겠어. 우선 네 원국과 2027년 세운을 읽어줄게.”"
+  ]);return;
+ }
+ const blocks=d.map((x,i)=>{
+  const t=ten(state.day,x.pillar[0]),v=tenTemper[t];
+  const to=d[i+1]?d[i+1].age-1:x.age+9;
+  return "“"+x.age+"~"+to+"세 "+koreanPillar(x.pillar)+" 대운은 "+t+" 운이야. "+v[0]+". "+v[1]+". 주의할 점은 "+v[2]+". 실제 대운 경계 나이는 입력한 원본 대운표를 기준으로 한 거야.”";
+ });
+ moment(root,"확인된 대운의 시기별 성격과 과제",blocks);
+}
+
 function verdictLine(topic){
  const v=directProfiles[state.day];if(!v)return "";
  const map={money:v.money,work:v.career,love:v.romance,person:v.core,health:v.weak,annual:v.strength,guide:v.weak};
@@ -679,6 +738,7 @@ function person(){
  say(root,"“"+verdictLine("person")+"”","okbig");
  say(root,"“이건 일간을 중심으로 읽은 성향이고, 태어난 달과 다른 글자도 함께 봐야 더 정확한 풀이가 돼.”");
 
+ renderTemper(root);
  moment(root,"네가 결정하는 방식부터 보자",[
   "“어떤 사람은 일을 시작하기 전에 먼저 움직이고, 어떤 사람은 마음속 기준이 설 때까지 기다리지.”",
   "“자네는 "+trimline(b.headline)+"로 읽히니, 큰 결정을 앞두고 무엇에 납득해야 움직이는지 떠올려봐.”",
@@ -965,6 +1025,8 @@ function chapter(index){
  }else if(index===8){
   pastLife(root,false);
  }
+ if(index===0)renderTemper(root);
+ if(index===1)renderDaewoon(root);
  premiumDepth(root,index);
  [...$("chapters").children].forEach((t,i)=>t.classList.toggle("active",i===index));
 }
