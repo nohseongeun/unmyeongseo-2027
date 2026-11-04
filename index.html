@@ -604,7 +604,7 @@ function verdictLine(topic){
 const chapterNames=["타고난 나","2027년 종합","돈·재물","직장·사업","사랑·관계","생활·마음","12개월","실천 가이드","전생 이야기","궁합·인연 분석"];
 let state=null,step=1,chapterIndex=0,previewIndex=0,monthIndex=1;
 function make(tag,content,cls){const x=document.createElement(tag);if(content!==undefined&&content!==null)x.textContent=content;if(cls)x.className=cls;return x}
-function addP(parent,text){parent.append(make("p",text))}
+function addP(parent,text){parent.append(make("p",oksoonPlainKorean(text)))}
 function section(parent,title,paragraphs){const box=make("section",null,"section");box.append(make("h3",title));paragraphs.forEach(p=>addP(box,p));parent.append(box)}
 function ten(a,b){const x=idx[a],y=idx[b],same=yy[a]===yy[b];if(x===undefined||y===undefined)return null;if(x===y)return same?"비견":"겁재";if((x+1)%5===y)return same?"식신":"상관";if((x+2)%5===y)return same?"편재":"정재";if((y+1)%5===x)return same?"편인":"정인";if((y+2)%5===x)return same?"편관":"정관";return null}
 
@@ -821,12 +821,12 @@ function prepReveal(){
  speechObserver=new IntersectionObserver((items)=>{items.forEach(e=>{if(e.isIntersecting){e.target.classList.add("okshow");speechObserver.unobserve(e.target);}});},{rootMargin:"0px 0px -6% 0px",threshold:0.05});
 }
 function say(target,words,cls=""){
- const t=make("p",words,"okline "+cls);target.append(t);
+ const t=make("p",oksoonPlainKorean(words),"okline "+cls);target.append(t);
  if(window.matchMedia?.("(prefers-reduced-motion: reduce)").matches||!("IntersectionObserver" in window))t.classList.add("okshow");
  else{prepReveal();speechObserver.observe(t);}
 }
 function moment(target,title,lines){
- const sec=make("section",null,"okmoment");sec.append(make("h3",title));lines.forEach(l=>say(sec,l));target.append(sec);
+ const sec=make("section",null,"okmoment");sec.append(make("h3",oksoonPlainKorean(title)));lines.forEach(l=>say(sec,l));target.append(sec);
 }
 function trimline(t){return String(t).replace(/[.。]+$/,"");}
 function storyIntro(target){
@@ -2121,6 +2121,56 @@ function oksoonDedupeWholeReport(){
  return removed;
 }
 
+
+/* V45: 쉬운 말 편집 — 생성된 리포트와 기본 풀이 모두 화면에 표시할 때 적용 */
+const oksoonPlainWords=[
+ ["어떤 선택 앞에서 마음이 움직이는지","어떤 일을 결정할 때 고민이 커지는지"],
+ ["어떤 선택 앞에서","무슨 일을 결정할 때"],
+ ["선택의 모양","결정하는 방식"],
+ ["기회의 방향","새로운 일이 생길 만한 곳"],
+ ["재물의 흐름","돈이 들어오고 나가는 모습"],
+ ["돈의 흐름","돈이 들어오고 나가는 모습"],
+ ["인연의 흐름","사람과의 관계"],
+ ["관계의 흐름","사람과의 관계"],
+ ["운의 흐름","운세"],
+ ["올해의 흐름","올해 운세"],
+ ["기운이 부각되는","이런 성향이 강해지는"],
+ ["이런 기운이 드러날 때","이런 일이 생길 때"],
+ ["현실적인 선택을 돌아보는 마음","실제로 감당할 수 있는지 따져보는 마음"],
+ ["현실적인 선택","실제로 할 수 있는 일"],
+ ["선택의 기준","결정할 때 중요하게 보는 것"],
+ ["성향이 읽히는구먼","성격으로 보이는구먼"],
+ ["이런 모습이 읽히는구먼","이런 모습이 보이는구먼"],
+ ["이런 모습이 읽히네","이런 모습이 보이네"],
+ ["이런 면이 읽히는구먼","이런 면이 보이는구먼"],
+ ["이런 면이 읽히네","이런 면이 보이네"],
+ ["이렇게 읽을 수 있어","이렇게 볼 수 있어"],
+ ["자네의 성미","자네 성격"],
+ ["이런 성미","이런 성격"],
+ ["성미를","성격을"],
+ ["마음에 크게 남을 수 있겠구먼","오래 마음에 남을 수 있겠구먼"],
+ ["눈여겨볼 만하구먼","한 번 주의해서 볼 만하구먼"],
+ ["다른 한편으로는","그런데"],
+ ["관계가 시험대에 오를","서로 크게 다툴"],
+ ["달마다 달라지는 흐름","달마다 달라지는 운세"],
+ ["장점의 그림자","장점 때문에 생기는 단점"],
+ ["도드라져 보이는구먼","더 뚜렷하게 보이는구먼"],
+ ["그 대목을 그냥 지나쳐서는 안 되지","그 부분은 그냥 넘기지 말게"],
+ ["생활 속에서 드러나는 양상","평소 생활에서 나타나는 모습"]
+];
+function oksoonPlainKorean(value){
+ let out=String(value??"").normalize("NFC");
+ for(const [a,b] of oksoonPlainWords)out=out.split(a).join(b);
+ return out.replace(/([.!?])\s*(?:그런데|하지만)\s*(?:그런데|하지만)/g,"$1 그런데");
+}
+function oksoonSimplifyReport(root){
+ for(const node of root.querySelectorAll(".report-chapter-base p,.report-chapter-base h3,.report-ai-enrichment p,.report-ai-enrichment h3")){
+  if(node.childElementCount)continue;
+  const edited=oksoonPlainKorean(node.textContent);
+  if(node.textContent!==edited)node.textContent=edited;
+ }
+}
+
 function oksoonRenderAIText(root,report){
  const section=make("section",null,"ai-premium-report");
  const lines=String(report).normalize("NFC").replace(/\r\n?/g,"\n")
@@ -2177,6 +2227,7 @@ function renderFullReport(){
   }
   root.append(sec);
  });
+ oksoonSimplifyReport(root);
  oksoonDedupeWholeReport();
 }
 function renderAutoPremium(host,index,report){
@@ -2185,6 +2236,7 @@ function renderAutoPremium(host,index,report){
  wrap.append(make("div","할매가 더 깊이 풀어주는 이야기","report-ai-eyebrow"));
  oksoonRenderAIText(wrap,report);
  host.append(wrap);
+ oksoonSimplifyReport(host);
  oksoonDedupeWholeReport();
 }
 async function pumpAutoReports(){
@@ -2205,7 +2257,7 @@ async function pumpAutoReports(){
     const payload={
      adminKey,topic:key,
      chart:{year:chart.getYear(),month:chart.getMonth(),day:chart.getDay(),time:state.unknown?null:chart.getTime()},
-     styleGuide:"한 사람에게 편지를 쓰듯 자연스럽게 말하기. 분야별로 서로 다른 구체적인 장면과 마음의 원인, 인간관계의 양면을 깊이 있게 풀어낼 것. 최소 6개 이상의 소제목과 충분한 장문 단락. 각 장마다 소재가 겹치지 않도록 구체적인 새 장면을 사용하고 같은 문장·문단·도입부 반복 금지. '사람이여', '기운이여' 같은 억지 사투리 금지. 현재 직업·성별·연애·개인 과거를 임의로 단정하지 말 것. 한글 맞춤법과 문장 호응 검수. 중간에 면책 문구를 반복하지 말고 반드시 마지막 문장까지 완결할 것.",
+     styleGuide:"가장 중요한 규칙: 초등학교 고학년도 단번에 알아들을 만큼 쉬운 한국어로 써라. 마치 진도 할머니가 옆에 앉아 직접 들려주듯 짧고 자연스럽게 말해라. 한 문장은 될수록 25~50자, 한 문단은 2~4문장으로 쪼개라. 사주 명리 용어를 쓸 때는 반드시 그 자리에서 쉬운 뜻을 한 번 설명하고, 독자가 모르는 전문 용어를 연달아 늘어놓지 마라. 추상적 표현인 '기운의 흐름', '선택의 모양', '삶의 방향', '내면의 파동', '관계의 결', '에너지의 순환', '상징적 국면', '현실적 통찰', '심리적 방어 기제', '전환점의 기운'을 피하고, 대신 '돈이 들어오거나 나갈 때', '직장에서 내 말을 무시했을 때', '약속을 어겼을 때'처럼 보통 사람이 겪는 상황으로 풀어라. '이런 모습이 나타날 수 있습니다', '선택을 돌아보세요' 같은 뻔한 표현도 금지. 설명만 하지 말고 사주 근거 한 문장→타고난 성격 한 문장→실제 생활 사례 두세 문장으로 설명하라. 재물·일·사랑은 서로 다른 장면을 쓸 것. 이미 앞 장에서 한 얘기는 반복 금지. 독자가 돈을 내고 읽는 긴 보고서이므로 분량은 충분히 쓰되 말만 길게 늘이지 마라. 소제목 6개 이상, 문장과 문단 자연스럽게 이어 쓰고 매번 같은 할머니 말투로 시작하지 마라. 과장된 사투리 금지. 남의 직업·성별·연애 여부·실제 과거를 지어내지 마라. 사주풀이를 사실 검증된 심리분석이나 확정 예언처럼 쓰지 마라. 오탈자와 문장 호응을 확인하고 마지막 문장까지 완결하라.",
      chapterGuide:({
       person:"겉과 속, 감정의 방어법, 기대와 상처, 강점의 그림자, 가까운 관계에서 드러나는 성향",
       annual:"2027년 상반기와 하반기의 흐름, 선택과 갈등, 일과 사람과 돈을 각각 독립된 장면으로",
