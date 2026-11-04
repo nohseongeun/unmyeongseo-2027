@@ -123,6 +123,63 @@ function reportPrompt(chart,topic){
  return {instructions,input:"확인된 사주 사실: "+JSON.stringify(facts)};
 }
 
+
+const BLOG_CATEGORIES=["기업 송년회","기업 워크숍","초등학교 운동회","학교 발표회","가족 운동회","지역 축제","기업 체육대회","행사 MC 섭외","음향·조명·포토부스","교회 행사"];
+const BLOG_AUDIENCES=["기업 행사 담당자","학교 선생님","학부모회","지자체 행사 담당자","교회 행사 담당자","일반 고객"];
+const BLOG_STYLES=["현장 후기","정보 가이드","체크리스트","비교·선택 팁","프로그램 아이디어"];
+function blogText(value,max=300){return typeof value==="string"?value.trim().slice(0,max):"";}
+async function createBlogDraft(data,env,headers){
+ if(!await isAdmin(data.adminKey,env))return json({error:"관리자 인증이 필요해."},403,headers);
+ if(!env.OPENAI_API_KEY)return json({error:"AI 설정을 확인해 줘."},503,headers);
+ const category=BLOG_CATEGORIES.includes(data.category)?data.category:BLOG_CATEGORIES[0];
+ const audience=BLOG_AUDIENCES.includes(data.audience)?data.audience:BLOG_AUDIENCES[0];
+ const style=BLOG_STYLES.includes(data.style)?data.style:BLOG_STYLES[1];
+ const city=blogText(data.city,50).replace(/[<>]/g,"");
+ const keyword=blogText(data.keyword,90);
+ const evidence=blogText(data.evidence,1000);
+ const services=blogText(data.services,240);
+ const brand=blogText(data.brand,60)||"렛미플레이";
+ const tone=blogText(data.tone,60)||"친근하지만 신뢰감 있는 실무자 말투";
+ const selected={brand,category,audience,style,city,keyword,evidence,services,tone,targetLength:data.length==="long"?"1800~2300자":"1100~1500자"};
+ const instructions=[
+  "너는 대한민국 현장 행사대행사 블로그 콘텐츠 편집자다. 네이버 블로그에 게시할 한국어 원고를 쓴다. 절대로 네이버에 직접 게시했다고 말하지 마라.",
+  "명확하고 자연스러운 문장으로 작성해. 빈말, 공허한 조언, 누구에게나 적용되는 문구, 반복, 과도한 이모지, 허위 과장, '완벽한 행사', '업계 1위', '무조건' 같은 단정을 쓰지 마.",
+  "제공된 실제 행사 경험만 현장 후기의 사실로 적을 수 있다. 경험이 비어 있으면 가상의 행사 후기, 고객 인터뷰, 고객 만족도, 실명, 수상 이력, 후기 인용, 성과 수치를 절대로 지어내지 마. 경험이 없으면 실용적인 가이드 글로 바꿔.",
+  "지역명과 키워드는 자연스럽게 쓰고 반복해서 도배하지 마. 네이버 검색 상위를 보장하는 주장은 금지한다.",
+  "도입부에 독자 문제를 짚되 불안을 부추기지 마. 실제 운영자의 관점에서 상황별 체크포인트, 예상 변수, 진행 순서와 준비물을 구체적으로 설명해.",
+  "글 길이는 targetLength를 목표로 하되 분량을 늘리려고 말만 반복하지 마. 새 정보를 더해. 문의 안내는 마지막에 딱 한번.",
+  "반환 형식은 JSON 객체 하나만. 키: title(문자열),intro(문자열),sections(heading와 body 필드를 가진 객체 4~6개 배열),imageIdeas(문자열 배열),tags(문자열 배열),cta(문자열),factCheck(문자열 배열). 코드펜스 금지.",
+  "사진은 실제 보유한 사진의 배치 위치를 제안하되, 사진이 있다고 지어내지는 마.",
+  "CTA에 연락처·홈페이지를 지어내지 마. 제공 정보가 없으면 날짜·장소·인원·행사 시간을 알려 달라는 안내로 마무리.",
+  "factCheck에는 게시 전 확인할 사실, 가격/일정, 사진 사용 권리, 동의 등을 구체적으로 적어."
+ ].join("\n");
+ const model=env.OPENAI_MODEL||"gpt-4.1-mini";
+ const body={model,store:false,max_output_tokens:model.startsWith("gpt-5")?3500:3200,instructions,input:"작성 요청: "+JSON.stringify(selected)};
+ if(model.startsWith("gpt-5")){body.reasoning={effort:"low"};body.text={verbosity:"medium"};}
+ try{
+  const upstream=await fetch("https://api.openai.com/v1/responses",{
+   method:"POST",headers:{"Authorization":"Bearer "+env.OPENAI_API_KEY,"Content-Type":"application/json"},
+   body:JSON.stringify(body),signal:AbortSignal.timeout(50000)
+  });
+  if(!upstream.ok)return json({error:upstream.status===429?"AI 사용 한도를 확인해 줘.":"AI 초안을 만들지 못했어. API 설정을 확인해 줘."},503,headers);
+  const result=await upstream.json();
+  const output=extractText(result).trim().replace(/^\x60{3}(?:json)?\s*/i,"").replace(/\s*\x60{3}$/,"").trim();
+  if(!output||result.status==="incomplete")return json({error:"글이 중간에 끊겼어. 다시 생성해 줘."},503,headers);
+  let draft;
+  try{draft=JSON.parse(output);}catch{return json({error:"AI가 글 형식을 올바르게 반환하지 않았어. 다시 시도해 줘."},503,headers);}
+  if(!draft||typeof draft.title!=="string"||typeof draft.intro!=="string"||!Array.isArray(draft.sections)||!draft.sections.length)
+   return json({error:"AI 초안 형식을 확인할 수 없어. 다시 생성해 줘."},503,headers);
+  const clean=(v,max)=>blogText(v,max);
+  return json({draft:{
+   title:clean(draft.title,150),intro:clean(draft.intro,1600),
+   sections:draft.sections.slice(0,8).map(x=>({heading:clean(x?.heading||x?.title,130),body:clean(x?.body,3400)})),
+   imageIdeas:(draft.imageIdeas||[]).slice(0,7).map(x=>clean(x,240)),
+   tags:(draft.tags||[]).slice(0,16).map(x=>clean(x,55).replace(/^#/,"")),
+   cta:clean(draft.cta,650),
+   factCheck:(draft.factCheck||[]).slice(0,8).map(x=>clean(x,240))
+  }},200,headers);
+ }catch(e){return json({error:"AI 서버 연결이 지연됐어. 잠시 후 다시 시도해 줘."},503,headers);}
+}
 export default {
  async fetch(request,env){
   const origin=request.headers.get("origin")||"";
@@ -130,13 +187,14 @@ export default {
   if(request.method==="OPTIONS")return new Response(null,{status:204,headers});
   if(!SITE_ORIGINS.has(origin))return json({error:"허용되지 않은 사이트 요청이야."},403,headers);
   const pathname=new URL(request.url).pathname;
-  if(request.method!=="POST"||!["/api/session","/api/chat","/api/admin/check","/api/report"].includes(pathname))return json({error:"찾을 수 없는 요청이야."},404,headers);
+  if(request.method!=="POST"||!["/api/session","/api/chat","/api/admin/check","/api/report","/api/blog-draft"].includes(pathname))return json({error:"찾을 수 없는 요청이야."},404,headers);
   if(!env.DB)return json({error:"상담 데이터베이스가 연결되지 않았어."},503,headers);
   let data;try{
    if(Number(request.headers.get("content-length")||"0")>9000)throw Error("TOO_LARGE");
    data=await request.json();
   }catch(e){return json({error:"요청 내용을 확인해 줘."},400,headers);}
   if(!data||typeof data!=="object")return json({error:"잘못된 요청이야."},400,headers);
+  if(pathname==="/api/blog-draft")return createBlogDraft(data,env,headers);
   if(pathname==="/api/admin/check"){
    const ok=await isAdmin(data.adminKey,env);
    return ok?json({admin:true},200,headers):
