@@ -645,6 +645,8 @@ function storyIntro(target){
    window.OKSOON_CHAT_API can be configured in public config.js after deployment. */
 let chatSession=null,chatLeft=1,chatBusy=false;
 let chatHistory=[]; // Recent dialogue only; kept in memory, no local storage.
+let chartOwner="unspecified"; // Gender and identity are never inferred from the birth chart.
+const chatStyleRules="질문에만 직접 대답. 2~4개 짧은 문단으로 답하고 사주 용어는 꼭 필요한 경우에만 한 번 쉬운 말로 풀어쓰기. 사주 글자와 오행 개수는 검증 없이 단정하지 않기. 성별·관계·직업·예정된 결혼 등 사용자가 알려주지 않은 개인 사실을 지어내지 않기. 사용자가 이전 답변을 정정하면 바로 인정하고 앞선 전제 폐기. 다른 사람과의 궁합은 두 사람의 출생 정보가 모두 있어야 비교하며, 기존 한 사람의 사주를 두 사람 것으로 혼동하지 않기. 오타 없는 자연스러운 한국어로 답하고 똑같은 오행 해설을 반복하지 않기.";
 let adminKey=""; // Runtime memory only. Never store admin credentials in URL, HTML or localStorage.
 function chatBubble(feed,who,words,isMe){
  const bubble=make("div",null,"chat-bubble"+(isMe?" mine":""));
@@ -668,7 +670,9 @@ function chatRequestPayload(){
   chart:{year:p.getYear(),month:p.getMonth(),day:p.getDay(),time:state.unknown?null:p.getTime(),
     dayMaster:state.day,calendar:state.calendar,unknownTime:state.unknown},
   clientContext:state.context||{},
-  confirmedPreference:null,
+  confirmedPreference:chartOwner==="unspecified"?null:{chartOwner},
+  chartOwner,
+  responseStyle:chatStyleRules,
   history:chatHistory.slice(-6)
  };
 }
@@ -750,13 +754,38 @@ function renderChat(){
  retry.addEventListener("click",connect);
  connect();
 }
+function identifyChatContext(question){
+ const q=String(question).replace(/\s+/g,"");
+ if(/(?:이건|이사주|지금사주|입력한사주).{0,16}(?:여자|여성|여자애|여자분)/.test(q))chartOwner="female-other";
+ else if(/(?:이건|이사주|지금사주|입력한사주).{0,16}(?:남자|남성|남자애|남자분)/.test(q))chartOwner="male-other";
+ return {compatibility:/궁합|사주궁합/.test(q),hasPartnerBirth:/\d{4}[년.\/-]\d{1,2}[월.\/-]\d{1,2}/.test(q)};
+}
+function compatibilityNeedsSecondChart(question){
+ const intent=identifyChatContext(question);
+ if(!intent.compatibility)return false;
+ // A single person's birth chart is not a two-person compatibility reading.
+ return !intent.hasPartnerBirth;
+}
+function directCompatibilityReply(){
+ return "아, 내가 자네 뜻을 잘못 알아들었구먼. 지금 입력된 사주는 한 사람의 것이여. "+(chartOwner==="female-other"?"이 사주가 여자분 것이라는 말도 알겠네. ":"")+"자네와 그분의 궁합을 보려면 자네 생년월일과 태어난 시각도 필요하네. 아래 ‘궁합·인연 분석’에서 두 사람 정보를 따로 넣어보게. 한 사람 사주만 보고 둘의 궁합을 지어내지는 않겠네.";
+}
 async function sendChat(){
  if(chatBusy||(chatLeft<1&&!adminKey)||!chatSession)return;
  const question=$("chatQuestion").value.trim();
  if(question.length<2||question.length>500){$("chatStatus").textContent="질문은 2~500글자로 적어줘.";return;}
  chatBusy=true;setChatState(chatLeft,false);
  const feed=$("chatFeed");chatBubble(feed,"자네",question,true);
- $("chatStatus").textContent="“잠깐 있어 봐… 자네 만세력을 다시 살펴볼게.”";
+ if(compatibilityNeedsSecondChart(question)){
+  const answer=directCompatibilityReply();
+  chatBubble(feed,"정옥순 할매",answer,false);
+  chatHistory.push({role:"user",text:question},{role:"assistant",text:answer});
+  chatHistory=chatHistory.slice(-6);
+  $("chatQuestion").value="";
+  $("chatStatus").textContent="궁합을 보려면 두 사람의 출생 정보가 필요해.";
+  chatBusy=false;setChatState(chatLeft,chatLeft===0);return;
+ }
+ identifyChatContext(question);
+ $("chatStatus").textContent="“잠깐 있어 봐… 자네가 물은 것부터 살펴볼게.”";
  try{
   const response=await fetch(chatApi()+"/api/chat",{method:"POST",credentials:"omit",headers:{"Content-Type":"application/json"},body:JSON.stringify({...chatRequestPayload(),sessionId:chatSession,...(adminKey?{adminKey}:{})})});
   const result=await response.json().catch(()=>({}));
