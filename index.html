@@ -200,6 +200,47 @@ header{position:relative}
 .compat-error{color:#ffb1aa;font-size:13px;line-height:1.6}
 .compat-result{padding-top:10px}
 </style>
+
+<style>
+/* OKSOON REPORT EDITION — first-pass editorial layout, admin preview only */
+#page5.report-edition{background:#f4eddf;color:#32291e;border:1px solid #bea884;padding:0;overflow:hidden}
+#page5.report-edition>.eyebrow,#page5.report-edition>#reportTitle,#page5.report-edition>.notice,#page5.report-edition>.hint{display:none}
+#page5.report-edition>p{display:none}
+.report-cover{position:relative;min-height:435px;background:radial-gradient(ellipse at 52% 41%,#5b4631 0%,#241c19 61%,#15130f 100%);color:#f7e7c3;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 24px;border-bottom:7px solid #aa8960}
+.report-cover:before{content:"";position:absolute;inset:17px;border:1px solid #b89c67;opacity:.75;pointer-events:none}
+.report-cover:after{content:"✦";font-size:37px;color:#dfbf7a;margin-top:13px}
+.report-cover .report-seal{color:#d9b77a;font-size:12px;letter-spacing:4px;font-weight:700}
+.report-cover h2{font-family:serif;font-size:clamp(37px,10vw,52px);line-height:1.23;color:#f6e0aa;letter-spacing:3px;margin:29px 0 8px}
+.report-cover .report-owner{font-size:21px;color:#f6e6cb;font-weight:700;margin:10px 0}
+.report-cover .report-subtitle{font-size:13px;color:#d4c19b;line-height:2;margin:5px 0}
+.report-cover .report-year{font-size:13px;letter-spacing:5px;color:#c8a974;margin-top:20px}
+.report-intro{padding:27px 23px 20px;background:#f4eddf;color:#342c24}
+.report-intro .report-eyebrow{font-size:11px;color:#9a7750;letter-spacing:2px;font-weight:800}
+.report-intro h3{font-size:25px;color:#44311f;line-height:1.45;margin:12px 0}
+.report-intro>p{color:#655541;font-size:14px;line-height:1.9}
+.report-toc{padding:5px 21px 25px;background:#f4eddf;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.report-toc button{border:1px solid #d7c6a8;background:#fffaf0;color:#4d3b26;padding:12px 10px;border-radius:9px;text-align:left;font-weight:700;font-size:13px;line-height:1.5;margin:0;min-height:70px}
+.report-toc button span{display:block;color:#a78453;font-size:11px;letter-spacing:1px}
+.report-divider{display:flex;align-items:center;gap:8px;padding:10px 24px;background:#e9dcc7;color:#6b5135;font-size:12px;letter-spacing:1px;font-weight:700}
+.report-element-panel{background:#f4eddf;padding:28px 18px;color:#44321e}
+.report-element-panel h3{color:#4a3524;text-align:center;font-size:20px}
+.report-element-panel .report-element-bars{display:grid;gap:10px;margin:19px 0}
+.report-element-panel .report-bar-line{display:grid;grid-template-columns:40px minmax(0,1fr) 24px;align-items:center;gap:9px;font-size:12px;font-weight:700}
+.report-element-panel .report-bar-line i{height:12px;background:#e7ddcd;border-radius:20px;display:block;overflow:hidden}
+.report-element-panel .report-bar-line b{display:block;height:100%;border-radius:20px;background:linear-gradient(90deg,#9e7950,#503b29)}
+.report-element-panel p{font-size:12px;color:#77634a;line-height:1.85}
+#page5.report-edition .chapter-tabs{background:#eee2cf;padding:13px 15px;display:flex;overflow-x:auto;gap:8px;scrollbar-width:thin}
+#page5.report-edition .chapter-tabs button{flex:0 0 auto;white-space:nowrap;background:#fff9ef;color:#604c32;border:1px solid #c5ac84;border-radius:7px;padding:9px 13px}
+#page5.report-edition .chapter-tabs button.active{background:#493824;color:#f8e7cb}
+#page5.report-edition .chapter-text{background:#fbf7ed;color:#342b21;padding:28px 19px}
+#page5.report-edition .chapter-text h2{color:#3c2c20;text-align:center;font-size:25px;border-bottom:1px solid #d6c4a6;padding-bottom:17px;margin:0 0 25px}
+#page5.report-edition .chapter-text h3{color:#513b2a}
+#page5.report-edition .chapter-text p{color:#493b2a;line-height:2.05}
+#page5.report-edition .chapter-text .okmoment,#page5.report-edition .chapter-text .section{border-color:#e4d4b8;background:#fffdf8}
+#page5.report-edition .chapter-text .note{color:#86735c}
+#page5.report-edition .chapter-text .ai-premium-report p{color:#443525}
+#page5.report-edition .chapter-text .ai-premium-report h3{color:#533b26}
+</style>
 </head>
 <body>
 <main>
@@ -250,6 +291,12 @@ header{position:relative}
 <section class="page card" id="page5">
  <div class="eyebrow">05 / 05 · 전체 풀이 검수</div><h2 id="reportTitle">2027년 귀신사주</h2>
  <p>전체 풀이 미리보기야. 결제 기능과 유료 열람 기능은 아직 준비 중이야.</p>
+ <div id="reportCover" class="report-cover" aria-label="운명서 표지"></div>
+ <div id="reportIntro" class="report-intro"></div>
+ <div id="reportTOC" class="report-toc"></div>
+ <div class="report-divider">✦　진도 정옥순 할머니의 사주 읽기</div>
+ <div id="reportElement" class="report-element-panel"></div>
+ <div class="report-divider">✦　인생의 열 가지 이야기</div>
  <div class="chapter-tabs" id="chapters"></div>
  <div class="chapter-text" id="chapterBody" aria-live="polite"></div>
  <div class="notice">현재는 시험용 풀이이며, 정식 유료 상품은 준비 중이야.</div>
@@ -1964,6 +2011,46 @@ function oksoonAIChapter(root,index){
  return true;
 }
 
+
+function renderEditorialReport(){
+ if(!state)return;
+ const panel=$("page5");panel.classList.add("report-edition");
+ const cover=$("reportCover");cover.replaceChildren();
+ cover.append(make("div","진도 정옥순 할머니의 귀신사주","report-seal"));
+ cover.append(make("h2","運 命 書"));
+ cover.append(make("p","한 사람의 사주에 담긴 열 가지 이야기","report-subtitle"));
+ cover.append(make("div",state.name+"님의 운명서","report-owner"));
+ cover.append(make("p","태어난 날의 기운에서 시작해 마음·돈·일·인연까지 차근차근 펼쳐봅니다.","report-subtitle"));
+ cover.append(make("div","二〇二七 · 2027","report-year"));
+ const intro=$("reportIntro");intro.replaceChildren();
+ intro.append(make("div","A LETTER FROM OKSOON","report-eyebrow"));
+ intro.append(make("h3",state.name+"님, 자네 이야기를 펼쳐보세"));
+ intro.append(make("p","사람마다 살아온 길은 다르지. 할매는 자네가 태어난 해와 달, 날의 기운을 차례로 읽고 마음이 움직이는 순간을 들여다보려 하네. 급하게 넘기지 말고 자네와 닮은 대목이 있는지 찬찬히 읽어보게."));
+ const toc=$("reportTOC");toc.replaceChildren();
+ chapterNames.forEach((chapterName,i)=>{
+  const button=make("button");
+  button.append(make("span",String(i+1).padStart(2,"0")+"  CHAPTER"));
+  button.append(document.createTextNode(chapterName));
+  button.type="button";
+  button.addEventListener("click",()=>{chapter(i);$("chapterBody").scrollIntoView({behavior:"smooth",block:"start"});});
+  toc.append(button);
+ });
+ const element=$("reportElement");element.replaceChildren();
+ element.append(make("h3","五行 · 자네를 이루는 다섯 기운"));
+ const counts=countElements(state.p),maximum=Math.max(1,...Object.values(counts));
+ const chart=make("div",null,"report-element-bars");
+ for(const [name,value] of Object.entries(counts)){
+  const row=make("div",null,"report-bar-line");
+  row.append(make("span",name));
+  const bar=make("i");const fill=make("b");
+  fill.style.width=Math.round(value/maximum*100)+"%";bar.append(fill);row.append(bar);
+  row.append(make("strong",String(value)));
+  chart.append(row);
+ }
+ element.append(chart);
+ element.append(make("p","태어난 해·달·날"+(state.unknown?"":"·시각")+"의 겉글자를 바탕으로 다섯 기운을 간단히 표시한 그림이야. 기운의 많고 적음만으로 모든 사람의 삶을 결정하지는 않지."));
+}
+
 function chapter(index){
  chapterIndex=index;
  const root=$("chapterBody");root.replaceChildren();
@@ -2279,7 +2366,7 @@ $("begin").addEventListener("click",()=>{
   setTimeout(()=>{
    try{
     renderManse();person();renderChat();annualIntro();preview(0);
-    $("reportTitle").textContent=state.name+"님의 2027년 귀신사주";chapter(0);page(2);
+    $("reportTitle").textContent=state.name+"님의 2027년 귀신사주";renderEditorialReport();chapter(0);page(2);
    }catch(err){$("formError").textContent=err.message||"풀이를 준비하지 못했어요.";}
    finally{loader.classList.add("hidden");oksoonBusy=false;$("begin").disabled=false;}
   },4700);
