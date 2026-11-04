@@ -86,6 +86,43 @@ function makePrompt(payload){
  "\n사용자가 실제로 입력한 맥락: "+stated+
  "\n사용자 질문: "+payload.question+"\n이전 대화: "+JSON.stringify(recent)};
 }
+
+const REPORT_TOPICS={person:"타고난 성격·상처",annual:"2027년 삶의 감정",money:"재물과 마음의 상처",career:"직업적 자존심과 꿈·생계의 갈등",love:"사랑과 관계의 상처",mind:"마음의 피로와 습관",monthly:"2027년 계절별 감정",guide:"반복되는 삶의 패턴",pastlife:"일주를 소재로 한 창작 이야기"};
+function reportTen(a,b){
+ const idx={"甲":0,"乙":0,"丙":1,"丁":1,"戊":2,"己":2,"庚":3,"辛":3,"壬":4,"癸":4},
+ yang="甲丙戊庚壬",x=idx[a],y=idx[b],same=yang.includes(a)===yang.includes(b);
+ if(x===undefined||y===undefined)return null;
+ if(x===y)return same?"비견":"겁재";
+ if((x+1)%5===y)return same?"식신":"상관";
+ if((x+2)%5===y)return same?"편재":"정재";
+ if((y+1)%5===x)return same?"편인":"정인";
+ return same?"편관":"정관";
+}
+function reportPrompt(chart,topic){
+ const stems=[["연주",chart.year],["월주",chart.month],["일주",chart.day],["시주",chart.time]].filter(x=>allowedPillar(x[1]));
+ const cl={"子":"午","丑":"未","寅":"申","卯":"酉","辰":"戌","巳":"亥","午":"子","未":"丑","申":"寅","酉":"卯","戌":"辰","亥":"巳"};
+ const conflicts=[];
+ for(let i=0;i<stems.length;i++)for(let j=i+1;j<stems.length;j++)
+  if(cl[stems[i][1][1]]===stems[j][1][1])conflicts.push(stems[i][0]+"-"+stems[j][0]);
+ const facts={pillars:stems,dayMaster:chart.day[0],monthTen:reportTen(chart.day[0],chart.month[0]),
+  yearTen:reportTen(chart.day[0],"丁"),earthTen:reportTen(chart.day[0],"己"),
+  visibleElements:visibleFiveElements(chart),natalClashes:conflicts,
+  yearClashes:stems.filter(x=>cl[x[1][1]]==="未").map(x=>x[0]),
+  limits:"지장간·계절의 강약·용신·대운 시작 나이·그 외 충합신살 계산하지 않음"};
+ const instructions=[
+  "너는 창작 인물 진도 정옥순 할매야. 직설적이고 정감 있는 반말로 깊이 상담해. 존댓말·기계적인 보고서 문체 금지.",
+  "주제: "+REPORT_TOPICS[topic]+". 다른 분야의 똑같은 문장 반복 금지.",
+  "고객은 출생 정보만 말했어. 직업·배우 여부·실직·결혼·실제 상처·재정 상황을 알거나 맞힌 척하지 마. '만약 이런 처지라면'처럼 분기해서 다뤄.",
+  "자기계발 조언이나 계약서·실천 계획은 거의 하지 마. 대신 '자네는 이런 기질이라 이런 말에 상처받고, 그런 상처를 감추려 이렇게 행동해, 그 때문에 가까운 사람이 이런 오해를 할 수 있지'라는 내면의 고리를 섬세한 현실 장면으로 풀어.",
+  "제공된 간지·십성·육충만 근거로 쓰고, 없는 인신충·무재·신살·질병·이별/실직/사고 예언을 지어내지 마. 어려운 명리 용어는 첫 등장에 어린이도 이해할 수 있도록 해설해.",
+  "소제목 '## 제목' 5~7개, 각 2~3개 단락, 전체 약 1500~2200자. 반복 없는 새로운 감정 해석으로 분량을 채워. 존댓말·오타·잘못 연결된 조사를 검수해.",
+  "명리학 상징 해석은 성격 진단이나 과거 사건 확인이 아니란 점을 마지막에 짧게 밝혀. 공포 조장·금전 투자 권유·건강 진단 금지.",
+  topic==="career"?"꿈을 좇지만 지금은 다른 일을 하는 사람, 꿈을 이룬 사람, 일을 쉬는 사람을 모두 조건부로 다뤄. 어떤 상태인지 결코 단정하지 마.":"",
+  topic==="pastlife"?"전생을 실제로 확인했다고 주장하지 말고 창작 이야기로 분명히 구분해.":""
+ ].filter(Boolean).join("\n");
+ return {instructions,input:"확인된 사주 사실: "+JSON.stringify(facts)};
+}
+
 export default {
  async fetch(request,env){
   const origin=request.headers.get("origin")||"";
@@ -93,7 +130,7 @@ export default {
   if(request.method==="OPTIONS")return new Response(null,{status:204,headers});
   if(origin!==SITE_ORIGIN)return json({error:"허용되지 않은 사이트 요청이야."},403,headers);
   const pathname=new URL(request.url).pathname;
-  if(request.method!=="POST"||!["/api/session","/api/chat","/api/admin/check"].includes(pathname))return json({error:"찾을 수 없는 요청이야."},404,headers);
+  if(request.method!=="POST"||!["/api/session","/api/chat","/api/admin/check","/api/report"].includes(pathname))return json({error:"찾을 수 없는 요청이야."},404,headers);
   if(!env.DB)return json({error:"상담 데이터베이스가 연결되지 않았어."},503,headers);
   let data;try{
    if(Number(request.headers.get("content-length")||"0")>9000)throw Error("TOO_LARGE");
@@ -104,6 +141,24 @@ export default {
    const ok=await isAdmin(data.adminKey,env);
    return ok?json({admin:true},200,headers):
     json({code:"ADMIN_AUTH_FAILED",error:"관리자 인증키를 확인해 줘."},403,headers);
+  }
+  if(pathname==="/api/report"){
+   if(!await isAdmin(data.adminKey,env))return json({code:"ADMIN_ONLY",error:"현재 관리자 검수용 기능이야."},403,headers);
+   const topic=typeof data.topic==="string"?data.topic:"",chart=data.chart||{};
+   if(!Object.hasOwn(REPORT_TOPICS,topic))return json({error:"분야를 다시 선택해 줘."},400,headers);
+   if(!allowedPillar(chart.year)||!allowedPillar(chart.month)||!allowedPillar(chart.day)||
+      (chart.time!=null&&!allowedPillar(chart.time)))return json({error:"만세력을 확인해 줘."},400,headers);
+   if(!env.OPENAI_API_KEY)return json({error:"AI 연결이 아직 준비되지 않았어."},503,headers);
+   try{
+    const prompt=reportPrompt(chart,topic),model=env.OPENAI_MODEL||"gpt-4.1-mini";
+    const body={model,store:false,max_output_tokens:model.startsWith("gpt-5")?3200:2600,instructions:prompt.instructions,input:prompt.input};
+    if(model.startsWith("gpt-5")){body.reasoning={effort:"low"};body.text={verbosity:"medium"};}
+    const res=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{"Authorization":"Bearer "+env.OPENAI_API_KEY,"Content-Type":"application/json"},body:JSON.stringify(body),signal:AbortSignal.timeout(26000)});
+    if(!res.ok)return json({error:res.status===429?"AI 사용량 한도에 도달했어.":"AI 심층 풀이를 생성하지 못했어."},503,headers);
+    const result=await res.json(),report=extractText(result);
+    if(!report||result.status==="incomplete"||result.incomplete_details?.reason==="max_output_tokens")return json({error:"풀이가 중간에 끊겼어. 다시 생성해 줘."},503,headers);
+    return json({topic,report},200,headers);
+   }catch(e){return json({error:"AI 서버가 지연됐어. 잠시 뒤 다시 시도해 줘."},503,headers);}
   }
   if(pathname==="/api/session"){
    const requested=excerpt(data.sessionId,100);
