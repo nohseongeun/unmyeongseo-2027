@@ -1689,7 +1689,7 @@ function oksoonRenderAIText(root,report){
  const lines=String(report).normalize("NFC").replace(/\r\n?/g,"\n")
   .replace(/설명하기이/g,"설명하기").replace(/그라이까/g,"그러니까")
   .replace(/됬/g,"됐").replace(/되엇/g,"되었")
-  .replace(/([가-힣])\\1{4,}/g,(_,c)=>c.repeat(2)).split("\n");
+  .replace(/([가-힣])\1{4,}/g,(_,c)=>c.repeat(2)).split("\n");
  let paragraph=[];
  const flush=()=>{
   const words=paragraph.join(" ").trim();
