@@ -223,13 +223,7 @@ header{position:relative}
  <select id="hour" aria-label="태어난 시"><option value="" selected disabled>시 선택</option><option value="0">0시</option><option value="1">1시</option><option value="2">2시</option><option value="3">3시</option><option value="4">4시</option><option value="5">5시</option><option value="6">6시</option><option value="7">7시</option><option value="8">8시</option><option value="9">9시</option><option value="10">10시</option><option value="11">11시</option><option value="12">12시</option><option value="13">13시</option><option value="14">14시</option><option value="15">15시</option><option value="16">16시</option><option value="17">17시</option><option value="18">18시</option><option value="19">19시</option><option value="20">20시</option><option value="21">21시</option><option value="22">22시</option><option value="23">23시</option></select>
  <select id="minute" aria-label="태어난 분"><option value="" selected disabled>분 선택</option><option value="0">0분</option><option value="1">1분</option><option value="2">2분</option><option value="3">3분</option><option value="4">4분</option><option value="5">5분</option><option value="6">6분</option><option value="7">7분</option><option value="8">8분</option><option value="9">9분</option><option value="10">10분</option><option value="11">11분</option><option value="12">12분</option><option value="13">13분</option><option value="14">14분</option><option value="15">15분</option><option value="16">16분</option><option value="17">17분</option><option value="18">18분</option><option value="19">19분</option><option value="20">20분</option><option value="21">21분</option><option value="22">22분</option><option value="23">23분</option><option value="24">24분</option><option value="25">25분</option><option value="26">26분</option><option value="27">27분</option><option value="28">28분</option><option value="29">29분</option><option value="30">30분</option><option value="31">31분</option><option value="32">32분</option><option value="33">33분</option><option value="34">34분</option><option value="35">35분</option><option value="36">36분</option><option value="37">37분</option><option value="38">38분</option><option value="39">39분</option><option value="40">40분</option><option value="41">41분</option><option value="42">42분</option><option value="43">43분</option><option value="44">44분</option><option value="45">45분</option><option value="46">46분</option><option value="47">47분</option><option value="48">48분</option><option value="49">49분</option><option value="50">50분</option><option value="51">51분</option><option value="52">52분</option><option value="53">53분</option><option value="54">54분</option><option value="55">55분</option><option value="56">56분</option><option value="57">57분</option><option value="58">58분</option><option value="59">59분</option></select>
  </div>
- <div class="hint" style="margin-top:16px">
-<h3>지금 내 상황도 알려주세요 (선택)</h3>
-<p class="note">같은 사주라도 처한 상황에 따라 조언을 다르게 보여줘요. 선택하지 않아도 돼요.</p>
-<label for="v17Work">현재 하는 일</label><select id="v17Work"><option value="">선택 안 함</option><option value="office">직장 생활</option><option value="business">사업·자영업</option><option value="freelance">프리랜서·창작 활동</option><option value="search">취업·이직·새로운 시작 준비</option><option value="other">그 외</option></select>
-<label for="v17Love">현재 관계</label><select id="v17Love"><option value="">선택 안 함</option><option value="single">싱글</option><option value="dating">연애 중</option><option value="married">결혼·동거 중</option><option value="other">그 외</option></select>
-<label for="v17Worry">가장 궁금한 고민</label><select id="v17Worry"><option value="">선택 안 함</option><option value="money">돈·재정</option><option value="work">일·진로</option><option value="love">사랑·관계</option><option value="decision">중요한 선택</option></select>
-</div><p class="note">태어난 시간은 몰라도 괜찮아. 다만 시주는 계산하지 않고, 대운처럼 정밀한 시기 판단은 추가 정보 없이는 단정할 수 없어. 입력한 정보는 별도 서버로 보내지 않아.</p>
+<p class="note">태어난 시간은 몰라도 괜찮아. 다만 시주는 계산하지 않고, 대운처럼 정밀한 시기 판단은 추가 정보 없이는 단정할 수 없어. 입력한 정보는 별도 서버로 보내지 않아.</p>
  <button class="primary" id="begin" type="button">정옥순 할머니께 무료 풀이받기 →</button><p id="formError" class="error" role="alert"></p>
 </section>
 <section class="page card" id="page2">
@@ -562,7 +556,7 @@ function validate(){
  if(original){
   const p=original.p,day=p.getDayGan(),base=profiles[day],annual=themes[ten(day,"丁")],ground=themes[ten(day,"己")],month=themes[ten(day,p.getMonthGan())];
   if(!base||!annual||!ground)throw Error("원본 사주에 필요한 정보를 확인하지 못했습니다.");
-  return {name:n,year:y||null,birthday:y&&m&&d?[y,m,d]:null,unknown:!p.getTime(),solar:null,p,day,base,annual,ground,month,branch:p.getDayZhi(),calendar:$("calendar").value,context:{work:$("v17Work").value,love:$("v17Love").value,worry:$("v17Worry").value},manual:true,daewoon:original.daewoon,gender:original.gender};
+  return {name:n,year:y||null,birthday:y&&m&&d?[y,m,d]:null,unknown:!p.getTime(),solar:null,p,day,base,annual,ground,month,branch:p.getDayZhi(),calendar:$("calendar").value,context:{work:"",love:"",worry:""},manual:true,daewoon:original.daewoon,gender:original.gender};
  }
  const unknown=$("unknown").checked;
  const selectedHour=$("hour").value,selectedMinute=$("minute").value;
@@ -582,7 +576,7 @@ function validate(){
  const p=solar.getLunar().getEightChar(),day=p.getDayGan(),base=profiles[day];
  const annual=themes[ten(day,"丁")],ground=themes[ten(day,"己")],month=themes[ten(day,p.getMonthGan())];
  if(!base||!annual||!ground)throw Error("사주 계산 결과를 확인할 수 없어요.");
- return {name:n,year:y,birthday:[y,m,d],unknown,birthHour:unknown?null:h,birthMinute:unknown?null:minute,solar,p,day,base,annual,ground,month,branch:p.getDayZhi(),calendar:$("calendar").value,context:{work:$("v17Work").value,love:$("v17Love").value,worry:$("v17Worry").value}};
+ return {name:n,year:y,birthday:[y,m,d],unknown,birthHour:unknown?null:h,birthMinute:unknown?null:minute,solar,p,day,base,annual,ground,month,branch:p.getDayZhi(),calendar:$("calendar").value,context:{work:"",love:"",worry:""}};
 }
 const devPreview=new URLSearchParams(window.location.search).get("dev")==="1";
 function page(num){
