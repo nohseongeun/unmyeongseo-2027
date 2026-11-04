@@ -356,7 +356,7 @@ header{position:relative}
 <section id="oksoonLoader" class="oksoon-loader hidden" role="status" aria-live="polite"><div class="oksoon-loader-in"><img src="./assets/oksoon-portrait.jpg?v=26" alt="" aria-hidden="true"><div class="eyebrow">진도 정옥순 할머니 · 사주 살펴보는 중</div><h2 id="oksoonLoadingLine">“어디… 자네 사주부터 보자꾸나.”</h2><div class="oksoon-bar"><span></span></div><p>잠시만 기다려 보게. 자네 사주를 찬찬히 살펴보고 있네.</p><div class="oksoon-review-samples"><div class="oksoon-review-label">자네 사주에서 먼저 읽힌 다섯 가지</div><div id="oksoonReviewList" aria-live="off"></div></div></div></section>
 <div class="steps" id="progress" aria-label="진행 단계"></div>
 <section class="page active card" id="page1">
- <div class="eyebrow">01 / 05 · 사주 맡기기</div><h2>자네, 태어난 날부터 말해보게.</h2>
+ <div class="eyebrow">01 / 05 · 사주 맡기기</div><h2>자네 팔자에 아직 모르는 이야기가 있네.</h2>
  <p>태어난 생년월일만 알려줘. 할매가 만세력의 연주·월주·일주를 계산해서 보여줄게. 태어난 시간을 알면 시주도 추가해 주마.</p>
  
 <label for="name">이름이나 별명 (선택)</label><input id="name" maxlength="20" placeholder="이름 또는 별명" autocomplete="off">
@@ -372,10 +372,10 @@ header{position:relative}
  <select id="minute" aria-label="태어난 분"><option value="" selected disabled>분 선택</option><option value="0">0분</option><option value="1">1분</option><option value="2">2분</option><option value="3">3분</option><option value="4">4분</option><option value="5">5분</option><option value="6">6분</option><option value="7">7분</option><option value="8">8분</option><option value="9">9분</option><option value="10">10분</option><option value="11">11분</option><option value="12">12분</option><option value="13">13분</option><option value="14">14분</option><option value="15">15분</option><option value="16">16분</option><option value="17">17분</option><option value="18">18분</option><option value="19">19분</option><option value="20">20분</option><option value="21">21분</option><option value="22">22분</option><option value="23">23분</option><option value="24">24분</option><option value="25">25분</option><option value="26">26분</option><option value="27">27분</option><option value="28">28분</option><option value="29">29분</option><option value="30">30분</option><option value="31">31분</option><option value="32">32분</option><option value="33">33분</option><option value="34">34분</option><option value="35">35분</option><option value="36">36분</option><option value="37">37분</option><option value="38">38분</option><option value="39">39분</option><option value="40">40분</option><option value="41">41분</option><option value="42">42분</option><option value="43">43분</option><option value="44">44분</option><option value="45">45분</option><option value="46">46분</option><option value="47">47분</option><option value="48">48분</option><option value="49">49분</option><option value="50">50분</option><option value="51">51분</option><option value="52">52분</option><option value="53">53분</option><option value="54">54분</option><option value="55">55분</option><option value="56">56분</option><option value="57">57분</option><option value="58">58분</option><option value="59">59분</option></select>
  </div>
 <p class="note">태어난 시간은 몰라도 괜찮아. 다만 시주는 계산하지 않고, 대운처럼 정밀한 시기 판단은 추가 정보 없이는 단정할 수 없어. 만세력은 화면에서 계산해. 심층 보고서를 생성할 때에는 사주 간지가 보고서 생성 서버로 전달될 수 있어.</p>
- <button class="primary" id="begin" type="button">정옥순 할머니께 무료 풀이받기 →</button><p id="formError" class="error" role="alert"></p>
+ <button class="primary" id="begin" type="button">내 성격과 팔자의 속내 무료로 보기 →</button><p id="formError" class="error" role="alert"></p>
 </section>
 <section class="page card" id="page2">
- <div class="eyebrow">02 / 05 · 정옥순 할머니의 첫마디</div><h2 id="personTitle">자네는 어떤 팔자인가</h2>
+ <div class="eyebrow">02 / 05 · 정옥순 할머니의 첫마디</div><h2 id="personTitle">남들이 모르는 자네의 성격</h2>
  <div id="manseChart"></div><div id="personBody"></div>
 </section>
 <section class="page card" id="page3">
@@ -389,14 +389,14 @@ header{position:relative}
   <div class="sales-price">14,900원 <span>출시 이벤트 예정가</span></div>
   <p class="sales-future">이벤트 종료 후 판매 예정가 29,900원</p>
   <p>재물·직업·인연·12개월 운세까지 한 번에. 분야별 추가 결제는 없어.</p>
-  <button id="salesGoOffer" type="button" class="sales-cta">전체 운명서 구성과 가격 보기</button>
+  <button id="salesGoOffer" type="button" class="sales-cta">가려진 뒷이야기 이어서 보기</button>
   <p class="sales-disclaimer">결제 서비스 준비 중 · 지금은 무료 미리보기만 제공돼.</p>
  </div>
  <div class="hidden" aria-hidden="true"><div id="annualIntro"></div><div id="previewTabs"></div><div id="previewBody"></div><div id="previewLock"></div></div>
 </section>
 <section class="page card" id="page4">
  <div class="eyebrow">04 / 05 · 2027 운명서 전체 열람</div>
- <h2>“자네 이야기를 한 권에 담았네.”</h2>
+ <h2>“돈과 일과 사랑, 아직 못다 한 이야기가 있네.”</h2>
  <p>무료로 타고난 성향과 2027년 운세를 미리 읽어본 다음, 전체 운명서를 한 번에 만나보게.</p>
  <div class="offer oksoon-premium">
   <div class="eyebrow">단일 상품 · 2027년 귀신사주</div>
@@ -849,72 +849,61 @@ function renderAdminVerification(){
  });
 }
 
-function person(){
- const root=$("personBody"),p=state.p,b=state.base,n=state.name,day=state.day;
- root.replaceChildren();
- root.append(make("div","할매가 네 팔자를 처음 들여다보는 시간","eyebrow"));
- say(root,"“"+n+"아. 이리 와서 앉아봐. 이름보다 태어난 날의 기운부터 보자.”","okbig");
- say(root,"“자네 일주는 "+koreanPillar(p.getDay())+"야. 일주란 태어난 날의 위아래 두 글자를 말하는 거다.”");
- say(root,"“그중 윗글자 "+(ganKo[day]||day)+"는 자네 자신을 나타내는 기운이지. "+b.symbol+" 같은 성질로 풀이한단다.”");
- say(root,"“"+verdictLine("person")+"”","okbig");
- say(root,"“이건 일간을 중심으로 읽은 성향이고, 태어난 달과 다른 글자도 함께 봐야 더 정확한 풀이가 돼.”");
 
- renderTemper(root);
- moment(root,"네가 결정하는 방식부터 보자",[
-  "“어떤 사람은 일을 시작하기 전에 먼저 움직이고, 어떤 사람은 마음속 기준이 설 때까지 기다리지.”",
-  "“자네는 "+trimline(b.headline)+"로 읽히니, 큰 결정을 앞두고 무엇에 납득해야 움직이는지 떠올려봐.”",
-  "“잘 풀리는 때와 괜히 지치는 때는 성격보다 선택하는 방식의 차이일 수도 있단다.”"
+const oksoonConcreteCases={
+ 비견:["내가 맡은 일을 남이 상의 없이 바꿨을 때","왜 내 의견을 묻지 않았는지 따지다 결국 혼자 하겠다고 물러나는","같이 쓸 돈의 내 몫을 상대가 정했을 때","연인이 중요한 약속을 상의 없이 바꿨을 때"],
+ 겁재:["주변 사람이 먼저 좋은 기회를 잡았다는 소식을 들을 때","웃으면서 축하해도 집에 와서는 내 속도를 비교하는","같은 일을 했는데 정산액이 다를 때","상대가 나보다 다른 사람을 더 챙기는 것처럼 보일 때"],
+ 식신:["며칠 준비한 결과에 아무도 반응하지 않을 때","표정은 괜찮아도 다음에는 덜 해주겠다고 마음먹는","애쓴 작업의 값이 예상보다 낮게 책정됐을 때","늘 해주는 일을 당연하게 넘길 때"],
+ 상관:["틀린 걸 알면서도 입을 다물라는 말을 들을 때","참은 말을 한꺼번에 꺼내고 나서 말투가 너무 셌나 뒤돌아보는","이유 없이 붙은 비용을 설명해주지 않을 때","억울한데 그냥 넘어가자는 말을 들을 때"],
+ 편재:["고민하는 사이 남이 기회를 먼저 잡았을 때","가능한 그림을 크게 그렸다가 세부 조건을 뒤늦게 확인하는","당장 결정하라며 큰 수익을 이야기하는 제안을 받을 때","새로운 만남과 오래된 관계 사이에서 마음이 갈릴 때"],
+ 정재:["약속한 날짜나 금액을 상대가 쉽게 바꿀 때","돈보다 약속이 깨졌다는 기억이 더 오래 남는","예산을 맞춰놨는데 갑작스러운 지출이 겹칠 때","같은 약속을 두 번 어겼을 때"],
+ 편관:["사람들 앞에서 갑자기 내 능력을 평가받을 때","힘들다는 말 대신 더 강한 척하고 책임을 떠안는","남의 부탁을 거절하지 못해 내 돈까지 책임져야 할 때","연인에게 약한 모습을 보이면 실망시킬까 걱정될 때"],
+ 정관:["상대가 별말 없이 실망한 표정을 지을 때","왜 그러냐 묻기보다 내 잘못부터 되짚는","성실하게 지킨 계획이 남의 결정으로 바뀔 때","서운해도 좋은 사람으로 남으려고 말을 삼킬 때"],
+ 편인:["가까운 사람이 이유 없이 말투를 바꿀 때","직접 물어보지 않고 그 말을 머릿속에서 여러 번 재생하는","확인할 정보가 부족한 계약을 앞두고 있을 때","답장이 늦어지자 여러 이유를 혼자 만들 때"],
+ 정인:["오랫동안 준비한 일을 누구나 한다며 넘길 때","해낸 것보다 인정받지 못한 부분을 더 오래 곱씹는","충분히 준비하고도 남의 반대에 실행을 미룰 때","내 진심을 농담으로 넘겼을 때"]
+};
+const oksoonBranchModes={
+ 子:"웃어넘긴 말을 혼자 있을 때 다시 떠올리는",丑:"사과받아도 그날 상황을 오래 기억하는",
+ 寅:"답답한 대화를 빨리 끊고 행동하려는",卯:"말의 내용보다 말투와 표정을 먼저 읽는",
+ 辰:"원하는 일과 현실 계산이 동시에 올라오는",巳:"한 가지 문제의 결론을 봐야 놓는",
+ 午:"좋고 싫은 마음이 얼굴에 먼저 드러나는",未:"내 일정보다 가까운 사람의 부탁을 먼저 챙기는",
+ 申:"장황한 설명보다 결론을 먼저 찾는",酉:"작은 약속이 어긋나도 신뢰를 다시 따지는",
+ 戌:"과거에 받은 도움이나 실망을 오래 기억하는",亥:"답하기 전에 혼자 정리할 시간이 필요한"
+};
+function oksoonConcrete(){
+ const p=state.p,rel=ten(state.day,p.getMonthGan());
+ const item=oksoonConcreteCases[rel]||oksoonConcreteCases["정인"];
+ return {hurt:item[0],reaction:item[1],money:item[2],love:item[3],branch:oksoonBranchModes[p.getDayZhi()]||"생각을 오래 붙잡는"};
+}
+
+function person(){
+ const root=$("personBody"),who=oksoonCallName(state.name),v=oksoonConcrete(),emotion=oksoonEmotion[state.day];
+ root.replaceChildren();
+ root.append(make("div","첫 번째 풀이 · 남이 모르는 자네 성격","eyebrow"));
+ moment(root,"왜 그 말 한마디가 유난히 마음에 남을까?",[
+  "“"+who+", "+emotion[0]+"으로 읽히는구먼.”",
+  "“"+v.hurt+". 이런 날에는 "+v.reaction+" 쪽으로 마음이 움직일 수 있어.”",
+  "“태어난 날의 아랫글자까지 같이 보면 "+v.branch+" 모습도 겹치네. 그래서 그 자리에서 했던 말과 혼자 남았을 때의 생각이 다를 수 있지.”"
  ]);
- moment(root,"태어난 달의 기운은 또 다르지",[
-  "“자네 월주는 "+koreanPillar(p.getMonth())+"이야. 태어난 달의 기운도 사람의 행동을 풀이할 때 빼놓지 않는 거다.”",
-  "“일간과 월간의 관계를 십성으로 풀면 "+ten(day,p.getMonthGan())+"이라는 이름을 붙이지.”",
-  state.month?"“그 관계의 중요한 화두는 "+trimline(state.month.title)+"이라고 읽는구나.”":"“다만 달의 기운만으로 모든 일을 확정하진 않아.”",
-  "“같은 날 태어났어도 자란 환경과 겪은 일은 다르니, 그건 꼭 구분해야 해.”"
+ moment(root,"겉으론 괜찮은데 속으로는 다른 생각",[
+  "“"+emotion[2]+". 그 속에는 "+emotion[3]+"이 걸려 있을 수 있어.”",
+  "“이런 모습이 자네에게 실제로 있었는지 확인해 보게. 비슷해 보여도 사람마다 살아온 이야기는 다르니까.”"
  ]);
- moment(root,"네 마음이 쉽게 지치는 순간",[
-  "“"+directProfiles[day].outer+"”",
-  "“그걸 감추고 계속 같은 방식으로 버티면, 정작 필요한 말을 늦게 하게 될지도 모르지.”",
-  "“자네가 가까운 사람 앞에서 어떤 말을 참는지 한 번 생각해보거라.”"
+ moment(root,"돈 때문에 감정보다 자존심이 먼저 움직이는 순간",[
+  "“"+v.money+". 이때는 잃은 액수보다 상대가 내 몫을 어떻게 취급했는지가 더 크게 다가올 수 있겠구먼.”",
+  "“자네라면 "+v.reaction+" 반응을 보이기 쉬운 기질로 읽히네.”"
  ]);
- moment(root,"할매가 보는 사람과 거리",[
-  "“사람을 가까이 둘 때는 "+trimline(b.love)+"처럼 풀어볼 수 있겠구나.”",
-  "“서로 좋아해도 거리와 연락의 기준이 다르면 오해가 생기기 쉬워.”",
-  "“이건 미래의 누군가를 미리 알아맞혔다는 뜻이 아니라 자네가 편한 관계의 조건을 짚는 거야.”"
+ moment(root,"연애에서 자꾸 반복되는 다툼의 시작",[
+  "“"+v.love+". 이때 자네가 "+v.branch+" 모습으로 반응하면 상대는 왜 갑자기 분위기가 바뀌었는지 몰라.”",
+  "“서운함을 곧장 말하는지, 시간이 지나서 꺼내는지. 자네의 실제 습관과 비교해 봐야 더 뚜렷해지겠구먼.”"
  ]);
- moment(root,"겉으로 보이는 네 얼굴",[
-  "“"+directProfiles[day].core+"”",
-  "“"+directProfiles[day].weak+"”",
-  "“사람들이 보이는 모습만 보고 자네 마음까지 다 안다고 착각할 수도 있겠지.”",
-  "“여기서 실제 네 모습하고 안 맞는 부분은 억지로 끼워 맞추지 말거라.”"
+ moment(root,"일에서 상처받을 때의 반응",[
+  "“"+v.hurt+". 이 장면이 일터에서 벌어지면 단순한 업무 문제가 아니라 나를 어떻게 평가하느냐의 문제로 느껴질 수 있지.”",
+  "“그때 "+v.reaction+" 성향이 보일 수 있어. 자네가 일할 때 가장 답답했던 순간이 이런 모양이었는지 생각해 보게.”"
  ]);
- moment(root,"할매가 보는 네 힘",[
-  "“네가 잘 쓸 수 있는 힘은 "+trimline(b.strong)+"이야.”",
-  "“일지라고 하는 날의 아랫글자는 "+(zhiKo[p.getDayZhi()]||p.getDayZhi())+"인데, 전통적으로 "+trimline(branchHints[p.getDayZhi()])+"이란 뜻도 붙여.”",
-  "“잘하는 게 뭔지 모르겠으면 남들이 여러 번 네게 맡겼던 일을 생각해봐.”"
+ moment(root,"2027년, 그 성미가 어디서 다시 나타날까?",[
+  "“돈과 일과 인연에서 늘 같은 행동을 하는 건 아니지. 올해 기운과 맞물릴 때는 어떤 대목이 더 크게 느껴지는지 다음 장에서 짚어보겠네.”"
  ]);
- moment(root,"이건 정말 조심해야 해",[
-  "“좋은 성미도 지나치면 그게 독이 되는 법이지.”",
-  "“"+directProfiles[day].weak+"”",
-  "“그러니까 중요한 일 앞에서는 바로 답하지 말고, 왜 내가 이 선택을 하려는지 한 번 적어보거라.”",
-  "“이건 운명이 정해졌다는 말이 아니라 자네가 바꿀 수 있는 행동을 짚어주는 거야.”"
- ]);
- moment(root,"사람을 만날 땐",[
-  "“"+directProfiles[day].romance+"”",
-  "“상대가 네 진심을 못 알아준다면 마음을 알아맞혀 달라고만 하지 마.”",
-  "“서운했던 행동이 뭔지, 앞으로 뭘 바라는지 정확히 말해야지.”"
- ]);
- moment(root,"일과 돈 앞에선",[
-  "“"+directProfiles[day].career+"”",
-  "“새로운 일을 맡을 땐 멋있다는 말보다 실제 책임과 돈, 마감부터 확인하고.”",
-  "“사주가 돈 들어올 날짜를 찍어주진 못해. 숫자는 계약서하고 장부에서 확인하는 거야.”"
- ]);
- moment(root,"자, 2027년 이야기를 들어보자",[
-  "“자네 사주에 새해 기운이 들어오면 무엇부터 조심할까?”"
- ]);
- storyIntro(root);
- say(root,"“좋은 쪽으로는 "+trimline(state.annual.main)+"이란 주제가 열리는 거야.”");
- say(root,"“반대로 "+trimline(state.ground.main)+"을 잊으면 판단이 흐려질 수 있지.”");
- say(root,"“더 들어가면 돈, 일, 사람 문제를 하나씩 봐야 해. 아래로 내려가면 계속 풀어줄게.”");
 }
 
 /* Preview uses computed saju inputs. The blurred bars are decorative, never secret paid text. */
@@ -973,12 +962,13 @@ function renderSalesTeasers(){
   물:"선택하기 전에 여러 가능성을 헤아리는 면이 읽히네."
  }[dominant];
  $("salesTitle").textContent="“"+name+", 2027년 돈 들어올 기회를 놓치고 싶진 않겠지?”";
+ const specifics=oksoonConcrete();
  const cards=[
-  {icon:"✦",title:"2027년 종합운",head:"2027년, 자네 운명이 흔들릴 대목은?",lead:"자네 사주에 올해의 기운을 겹쳐보니 "+y.title+"가 먼저 눈에 들어오는구먼.",sub:"그런데 "+e.title+"도 함께 들어와 있어. 두 흐름이 만나는 대목을 그냥 지나쳐서는 안 되지."},
-  {icon:"◈",title:"돈·재물운",head:"돈이 들어오는 흐름, 어디서 갈릴까?",lead:"자네 돈의 흐름에는 "+profile.money.replace(/^돈도 /,"돈도 ").replace(/마\.$/,"마.") ,sub:"2027년에는 특히 "+y.money+"라는 주제가 맞물리네. 언제 지키고 언제 움직일지가 궁금해질 게야."},
-  {icon:"▣",title:"직업·사업운",head:"올해 일에서 기회가 보이는 순간은?",lead:profile.career,sub:"올해는 "+e.work+"라는 기운도 읽히네. 지금 하는 일이 무엇이든 선택의 모양은 달라질 수 있어."},
-  {icon:"♡",title:"연애·인간관계",head:"자네 마음을 흔들 사람, 피해야 할 관계는?",lead:profile.romance,sub:"올해의 관계 흐름에는 "+y.love+"라는 주제가 놓여 있어. 마음을 주는 방식과 받아들이는 방식이 같지는 않겠지."},
-  {icon:"☾",title:"2027년 월별 운세",head:"2027년, 놓치면 아쉬울 달은 언제일까?",lead:starter+" 2027년 열두 달은 같은 기운으로 흐르지 않아.",sub:"월별로 돈·일·인연의 흐름을 나눠 보면 어떤 때에 더 신중해야 하는지 이야기의 결이 달라진단다."}
+  {icon:"✦",title:"2027년 종합운",head:"올해도 자네를 흔들 수 있는 선택은?",lead:specifics.hurt+". 이런 상황에서 자네는 생각보다 크게 흔들릴 수 있겠구먼.",sub:"2027년 "+y.title+"의 흐름을 이 반응과 겹쳐 읽으면 선택의 모양이 달라질 수 있어."},
+  {icon:"◈",title:"돈·재물운",head:"돈 때문에 마음이 상하는 순간은?",lead:specifics.money+". 자네 사주에서 돈 앞의 기질이 뚜렷해질 수 있는 장면이지.",sub:"그때 "+specifics.reaction+" 반응이 나오면 지출과 계약에 대한 판단까지 흔들릴 수 있어."},
+  {icon:"▣",title:"직업·사업운",head:"일에서 자네를 가장 화나게 하는 일은?",lead:specifics.hurt+". 이 장면이 일터에서 벌어지면 단순한 의견 차이 이상으로 느껴질 수 있지.",sub:"올해는 "+e.work+"라는 주제도 겹쳐. 일의 방식과 평가에 대한 마음이 부딪힐 때를 읽어보세."},
+  {icon:"♡",title:"연애·인간관계",head:"왜 연애에서는 같은 다툼이 반복될까?",lead:specifics.love+". 이때 자네가 "+specifics.branch+" 모습을 보일 수 있네.",sub:"그리고 "+specifics.reaction+" 반응이 나오면 상대는 자네가 왜 달라졌는지 모를 수도 있지."},
+  {icon:"☾",title:"2027년 월별 운세",head:"어느 달에 움직이고 어느 달에 기다릴까?",lead:starter+" 열두 달의 기운은 같은 방향으로 흐르지 않지.",sub:"각 달의 글자와 자네의 태어난 날을 대조해서 돈·일·인연에서 판단이 어떻게 달라질지 풀어보겠네."}
  ];
  for(const item of cards){
   const card=make("article",null,"sales-teaser");
@@ -1912,7 +1902,7 @@ function oksoonHumanReading(root,index){
   add("남들이 보는 얼굴, 속에 감춘 얼굴",[first,"남들 앞에서 강한 척할 때도 "+voice[2]+". 그래서 가까운 사람일수록 자네 속마음을 더 모를 수도 있어.",basis]);
   add("왜 그 말에 유난히 상처받는가",[wound[0]+"에 마음이 크게 움직이는 관계야. "+wound[1]+".","자네가 정말 바라는 건 "+voice[3]+"이지. 사소한 말이 크게 들리는 데에는 이런 마음이 깔려 있을 수 있어.",detail]);
   add("상처를 들키기 싫을 때",[voice[2]+". 본인은 자존심을 지키는 거지만 상대는 왜 갑자기 멀어졌는지 모를 수도 있겠지.","그건 착하거나 나쁘다는 이야기보다 감정을 지키는 방식이야.",reality]);
-  add("어떤 사람과 잘 지내고 어떤 사람에게 약한가",["자네가 바라는 "+voice[3]+"을 소중히 여기는 사람과는 편안할 수 있어.","반대로 그 마음을 가볍게 여기는 사람을 만나면 자네는 "+voice[2]+"이라는 모습을 보일 수 있지."]);
+  add("자네가 사랑에서 반복하기 쉬운 장면",[""+oksoonConcrete().love+". 그때 자네는 "+oksoonConcrete().reaction+" 성향으로 읽혀.",""+oksoonConcrete().branch+" 모습이 겹치면 상대는 별일 아니라고 넘긴 일을 자네는 오래 기억할 수 있겠구먼."]);
   add("할매가 읽은 자네의 속",["겉으로 드러나는 모습과 마음속 바람은 다를 수 있지. "+voice[0]+". 마음 깊은 곳에서는 "+voice[3]+"을 바랄 수 있네.","강점과 약점은 따로 있는 게 아니야. 같은 성미가 자네를 지키기도 하고 아프게 하기도 하는 거지."]);
  }else if(index===1){
   add("2027년, 무엇이 자네 마음을 건드리나",[first,"2027년의 기운을 자네 사주에 빗대면 "+yw[0]+"이 하나의 주제로 읽히는구먼. 올해 자네 마음에 어떤 선택이 남는지 살펴보게."]);
@@ -1936,7 +1926,7 @@ function oksoonHumanReading(root,index){
   add("가장 서운한 순간",[basis,wound[0]+"이면 속으로 울컥할 수 있어.","그럴 때 "+voice[2]+". 상대는 자네 마음이 바뀐 줄 알고 자네는 왜 몰라주냐며 상처받는 모습이 될 수 있지."]);
   add("연인이 아무렇지 않게 넘긴 말",["자네가 "+voice[0]+"이라서 "+voice[1]+".","상대는 작은 일을 잊었는데 자네는 그때 내 마음을 어떻게 다뤘는지 오래 기억할 수 있어."]);
   add("헤어짐보다 무서운 감정",["자네가 진짜 두려운 건 관계의 끝보다 "+voice[3]+"을 잃는 일일 수도 있지.","마음을 오래 준 인연일수록 쉽게 놓지 못하는 까닭도 여기에 있겠지."]);
-  add("오래 함께할 인연은 어떤 모습인가",["자네의 강한 모습만 좋아하는 사람보다 약한 마음까지 이해하려는 사람이 편할 수 있겠지.","상대의 사주를 따로 입력하는 궁합 메뉴에서는 두 사람의 글자를 구분해 비교할 수 있어."]);
+  add("자네 마음이 식는 정확한 장면",[""+oksoonConcrete().love+". 이때 자네는 "+oksoonConcrete().reaction+" 모습으로 반응할 수 있네.","상대의 실제 반응을 알아야 두 사람 사이에서 무슨 일이 생기는지 비교할 수 있지."]);
  }else if(index===5){
   add("마음이 지치는 진짜 이유",[first,"혼자 있을 때도 "+voice[2]+". 남이 보기에는 괜찮아도 속에서는 생각이 멈추지 않을 수 있지."]);
   add("화가 난 줄 알았는데 사실은",["태어난 달의 기운을 보면 "+wound[0]+"이 먼저 마음을 건드릴 수 있다고 읽는구먼.","화라는 감정 아래에 "+voice[3]+"이 가려져 있을 수 있겠네."]);
@@ -2296,7 +2286,7 @@ function renderCompatibility(root){
    part("궁합이 좋은지 마지막으로 확인할 네 가지",[
     "첫째, 갈등이 생겼을 때 사과보다 실제 행동이 바뀌는가. 둘째, 돈 이야기를 불편해하지 않고 할 수 있는가.",
     "셋째, 각자의 일과 시간을 존중하는가. 넷째, 한 사람이 계속 희생하는 구조는 아닌가.",
-    "좋은 인연은 말보다 행동에서 더 오래 드러나는 법이여. 서로의 마음을 오래 지키는 사람이 되어보게."
+    "서로 다툴 때 누가 먼저 말을 끊고, 누가 침묵을 오래 끌고 가는지부터 살펴보게."
    ]);
   }catch(err){error.textContent=err.message||"상대방의 입력 정보를 확인해 줘.";}
  });
