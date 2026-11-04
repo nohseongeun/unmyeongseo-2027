@@ -1663,12 +1663,23 @@ function oksoonReportBirthKey(){
 }
 function oksoonRenderAIText(root,report){
  const section=make("section",null,"ai-premium-report");
- const chunks=String(report).split(/\n\s*\n/).filter(Boolean);
- for(const chunk of chunks){
-  const cleaned=chunk.trim();
-  if(cleaned.startsWith("## ")){section.append(make("h3",cleaned.slice(3).trim()));continue;}
-  if(cleaned.length>0)section.append(make("p",cleaned.replace(/^#{1,3}\s*/,"")));
+ const lines=String(report).replace(/\r\n?/g,"\n").split("\n");
+ let paragraph=[];
+ const flush=()=>{
+  const words=paragraph.join(" ").trim();
+  if(words)section.append(make("p",words));
+  paragraph=[];
+ };
+ for(const line of lines){
+  const clean=line.trim();
+  if(!clean){flush();continue;}
+  const heading=clean.match(/^#{1,3}\s+(.+)$/);
+  if(heading){flush();section.append(make("h3",heading[1].trim()));continue;}
+  if(/^[-*_]{3,}$/.test(clean)){flush();continue;}
+  paragraph.push(clean.replace(/^[-*]\s+/,""));
  }
+ flush();
+ if(!section.childElementCount)section.append(make("p","풀이 내용을 표시하지 못했어. 다시 생성해 줘."));
  root.append(section);
 }
 function oksoonAIChapter(root,index){
@@ -1718,8 +1729,8 @@ function chapter(index){
  const root=$("chapterBody");root.replaceChildren();
  const heading=chapterNames[index];
  root.append(make("h2",heading));
- if(index===6){monthReport(root)}
- else if(index===9){renderCompatibility(root)}
+ if(index===9){renderCompatibility(root)}
+ else if(index===6){if(!oksoonAIChapter(root,index))monthReport(root);}
  else{if(!oksoonAIChapter(root,index)){oksoonHumanReading(root,index);oksoonEmotionalContext(root,index);if(index===1)renderDaewoon(root);}}
  [...$("chapters").children].forEach((t,i)=>t.classList.toggle("active",i===index));
 }
