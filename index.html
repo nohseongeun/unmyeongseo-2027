@@ -902,57 +902,60 @@ function pastLife(target,short){
 }
 function preview(index){
  previewIndex=index;const root=$("previewBody");root.replaceChildren();
- const a=state.annual,g=state.ground,n=state.name,b=state.base;
+ const a=state.annual,g=state.ground,n=oksoonCallName(state.name),b=state.base;
  const intro=["타고난 성미","2027년 전체","돈","일","연애와 관계","몸과 생활","달마다 달라지는 흐름","올해의 당부","전생 이야기"];
- say(root,"“"+n+"아. "+intro[index]+" 얘길 듣고 싶은 게지?”","okbig");
+ const quote=(v)=>"‘"+trimline(v)+"’";
+ say(root,"“"+n+", "+intro[index]+" 이야기를 듣고 싶은 게지?”","okbig");
  if(index===0)moment(root,"타고난 성미",[
-  "“자네에게는 "+trimline(b.strong)+"이라는 힘이 있어.”",
-  "“그런데 "+trimline(b.blind)+"도 함께 봐야지.”",
-  "“이걸 어찌 다스리느냐에 따라 같은 성미도 장점이 되고 짐이 되는 거야.”"
+  "“자네의 강점은 "+quote(b.strong)+"이라는 모습으로 읽혀.”",
+  "“하지만 "+quote(b.blind)+"라는 약점도 함께 따라다니지.”",
+  "“같은 성미가 자네를 지켜주기도 하고, 가까운 사람에게 상처를 주기도 하는 법이야.”"
  ]);
- if(index===1)moment(root,"2027년의 다른 얼굴",["“하늘의 정(丁)과 땅의 미(未)를 따로 비교해야 해. "+oksoonTenPunch[ten(state.day,"己")][0]+"이라는 주제도 함께 보여.”","“새로운 선택이 생긴다면 무조건 좋다 나쁘다 판단하기 전에 내가 감당할 몫이 뭔지 확인하거라.”"]);
+ if(index===1)moment(root,"2027년의 다른 얼굴",[
+  "“올해의 정(丁)과 미(未)를 자네 일간과 비교해 보면 "+quote(oksoonTenPunch[ten(state.day,"己")][0])+"라는 주제도 보여.”",
+  "“새로운 선택 앞에서 자네가 어떤 생각에 흔들리는지 더 깊게 들여다볼 만하구먼.”"
+ ]);
  if(index===2)moment(root,"돈 문제",[
-  "“돈에선 "+trimline(a.money)+"이 먼저 보여.”",
-  "“그리고 "+trimline(g.money)+"도 신경 쓰거라.”",
-  "“"+trimline(contextAdvice("money"))+"”"
+  "“재물운에서 먼저 짚을 건 "+quote(a.money)+"라는 문제야.”",
+  "“여기에 "+quote(g.money)+"라는 주제도 함께 살펴야지.”",
+  "“"+trimline(contextAdvice("money"))+".”"
  ]);
  if(index===3)moment(root,"일과 진로",[
-  "“일에서는 "+trimline(a.work)+"이 핵심 주제야.”",
-  "“다른 한편으론 "+trimline(g.work)+"이지.”",
-  "“"+trimline(contextAdvice("work"))+"”"
+  "“일에서는 "+quote(a.work)+"라는 모습이 먼저 눈에 들어오는구먼.”",
+  "“또 "+quote(g.work)+"라는 면도 함께 살펴야 해.”",
+  "“"+trimline(contextAdvice("work"))+".”"
  ]);
  if(index===4)moment(root,"사람과 인연",[
-  "“사람 사이에선 "+trimline(a.love)+"이란 이야기가 나와.”",
-  "“여기에 "+trimline(g.love)+"도 붙지.”",
-  "“"+trimline(contextAdvice("love"))+"”"
+  "“인연에선 "+quote(a.love)+"라는 모습이 나타날 수 있어.”",
+  "“다른 한편으로는 "+quote(g.love)+"라는 성향도 읽히지.”",
+  "“"+trimline(contextAdvice("love"))+".”"
  ]);
  if(index===5)moment(root,"몸과 마음",[
   "“몸이 아플 거라고 사주로 단정하는 건 무책임한 일이야.”",
-  "“대신 일을 몰아서 하는 습관이 있는지, 잠과 휴식은 지키는지 돌아봐.”",
-  "“몸에 이상이 느껴지면 운세로 버티지 말고 진료를 받으렴.”"
+  "“대신 마음이 지치는 순간과 그때 보이는 반응을 자네 사주에서 함께 살펴보자.”",
+  "“실제 건강 문제는 운세와 별도로 확인해야 한다는 것도 잊지 말게.”"
  ]);
- if(index===6)moment(root,"1월부터",[
-  "“달마다 절기의 기운이 바뀌는 법이야. 날짜 하나로 한 달 내내 같은 일이 난다고 하면 안 되지.”",
-  "“1월부터 12월까지 각 달의 주제와 그때 할 일을 따로 들려줄게.”"
+ if(index===6)moment(root,"한 달씩 다른 얼굴",[
+  "“월운은 매달 같은 말만 반복하면 안 되지. 계절을 나타내는 월주와 자네의 일간을 달마다 따로 비교해.”",
+  "“1월부터 12월까지 서로 다른 고민의 모양을 읽어줄게.”"
  ]);
  if(index===7)moment(root,"할매의 당부",[
-  "“"+trimline(a.tip)+"부터 해보거라.”",
-  "“그리고 "+trimline(g.tip)+"도 잊지 마.”",
-  "“미래를 기다리는 것보다 네 손으로 바꿀 수 있는 일을 먼저 하라는 말이야.”"
+  "“2027년에는 "+quote(a.tip)+"라는 주제가 자꾸 눈에 들어와.”",
+  "“그리고 "+quote(g.tip)+"라는 대목도 함께 기억해 두게.”",
+  "“자네가 왜 이런 상황에 마음이 쓰이는지부터 읽어보자는 거야.”"
  ]);
  if(index===8){
   const ps=pastScenes[state.day];
   moment(root,"옛이야기 한 자락",[
    "“전생을 진짜 알아맞혔다는 말은 안 할 거야. 네 만세력을 소재로 만든 이야기란다.”",
    "“"+ps.role+"이 살았던 옛날로 한번 가보자.”",
-   "“그 사람이 마음에 남긴 건 "+trimline(ps.regret)+"이었대.”"
+   "“그 사람이 마음에 남긴 건 "+quote(ps.regret)+"라는 감정이었대.”"
   ]);
  }
  const lock=$("previewLock");
- lock.textContent=index===8?"전생의 마지막 장면과 지금 삶에 적용할 이야기":intro[index]+"의 세부 명리 근거와 생활 속 대응법 · 12개월 흐름";
+ lock.textContent=index===8?"전생의 마지막 장면과 지금 삶에 적용할 이야기":intro[index]+"의 세부 명리 근거와 생활 속 해석 · 12개월 흐름";
  [...$("previewTabs").children].forEach((t,i)=>{t.classList.toggle("active",i===index);t.setAttribute("aria-pressed",String(i===index));});
 }
-
 function premiumDepth(root,index){
  const z=state,p=z.p,b=z.base,a=z.annual,g=z.ground,c=z.context||{};
  const kt=ten(z.day,"丁"),gt=ten(z.day,"己"),mt=ten(z.day,p.getMonthGan());
