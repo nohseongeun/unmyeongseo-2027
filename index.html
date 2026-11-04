@@ -298,6 +298,14 @@ header{position:relative}
 #page5.report-edition .chapter-text .compat-form select{background:#fffdf8;color:#2e271f;border-color:#90734c}
 #page5.report-edition .chapter-text .compat-form button{background:#47331e;color:#fff2dd}
 </style>
+<style>
+#reportAdminAuth[hidden]{display:none!important}
+#reportAdminAuth{background:#ebe0cd;border-top:1px solid #c4ae8a;border-bottom:1px solid #c4ae8a;padding:19px 17px;color:#433120}
+#reportAdminAuth strong{color:#433120;font-size:15px}
+#reportAdminAuth .note{color:#654e32!important}
+#reportAdminAuth input{display:block;width:100%;padding:12px;border-radius:9px;background:#fffdf8;color:#2d241a;border:1px solid #8a7452;font-size:16px;margin:11px 0}
+#reportAdminAuth button{background:#46331d;color:#fff6e8;border:1px solid #705439;padding:10px 18px;border-radius:9px}
+</style>
 </head>
 <body>
 <main>
@@ -321,17 +329,17 @@ header{position:relative}
  <select id="hour" aria-label="태어난 시"><option value="" selected disabled>시 선택</option><option value="0">0시</option><option value="1">1시</option><option value="2">2시</option><option value="3">3시</option><option value="4">4시</option><option value="5">5시</option><option value="6">6시</option><option value="7">7시</option><option value="8">8시</option><option value="9">9시</option><option value="10">10시</option><option value="11">11시</option><option value="12">12시</option><option value="13">13시</option><option value="14">14시</option><option value="15">15시</option><option value="16">16시</option><option value="17">17시</option><option value="18">18시</option><option value="19">19시</option><option value="20">20시</option><option value="21">21시</option><option value="22">22시</option><option value="23">23시</option></select>
  <select id="minute" aria-label="태어난 분"><option value="" selected disabled>분 선택</option><option value="0">0분</option><option value="1">1분</option><option value="2">2분</option><option value="3">3분</option><option value="4">4분</option><option value="5">5분</option><option value="6">6분</option><option value="7">7분</option><option value="8">8분</option><option value="9">9분</option><option value="10">10분</option><option value="11">11분</option><option value="12">12분</option><option value="13">13분</option><option value="14">14분</option><option value="15">15분</option><option value="16">16분</option><option value="17">17분</option><option value="18">18분</option><option value="19">19분</option><option value="20">20분</option><option value="21">21분</option><option value="22">22분</option><option value="23">23분</option><option value="24">24분</option><option value="25">25분</option><option value="26">26분</option><option value="27">27분</option><option value="28">28분</option><option value="29">29분</option><option value="30">30분</option><option value="31">31분</option><option value="32">32분</option><option value="33">33분</option><option value="34">34분</option><option value="35">35분</option><option value="36">36분</option><option value="37">37분</option><option value="38">38분</option><option value="39">39분</option><option value="40">40분</option><option value="41">41분</option><option value="42">42분</option><option value="43">43분</option><option value="44">44분</option><option value="45">45분</option><option value="46">46분</option><option value="47">47분</option><option value="48">48분</option><option value="49">49분</option><option value="50">50분</option><option value="51">51분</option><option value="52">52분</option><option value="53">53분</option><option value="54">54분</option><option value="55">55분</option><option value="56">56분</option><option value="57">57분</option><option value="58">58분</option><option value="59">59분</option></select>
  </div>
-<p class="note">태어난 시간은 몰라도 괜찮아. 다만 시주는 계산하지 않고, 대운처럼 정밀한 시기 판단은 추가 정보 없이는 단정할 수 없어. 만세력은 화면에서 계산해. AI 상담·심층 보고서를 요청하면 사주 간지는 상담 서버로 전달돼.</p>
+<p class="note">태어난 시간은 몰라도 괜찮아. 다만 시주는 계산하지 않고, 대운처럼 정밀한 시기 판단은 추가 정보 없이는 단정할 수 없어. 만세력은 화면에서 계산해. 심층 보고서를 생성할 때에는 사주 간지가 보고서 생성 서버로 전달될 수 있어.</p>
  <button class="primary" id="begin" type="button">정옥순 할머니께 무료 풀이받기 →</button><p id="formError" class="error" role="alert"></p>
 </section>
 <section class="page card" id="page2">
  <div class="eyebrow">02 / 05 · 정옥순 할머니의 첫마디</div><h2 id="personTitle">자네는 어떤 팔자인가</h2>
- <div id="manseChart"></div><div id="personBody"></div><section id="oksoonChat" class="chat-shell" aria-label="정옥순 할매 상담방"></section>
+ <div id="manseChart"></div><div id="personBody"></div>
 </section>
 <section class="page card" id="page3">
 <div class="eyebrow">03 / 05 · 할매가 들려주는 2027년</div>
 <h2>“자, 새해 운도 한번 짚어보자꾸나.”</h2>
-<p class="note">무료 질문은 앞 페이지에서 한 번만 할 수 있어. 여기서는 2027년 운세의 전체 흐름을 읽어봐.</p>
+<p class="note">여기서는 2027년 운세의 전체 흐름을 무료로 미리 읽어볼 수 있어.</p>
 <div class="consult-preview"><div id="annualIntro"></div><div class="tabs" id="previewTabs"></div><div class="hint" id="previewBody" aria-live="polite"></div><div class="lock"><strong>🔒 더 깊은 이야기는 전체 운명서에서</strong><p id="previewLock"></p></div></div>
 
 
@@ -373,6 +381,7 @@ header{position:relative}
  <div class="report-divider">✦　진도 정옥순 할머니의 사주 읽기</div>
  <div id="reportElement" class="report-element-panel"></div>
  <div class="report-divider">✦　인생의 열 가지 이야기</div>
+ <section id="reportAdminAuth" class="report-admin-auth" aria-label="관리자용 인증 영역" hidden></section>
  <div class="chapter-tabs" id="chapters"></div>
  <div class="chapter-text" id="chapterBody" aria-live="polite"></div>
  <div class="notice">현재는 시험용 풀이이며, 정식 유료 상품은 준비 중이야.</div>
@@ -763,170 +772,30 @@ function storyIntro(target){
  say(target,"“이걸 무슨 일이 꼭 생긴다는 증거처럼 받아들이면 안 돼. 다만 자네가 조심할 선택을 구체적으로 짚어볼 수는 있지.”");
 }
 
-/* OKSOON-CONFIRMATION-V29 — distinguish symbolic inference from user-confirmed reality */
-/* OKSOON AI CHAT V30
-   Requires a separately deployed server. Never store the OpenAI API key in this file.
-   window.OKSOON_CHAT_API can be configured in public config.js after deployment. */
-let chatSession=null,chatLeft=1,chatBusy=false;
-let chatHistory=[]; // Recent dialogue only; kept in memory, no local storage.
-let chartOwner="unspecified"; // Gender and identity are never inferred from the birth chart.
-const chatStyleRules="질문에만 직접 대답. 2~4개 짧은 문단으로 답하고 사주 용어는 꼭 필요한 경우에만 한 번 쉬운 말로 풀어쓰기. 사주 글자와 오행 개수는 검증 없이 단정하지 않기. 성별·관계·직업·예정된 결혼 등 사용자가 알려주지 않은 개인 사실을 지어내지 않기. 사용자가 이전 답변을 정정하면 바로 인정하고 앞선 전제 폐기. 다른 사람과의 궁합은 두 사람의 출생 정보가 모두 있어야 비교하며, 기존 한 사람의 사주를 두 사람 것으로 혼동하지 않기. 오타 없는 자연스러운 한국어로 답하고 똑같은 오행 해설을 반복하지 않기.";
-let adminKey=""; // Runtime memory only. Never store admin credentials in URL, HTML or localStorage.
-function chatBubble(feed,who,words,isMe){
- const bubble=make("div",null,"chat-bubble"+(isMe?" mine":""));
- bubble.append(make("div",who,"chat-role"));
- bubble.append(make("div",words));feed.append(bubble);return bubble;
-}
+/* Administrator authentication for report QA only. The public AI question chat is removed. */
+let adminKey=""; // In-memory only, never expose credentials in URL, HTML or storage.
 function chatApi(){return String(window.OKSOON_CHAT_API||"").trim().replace(/\/$/,"");}
-async function chatStart(){
- const url=chatApi();if(!url)return null;
- let previous=null;
- try{previous=localStorage.getItem("oksoon-chat-session-v1")}catch(e){}
- const response=await fetch(url+"/api/session",{method:"POST",credentials:"omit",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:previous||null})});
- const json=await response.json().catch(()=>({}));
- if(!response.ok||!json.sessionId)throw Error(json.error||"상담방 연결이 되지 않았어.");
- try{localStorage.setItem("oksoon-chat-session-v1",json.sessionId)}catch(e){}
- return json;
-}
-function chatRequestPayload(){
- const p=state.p;return {
-  question:$("chatQuestion").value.trim(),
-  chart:{year:p.getYear(),month:p.getMonth(),day:p.getDay(),time:state.unknown?null:p.getTime(),
-    dayMaster:state.day,calendar:state.calendar,unknownTime:state.unknown},
-  clientContext:state.context||{},
-  confirmedPreference:chartOwner==="unspecified"?null:{chartOwner},
-  chartOwner,
-  responseStyle:chatStyleRules,
-  history:chatHistory.slice(-6)
- };
-}
-function setChatState(remaining,locked){
- chatLeft=remaining;
- const textarea=$("chatQuestion"),send=$("chatSend");
- if(!textarea||!send)return;
- const admin=Boolean(adminKey);
- textarea.disabled=locked&&!admin;
- send.disabled=(locked&&!admin)||chatBusy||!chatSession;
- $("chatCounter").textContent=admin?"관리자 검수 모드 · 반복 질문 가능":"할매 무료상담 · "+Math.max(0,chatLeft)+"회 남음";
- if(locked&&!admin){textarea.placeholder="무료 상담 1회를 사용했어. 추가 상담 상품은 준비 중이야.";send.textContent="추가 상담 준비 중";}
- else{textarea.placeholder="예: 할매, 2027년 내 재물운은 어때?";send.textContent=admin?"관리자 질문 보내기":"할매한테 물어보기";}
-}
-function renderChat(){
- const root=$("oksoonChat");if(!root)return;root.replaceChildren();
- root.append(make("div",devPreview?"관리자 검수 · 할매 상담":"할매에게 질문 한 번은 무료","eyebrow"));
- if(devPreview){
-  const panel=make("section",null,"chat-note");
-  panel.append(make("strong","관리자 전용 상담 테스트"));
-  panel.append(make("p","서버에 설정한 관리자 인증키로 로그인하면 무료 횟수와 관계없이 반복 질문할 수 있어. AI 사용료는 발생해.","chat-sub"));
-  const field=make("input");field.type="password";field.autocomplete="off";field.placeholder="관리자 인증키 입력";field.setAttribute("aria-label","관리자 인증키");field.id="adminAccessInput";panel.append(field);
-  const button=make("button","관리자 인증하기","secondary");button.type="button";button.style.marginTop="8px";panel.append(button);
-  const feedback=make("div","","chat-role");feedback.setAttribute("role","status");feedback.style.marginTop="8px";panel.append(feedback);
-  button.addEventListener("click",async()=>{
-   const candidate=field.value.trim();if(!candidate){feedback.textContent="관리자 인증키를 입력해 줘.";return;}
-   button.disabled=true;feedback.textContent="서버에서 관리자 권한 확인 중…";
-   try{
-    const response=await fetch(chatApi()+"/api/admin/check",{method:"POST",credentials:"omit",headers:{"Content-Type":"application/json"},body:JSON.stringify({adminKey:candidate}),signal:AbortSignal.timeout(13000)});
-    const data=await response.json().catch(()=>({}));
-    if(!response.ok||!data.admin)throw Error(data.error||"관리자 인증에 실패했어.");
-    adminKey=candidate;
-    field.value="";field.remove();button.remove();
-    feedback.textContent="관리자 인증 성공! 이제 질문을 계속할 수 있어.";
-    if(step===5)activateAutoReports();
-    setChatState(chatLeft,false);
-    $("chatStatus").textContent="관리자 질문 테스트가 열렸어.";
-   }catch(error){feedback.textContent=error.message||"관리자 인증 서버를 확인해 줘.";button.disabled=false;}
-  });
-  root.append(panel);
- }
- root.append(make("h3","“궁금한 게 있으면 하나 물어봐. 자네 팔자랑 같이 풀어줄게.”"));
- root.append(make("p","만세력을 바탕으로 할매가 대화하듯 답해줘. 미래의 사건이나 돈 들어올 날짜를 정확히 알아맞힐 수 있다는 뜻은 아니야.","chat-sub"));
- const counter=make("div","할매 무료상담 · 1회 남음","chat-role");counter.id="chatCounter";root.append(counter);
- const feed=make("div");feed.id="chatFeed";root.append(feed);
- chatBubble(feed,"정옥순 할매","“자, 돈이든 일자리든 사랑이든 하나 물어보거라. 내가 아는 범위에서 구체적으로 풀어줄게.”",false);
- const form=make("form");form.addEventListener("submit",e=>{e.preventDefault();sendChat()});
- const input=make("textarea");input.id="chatQuestion";input.autocomplete="off";input.maxLength=500;input.placeholder="예: 할머니, 돈이 언제 들어올까요?";input.setAttribute("aria-label","정옥순 할매에게 질문");form.append(input);
- const btn=make("button","할매한테 물어보기","primary");btn.id="chatSend";btn.type="submit";form.append(btn);root.append(form);
- const status=make("div",null,"chat-error");status.id="chatStatus";status.setAttribute("role","status");root.append(status);
- const upsell=make("div",null,"chat-note");upsell.id="chatUpsell";
- upsell.append(make("strong","추가 상담 · 가격 미정"));
- upsell.append(make("p","무료 질문은 한 번이야. 이후 계속 상담하거나 재물운·연애운 등 분야별 풀이를 따로 이용하는 상품은 준비 중이야.","chat-sub"));root.append(upsell);
- const retry=make("button","서버 다시 연결하기","secondary");
- retry.type="button";retry.style.marginTop="8px";retry.classList.add("hidden");
- root.append(retry);
- const connect=async()=>{
-  const draft=input.value;
-  status.textContent="할매 상담 서버에 연결하는 중이야…";
-  retry.classList.add("hidden");
-  btn.disabled=true;
-  if(!chatApi()){
-   status.textContent="서버 주소가 아직 설정되지 않았어. 질문은 적어둘 수 있어.";
-   retry.classList.remove("hidden");return;
-  }
+function renderAdminVerification(){
+ const root=$("reportAdminAuth");if(!root||!devPreview)return;
+ root.hidden=false;
+ root.replaceChildren();
+ const heading=make("strong","관리자 · AI 심층 보고서 검수 인증");root.append(heading);
+ const desc=make("p","관리자 인증을 완료하면 전체 운명서에서 AI 심층 풀이가 자동으로 추가돼. 고객에게는 이 기능이 보이지 않아.","note");root.append(desc);
+ const input=make("input");input.type="password";input.autocomplete="off";input.placeholder="관리자 인증키";input.setAttribute("aria-label","관리자 인증키");root.append(input);
+ const button=make("button","관리자 인증하기","secondary");button.type="button";root.append(button);
+ const status=make("p","","note");status.setAttribute("role","status");root.append(status);
+ button.addEventListener("click",async()=>{
+  const candidate=input.value.trim();if(!candidate){status.textContent="관리자 인증키를 입력해 줘.";return;}
+  button.disabled=true;status.textContent="서버에서 관리자 권한 확인 중…";
   try{
-   const res=await chatStart();
-   chatSession=res.sessionId;
-   const remaining=Number(res.remaining);
-   if(!Number.isInteger(remaining)||remaining<0)throw Error("상담 횟수를 확인하지 못했어.");
-   status.textContent=remaining?"연결됐어! 질문을 보내봐.":"무료 상담 1회를 사용했어.";
-   setChatState(remaining,remaining===0);
-  }catch(err){
-   chatSession=null;
-   status.textContent="서버 연결을 확인하지 못했어. 질문은 입력할 수 있어. 다시 연결해 줘. ("+(err.message||"네트워크 오류")+")";
-   btn.disabled=true;
-   retry.classList.remove("hidden");
-  }
- };
- retry.addEventListener("click",connect);
- connect();
-}
-function identifyChatContext(question){
- const q=String(question).replace(/\s+/g,"");
- if(/(?:이건|이사주|지금사주|입력한사주).{0,16}(?:여자|여성|여자애|여자분)/.test(q))chartOwner="female-other";
- else if(/(?:이건|이사주|지금사주|입력한사주).{0,16}(?:남자|남성|남자애|남자분)/.test(q))chartOwner="male-other";
- return {compatibility:/궁합|사주궁합/.test(q),hasPartnerBirth:/\d{4}[년.\/-]\d{1,2}[월.\/-]\d{1,2}/.test(q)};
-}
-function compatibilityNeedsSecondChart(question){
- const intent=identifyChatContext(question);
- if(!intent.compatibility)return false;
- // A single person's birth chart is not a two-person compatibility reading.
- return !intent.hasPartnerBirth;
-}
-function directCompatibilityReply(){
- return "아, 내가 자네 뜻을 잘못 알아들었구먼. 지금 입력된 사주는 한 사람의 것이여. "+(chartOwner==="female-other"?"이 사주가 여자분 것이라는 말도 알겠네. ":"")+"자네와 그분의 궁합을 보려면 자네 생년월일과 태어난 시각도 필요하네. 아래 ‘궁합·인연 분석’에서 두 사람 정보를 따로 넣어보게. 한 사람 사주만 보고 둘의 궁합을 지어내지는 않겠네.";
-}
-async function sendChat(){
- if(chatBusy||(chatLeft<1&&!adminKey)||!chatSession)return;
- const question=$("chatQuestion").value.trim();
- if(question.length<2||question.length>500){$("chatStatus").textContent="질문은 2~500글자로 적어줘.";return;}
- chatBusy=true;setChatState(chatLeft,false);
- const feed=$("chatFeed");chatBubble(feed,"자네",question,true);
- if(compatibilityNeedsSecondChart(question)){
-  const answer=directCompatibilityReply();
-  chatBubble(feed,"정옥순 할매",answer,false);
-  chatHistory.push({role:"user",text:question},{role:"assistant",text:answer});
-  chatHistory=chatHistory.slice(-6);
-  $("chatQuestion").value="";
-  $("chatStatus").textContent="궁합을 보려면 두 사람의 출생 정보가 필요해.";
-  chatBusy=false;setChatState(chatLeft,chatLeft===0);return;
- }
- identifyChatContext(question);
- $("chatStatus").textContent="“잠깐 있어 봐… 자네가 물은 것부터 살펴볼게.”";
- try{
-  const response=await fetch(chatApi()+"/api/chat",{method:"POST",credentials:"omit",headers:{"Content-Type":"application/json"},body:JSON.stringify({...chatRequestPayload(),sessionId:chatSession,...(adminKey?{adminKey}:{})})});
-  const result=await response.json().catch(()=>({}));
-  if(!response.ok){
-   if(response.status===402||result.code==="FREE_LIMIT")setChatState(0,true);
-   if(result.code==="ADMIN_AUTH_FAILED"){adminKey="";setChatState(chatLeft,chatLeft===0);}
-   throw Error(result.error||"할매 상담이 잠시 연결되지 않았어.");
-  }
-  chatBubble(feed,"정옥순 할매",result.answer||"미안하구나. 다시 확인해 볼게.",false);
-  chatHistory.push({role:"user",text:question},{role:"assistant",text:result.answer||""});
-  chatHistory=chatHistory.slice(-6);
-  $("chatQuestion").value="";
-  chatLeft=Number(result.remaining);
-  $("chatStatus").textContent=adminKey?"관리자 답변이 도착했어. 계속 질문해 봐.":chatLeft===0?"무료 상담 한 번을 마쳤어. 추가 상담 상품은 준비 중이야.":"답변이 도착했어.";
- }catch(e){$("chatStatus").textContent=e.message||"답변을 받지 못했어. 다시 시도해 줘.";}
- finally{chatBusy=false;setChatState(chatLeft,chatLeft===0);}
+   const response=await fetch(chatApi()+"/api/admin/check",{method:"POST",credentials:"omit",headers:{"Content-Type":"application/json"},body:JSON.stringify({adminKey:candidate}),signal:AbortSignal.timeout(13000)});
+   const data=await response.json().catch(()=>({}));
+   if(!response.ok||!data.admin)throw Error(data.error||"관리자 인증에 실패했어.");
+   adminKey=candidate;input.value="";input.remove();button.remove();
+   status.textContent="관리자 인증 완료 · 전체 운명서의 AI 심층 풀이 자동 생성 준비 완료";
+   if(step===5)activateAutoReports();
+  }catch(error){status.textContent=error.message||"인증 서버를 확인해 줘.";button.disabled=false;}
+ });
 }
 
 function person(){
@@ -2513,7 +2382,7 @@ $("begin").addEventListener("click",()=>{
   for(let i=1;i<selectedLines.length;i++)setTimeout(()=>showInsight(i),i*900);
   setTimeout(()=>{
    try{
-    renderManse();person();renderChat();annualIntro();preview(0);
+    renderManse();person();renderAdminVerification();annualIntro();preview(0);
     $("reportTitle").textContent=state.name+"님의 2027년 귀신사주";renderEditorialReport();renderFullReport();page(2);
    }catch(err){$("formError").textContent=err.message||"풀이를 준비하지 못했어요.";}
    finally{loader.classList.add("hidden");oksoonBusy=false;$("begin").disabled=false;}
