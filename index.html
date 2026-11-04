@@ -1979,7 +1979,7 @@ function renderCompatibility(root){
 
 function monthReport(root){
  root.append(make("h3","“열두 달을 똑같이 이야기하면 그건 사주가 아니지.”"));
- say(root,"“월운(매달 바뀌는 기운)은 매달 대표적인 월주와 자네 일간을 비교해서 보는 거야. 실제 절기 경계일 전후는 다를 수 있단다.”");
+ say(root,"“한 해 열두 달이 다 같은 얼굴일 수는 없지. 달마다 자네가 어떤 일에 마음이 움직일지 찬찬히 들여다보자꾸나.”");
  const nav=make("div",null,"month-nav");root.append(nav);
  const detail=make("div",null,"hint");root.append(detail);
  for(let i=1;i<=12;i++){
@@ -2079,10 +2079,11 @@ function monthReport(root){
    "“월말에는 이번 달에 실제로 끝낸 것 두 개와 아직 남은 것 하나를 적어. 남의 속도에 맞춰 살 필요는 없어.”",
    "“월초와 월말은 분위기가 다를 수 있지. 한 달 동안 마음이 움직이는 순간을 잘 살펴보게.”"
   ]);
-  moment(detail,"이번 달 할매의 정해진 루틴",[
-   "“"+month+"월에는 "+ritual[2]+"에 10분만 시간을 내. "+ritual[0]+" 소품이나 "+ritual[1]+"을 곁에 두고 오늘 반드시 끝낼 일 하나를 적어.”",
-   "“자네와 어울리는 색을 일상에 조금 더해보게. 작은 물건 하나도 마음을 다잡는 계기가 될 수 있지.”",
-   "“이번 달에 할 일은 하나야. "+d[0]+". 말이 아니라 행동으로 보여줘.”"
+  const personal=directProfiles[state.day],element=everydayElements[Object.entries(countElements(state.p)).sort((a,b)=>b[1]-a[1])[0][0]];
+  moment(detail,"이달에 자네가 놓치기 쉬운 마음",[
+   "“자네는 "+personal.outer+" 그러니 이달에 "+monthlyVerdicts[k]+"라는 흐름이 겹치면 평소보다 마음이 바빠질 수 있겠구먼.”",
+   "“조심할 것은 "+element.avoid+"이지. 이달의 말 한마디나 결정 하나가 마음에 오래 남지 않도록 스스로 어떤 순간에 예민해지는지 보게.”",
+   "“옷차림에는 "+ritual[0]+"을 가볍게 더해봐도 좋겠네. 큰 의미를 억지로 붙이기보다 자네가 편안하게 느끼는 방식으로 말이야.”"
   ]);
   [...nav.children].forEach((b,i)=>b.classList.toggle("active",i===month-1));
  }
