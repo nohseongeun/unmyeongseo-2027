@@ -241,6 +241,23 @@ header{position:relative}
 #page5.report-edition .chapter-text .ai-premium-report p{color:#443525}
 #page5.report-edition .chapter-text .ai-premium-report h3{color:#533b26}
 </style>
+<style>
+/* full-length report: all chapters appear in one continuous reading flow */
+.report-edition .chapter-tabs{position:relative}
+.report-chapter-section{padding:24px 0 39px;border-bottom:8px solid #e6d8c1;scroll-margin-top:15px}
+.report-chapter-section:last-child{border-bottom:0}
+.report-chapter-number{font-size:11px;color:#977753;font-weight:800;letter-spacing:2px;text-align:center;margin:0 0 14px}
+.report-chapter-section>h2{text-align:center;color:#38291f;font-size:25px;margin:0 auto 25px;line-height:1.55}
+.report-chapter-base .okmoment{margin:18px 0;padding:19px 15px;border-radius:10px;background:#fffdf8;border:1px solid #dfd0b8}
+.report-chapter-base .okmoment h3{font-size:18px;color:#5b4029;margin:0 0 12px}
+.report-ai-enrichment{padding-top:10px}
+.report-ai-paper{background:#fffdf8;border-top:2px solid #bb9966;border-bottom:1px solid #d6c3a3;padding:23px 15px;margin:22px 0}
+.report-ai-eyebrow{color:#9b6f36;font-size:12px;font-weight:800;letter-spacing:1px;padding-bottom:8px}
+.report-ai-loading{font-size:13px!important;color:#866b45!important;text-align:center;padding:15px}
+#page5.report-edition .chapter-text{padding:12px 15px}
+#page5.report-edition .report-chapter-section .chapter-text{padding:0}
+@media(max-width:390px){#page5.report-edition .chapter-text{padding:9px 10px}.report-chapter-base .okmoment{padding:17px 12px}}
+</style>
 </head>
 <body>
 <main>
@@ -660,6 +677,7 @@ function page(num){
  $("back").textContent=step===2?"입력 수정":"이전 페이지";
  $("next").textContent=step===5?"다른 정보로 다시 보기":step===2?"2027년 운세 읽기":step===3?"상품별 이용 안내":step===4?(devPreview?"개발자용 전체 풀이 확인":"상품 준비 중"):"다음 페이지";
  $("next").disabled=step===4&&!devPreview;
+ if(step===5)activateAutoReports();
  window.scrollTo(0,0);
 }
 
@@ -754,6 +772,7 @@ function renderChat(){
     adminKey=candidate;
     field.value="";field.remove();button.remove();
     feedback.textContent="관리자 인증 성공! 이제 질문을 계속할 수 있어.";
+    if(step===5)activateAutoReports();
     setChatState(chatLeft,false);
     $("chatStatus").textContent="관리자 질문 테스트가 열렸어.";
    }catch(error){feedback.textContent=error.message||"관리자 인증 서버를 확인해 줘.";button.disabled=false;}
@@ -1963,54 +1982,125 @@ function oksoonRenderAIText(root,report){
  if(!section.childElementCount)section.append(make("p","풀이 내용을 표시하지 못했어. 다시 생성해 줘."));
  root.append(section);
 }
-function oksoonAIChapter(root,index){
- // Server-side admin validation is mandatory. This UI flag never grants API access.
- if(!devPreview||index===9)return false;
- const key=oksoonAIKeys[index];
- if(!key)return false;
+/* REPORT-V36 — full editorial book is visible immediately. AI enrichment loads automatically on scroll, when administrator has authenticated. */
+const autoReportQueue=[];
+const autoReportQueued=new Set();
+const autoReportRunning=new Set();
+let autoReportObserver=null;
+let autoReportActive=0;
+function renderFullReport(){
+ if(!state)return;
  if(oksoonCurrentReportBirth!==oksoonReportBirthKey()){
-  oksoonAICache.clear();oksoonCurrentReportBirth=oksoonReportBirthKey();
+  oksoonAICache.clear();
+  oksoonCurrentReportBirth=oksoonReportBirthKey();
+  autoReportQueue.length=0;
+  autoReportQueued.clear();
  }
- const heading=make("div","정옥순 할매의 AI 심층 운명서 · 관리자 검수","eyebrow");
- root.append(heading);
- const explanation=make("p","자네의 성격부터 돈·일·사랑, 마음에 오래 남는 일까지 할매가 찬찬히 짚어줄게.","note");
- root.append(explanation);
- const result=make("div",null,"ai-report-output");root.append(result);
- const status=make("p","","note");status.setAttribute("role","status");
- const qaPanel=make("section",null,"chat-note");
- const go=make("button","AI 심층 풀이 생성하기","primary");
- go.type="button";
- if(oksoonAICache.has(key)){
-  oksoonRenderAIText(result,oksoonAICache.get(key));
-  go.textContent="이 분야 다시 생성하기";
- }
- root.append(go,status,qaPanel);
- if(oksoonAICache.has(key))showPremiumReportQA(qaPanel,premiumReportQA(oksoonAICache.get(key),key));
- go.addEventListener("click",async()=>{
-  if(!adminKey){status.textContent="먼저 2페이지 무료 상담 영역에서 관리자 인증을 해줘.";return;}
-  if(!chatApi()){status.textContent="상담 서버 주소가 설정되지 않았어.";return;}
-  go.disabled=true;status.textContent="만세력을 바탕으로 할매가 긴 이야기를 풀고 있어… AI 사용료가 발생해.";
-  try{
-   const p=state.p;
-   const body={adminKey,topic:key,chart:{year:p.getYear(),month:p.getMonth(),day:p.getDay(),time:state.unknown?null:p.getTime()},
-    styleGuide:"성격과 마음을 실제 생활에서 겪는 구체적인 장면으로 길게 풀 것. 억지 사투리(사람이여/기운이여)와 어려운 사주용어 금지. 같은 문단이나 표현을 반복하지 말 것. 현재 직업·성별·연애 상황을 지어내지 말 것. 오타와 조사·띄어쓰기를 검수하고 문단 끝을 완결할 것. 풀이 중간에 장황한 면책 설명을 반복하지 말 것.",
-    chapterGuide:({"person":"강점·약점·겉모습과 속마음","annual":"2027년 상·하반기 흐름","money":"돈과 신뢰, 계약, 지출의 구체적 장면","career":"직업을 단정하지 않는 일과 평가의 다양한 장면","love":"연애 상태를 단정하지 않는 인연과 관계","mind":"마음의 부담과 회복","monthly":"1월부터 12월 모두 서로 다른 주제","guide":"실제 행동과 선택의 반복 장면","pastlife":"전생 소재의 옛이야기"})[key]};
-   const res=await fetch(chatApi()+"/api/report",{method:"POST",credentials:"omit",
-    headers:{"Content-Type":"application/json"},body:JSON.stringify(body),signal:AbortSignal.timeout(55000)});
-   const data=await res.json().catch(()=>({}));
-   if(!res.ok||!data.report)throw Error(data.error||"AI 심층 풀이를 가져오지 못했어.");
-   const qa=premiumReportQA(data.report,key);
-   oksoonAICache.set(key,data.report);
-   result.replaceChildren();oksoonRenderAIText(result,data.report);
-   showPremiumReportQA(qaPanel,qa);
-   status.textContent=qa.warns.length?"보고서가 도착했지만 관리자 검수에서 확인할 부분이 있어.":"보고서가 도착했어. 내용은 직접 한 번 더 읽어봐.";
-   go.textContent="이 분야 다시 생성하기";
-  }catch(e){status.textContent=e.message||"AI 풀이 생성에 실패했어.";}
-  finally{go.disabled=false;}
+ const root=$("chapterBody");root.replaceChildren();
+ chapterNames.forEach((name,index)=>{
+  const sec=make("section",null,"report-chapter-section");
+  sec.id="fortune-chapter-"+index;
+  sec.append(make("div",String(index+1).padStart(2,"0")+" / "+String(chapterNames.length).padStart(2,"0")+" · 정옥순 할매의 운명서","report-chapter-number"));
+  sec.append(make("h2",name));
+  const content=make("div",null,"report-chapter-base");sec.append(content);
+  if(index===9)renderCompatibility(content);
+  else if(index===6)monthReport(content);
+  else if([1,2,3,4,5,7].includes(index))chapterLifeReading(content,index);
+  else oksoonHumanReading(content,index);
+  if(index!==9){
+   const enrich=make("div",null,"report-ai-enrichment");enrich.id="report-enrich-"+index;
+   if(oksoonAICache.has(oksoonAIKeys[index]))renderAutoPremium(enrich,index,oksoonAICache.get(oksoonAIKeys[index]));
+   sec.append(enrich);
+  }
+  root.append(sec);
  });
- return true;
 }
-
+function renderAutoPremium(host,index,report){
+ host.replaceChildren();
+ const wrap=make("section",null,"report-ai-paper");
+ wrap.append(make("div","할매가 더 깊이 풀어주는 이야기","report-ai-eyebrow"));
+ oksoonRenderAIText(wrap,report);
+ host.append(wrap);
+ if(devPreview){
+  const quality=premiumReportQA(report,oksoonAIKeys[index]);
+  const panel=make("section",null,"chat-note");
+  showPremiumReportQA(panel,quality);
+  host.append(panel);
+ }
+}
+async function pumpAutoReports(){
+ if(!adminKey||!devPreview||step!==5)return;
+ while(autoReportActive<2&&autoReportQueue.length){
+  const index=autoReportQueue.shift();
+  const key=oksoonAIKeys[index];
+  if(!key||autoReportRunning.has(index)||oksoonAICache.has(key))continue;
+  const host=$("report-enrich-"+index);
+  if(!host)continue;
+  const birth=oksoonReportBirthKey();
+  const chart=state.p;
+  autoReportRunning.add(index);autoReportActive++;
+  const progress=make("p","할매가 "+chapterNames[index]+"의 심층 이야기를 덧붙이고 있어…","report-ai-loading");
+  host.replaceChildren();host.append(progress);
+  (async()=>{
+   try{
+    const payload={
+     adminKey,topic:key,
+     chart:{year:chart.getYear(),month:chart.getMonth(),day:chart.getDay(),time:state.unknown?null:chart.getTime()},
+     styleGuide:"한 사람에게 편지를 쓰듯 자연스럽게 말하기. 분야별로 서로 다른 구체적인 장면과 마음의 원인, 인간관계의 양면을 깊이 있게 풀어낼 것. 최소 6개 이상의 소제목과 충분한 장문 단락. 같은 문장·문단·도입부 반복 금지. '사람이여', '기운이여' 같은 억지 사투리 금지. 현재 직업·성별·연애·개인 과거를 임의로 단정하지 말 것. 한글 맞춤법과 문장 호응 검수. 중간에 면책 문구를 반복하지 말고 반드시 마지막 문장까지 완결할 것.",
+     chapterGuide:({
+      person:"겉과 속, 감정의 방어법, 기대와 상처, 강점의 그림자, 가까운 관계에서 드러나는 성향",
+      annual:"2027년 상반기와 하반기의 흐름, 선택과 갈등, 일과 사람과 돈을 각각 독립된 장면으로",
+      money:"돈을 벌고 지키고 나누는 방식, 관계에서 생기는 돈의 갈등, 기회와 신중함",
+      career:"인정받는 방식, 기다리는 시기, 전환점, 다양한 직업 상황의 조건형 풀이",
+      love:"인연을 시작하고 유지하는 방식, 오해와 거리, 오래 만나는 관계, 궁합은 상대 정보 필요",
+      mind:"내면의 부담, 혼자 견디는 방식, 감정이 쌓일 때와 풀릴 때",
+      monthly:"반드시 1월~12월 모두 서로 다른 소제목과 충분한 월별 해석, 12개 월 누락 금지",
+      guide:"반복되는 결정과 관계, 성격의 장점이 약점이 되는 경우와 기운을 살리는 생활 장면",
+      pastlife:"옛이야기 형태의 상징적인 서사, 현실의 실제 과거로 단정하지 않기"
+     })[key]
+    };
+    const response=await fetch(chatApi()+"/api/report",{method:"POST",credentials:"omit",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload),signal:AbortSignal.timeout(90000)});
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok||!data.report)throw Error(data.error||"심층 풀이를 가져오지 못했어.");
+    if(oksoonReportBirthKey()!==birth)return;
+    oksoonAICache.set(key,data.report);
+    const current=$("report-enrich-"+index);
+    if(current)renderAutoPremium(current,index,data.report);
+   }catch(error){
+    if(oksoonReportBirthKey()===birth){
+     const current=$("report-enrich-"+index);
+     if(current){current.replaceChildren();if(devPreview)current.append(make("p","심층 풀이 연결이 원활하지 않아 기본 풀이를 먼저 보여주고 있어. ("+(error.message||"연결 오류")+")","note"));}
+    }
+   }finally{
+    autoReportRunning.delete(index);autoReportActive--;
+    pumpAutoReports();
+   }
+  })();
+ }
+}
+function queueAutoReport(index){
+ if(index===9||!adminKey||!devPreview||step!==5)return;
+ const key=oksoonAIKeys[index];
+ if(!key||oksoonAICache.has(key)||autoReportQueued.has(index)||autoReportRunning.has(index))return;
+ autoReportQueued.add(index);
+ autoReportQueue.push(index);
+ pumpAutoReports();
+}
+function activateAutoReports(){
+ if(!state||!devPreview||step!==5||!adminKey)return;
+ if(autoReportObserver){autoReportObserver.disconnect();autoReportObserver=null;}
+ const targets=[...$("chapterBody").querySelectorAll(".report-chapter-section")].filter(x=>x.id!=="fortune-chapter-9");
+ if("IntersectionObserver" in window){
+  autoReportObserver=new IntersectionObserver(entries=>{
+   for(const entry of entries)if(entry.isIntersecting){
+    const i=Number(entry.target.id.replace("fortune-chapter-",""));
+    queueAutoReport(i);
+    autoReportObserver.unobserve(entry.target);
+   }
+  },{rootMargin:"550px 0px",threshold:0});
+  targets.forEach(el=>autoReportObserver.observe(el));
+ }else targets.forEach((_,index)=>queueAutoReport(index));
+}
 
 function renderEditorialReport(){
  if(!state)return;
@@ -2032,7 +2122,7 @@ function renderEditorialReport(){
   button.append(make("span",String(i+1).padStart(2,"0")+"  CHAPTER"));
   button.append(document.createTextNode(chapterName));
   button.type="button";
-  button.addEventListener("click",()=>{chapter(i);$("chapterBody").scrollIntoView({behavior:"smooth",block:"start"});});
+  button.addEventListener("click",()=>chapter(i));
   toc.append(button);
  });
  const element=$("reportElement");element.replaceChildren();
@@ -2053,13 +2143,11 @@ function renderEditorialReport(){
 
 function chapter(index){
  chapterIndex=index;
- const root=$("chapterBody");root.replaceChildren();
- const heading=chapterNames[index];
- root.append(make("h2",heading));
- if(index===9){renderCompatibility(root)}
- else if(index===6){if(!oksoonAIChapter(root,index))monthReport(root);}
- else{if(!oksoonAIChapter(root,index)){if([1,2,3,4,5,7].includes(index))chapterLifeReading(root,index);else oksoonHumanReading(root,index);}}
- [...$("chapters").children].forEach((t,i)=>t.classList.toggle("active",i===index));
+ const root=$("fortune-chapter-"+index);
+ if(!root)return;
+ if(step===5)root.scrollIntoView({behavior:"smooth",block:"start"});
+ [...$("chapters").children].forEach((t,i)=>{t.classList.toggle("active",i===index);t.setAttribute("aria-pressed",String(i===index));});
+ if(step===5)queueAutoReport(index);
 }
 
 /* Gung-hap is a real two-chart comparison, never a guessed partner profile. */
@@ -2366,7 +2454,7 @@ $("begin").addEventListener("click",()=>{
   setTimeout(()=>{
    try{
     renderManse();person();renderChat();annualIntro();preview(0);
-    $("reportTitle").textContent=state.name+"님의 2027년 귀신사주";renderEditorialReport();chapter(0);page(2);
+    $("reportTitle").textContent=state.name+"님의 2027년 귀신사주";renderEditorialReport();renderFullReport();page(2);
    }catch(err){$("formError").textContent=err.message||"풀이를 준비하지 못했어요.";}
    finally{loader.classList.add("hidden");oksoonBusy=false;$("begin").disabled=false;}
   },4700);
