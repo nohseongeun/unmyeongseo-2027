@@ -151,9 +151,9 @@ export default {
    if(!env.OPENAI_API_KEY)return json({error:"AI 연결이 아직 준비되지 않았어."},503,headers);
    try{
     const prompt=reportPrompt(chart,topic),model=env.OPENAI_MODEL||"gpt-4.1-mini";
-    const body={model,store:false,max_output_tokens:model.startsWith("gpt-5")?3200:2600,instructions:prompt.instructions,input:prompt.input};
+    const body={model,store:false,max_output_tokens:model.startsWith("gpt-5")?5500:4600,instructions:prompt.instructions,input:prompt.input};
     if(model.startsWith("gpt-5")){body.reasoning={effort:"low"};body.text={verbosity:"medium"};}
-    const res=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{"Authorization":"Bearer "+env.OPENAI_API_KEY,"Content-Type":"application/json"},body:JSON.stringify(body),signal:AbortSignal.timeout(26000)});
+    const res=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{"Authorization":"Bearer "+env.OPENAI_API_KEY,"Content-Type":"application/json"},body:JSON.stringify(body),signal:AbortSignal.timeout(48000)});
     if(!res.ok)return json({error:res.status===429?"AI 사용량 한도에 도달했어.":"AI 심층 풀이를 생성하지 못했어."},503,headers);
     const result=await res.json(),report=extractText(result);
     if(!report||result.status==="incomplete"||result.incomplete_details?.reason==="max_output_tokens")return json({error:"풀이가 중간에 끊겼어. 다시 생성해 줘."},503,headers);
