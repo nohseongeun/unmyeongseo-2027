@@ -358,7 +358,7 @@ function everydayElementReading(){
  const noTime=state.unknown;
  const day=directProfiles[state.day];
  return {
-  opening:"자네 사주에서 먼저 눈에 띄는 건 "+top[0]+"의 기운이여. 옛사람들은 이걸 "+lead.nature+"에 빗대어 읽었지.",
+  opening:"자네 사주에서 먼저 눈에 띄는 건 "+top[0]+"의 기운이구먼. 옛사람들은 이걸 "+lead.nature+"에 빗대어 읽었지.",
   strength:"이런 기운이 두드러지면 "+lead.strength+". "+(day?day.strength:"")+" 자네도 비슷한 순간이 있었는지 돌아보게.",
   caution:"그런데 좋은 성향도 지나치면 힘들어지는 법이여. "+lead.risk+". 그래서 평소에는 "+lead.habit+". "+(day?day.weak:""),
   style:"옷차림도 어렵게 생각하지 말게. "+lead.color+"은 전통 오행에서 "+top[0]+"과 연결하는 색이여. 즐겨 입는 옷에 조금 섞어보는 정도면 충분하지.",
@@ -372,7 +372,7 @@ function detailedTemper(){
  return {
   main:"자네 성향을 한마디로 풀면 이렇지. "+(t[0]||"자기만의 방식이 뚜렷한 편이야")+". "+(t[1]||"")+" 하지만 "+(t[2]||"그 장점이 때로는 부담이 될 수 있지")+".",
   day:"가까운 사람 앞에서는 또 다른 모습이 보일 수 있지. "+b+"",
-  limitation:"전통 명리학의 성향 풀이이며, 자네의 실제 삶을 확인한 진단은 아니여."
+  limitation:""
  };
 }
 function renderTemper(root){
@@ -1625,7 +1625,7 @@ const oksoonBranchHearts={
 function oksoonHumanReading(root,index){
  const p=state.p,day=state.day,voice=oksoonEmotion[day],month=ten(day,p.getMonthGan()),wound=oksoonMonthlyWound[month],branch=p.getDayZhi();
  const yr=ten(day,"丁"),yw=oksoonMonthlyWound[yr],earth=ten(day,"己");
- const call=oksoonCallName(state.name),basis="태어난 날과 달의 기운을 함께 보면 이런 면이 읽히는구먼. "+(tenTemper[month]?.[1]||"자기만의 방식이 또렷한 사람이여")+". 다만 실제 성격은 자네가 살아온 일에 따라 달라지지.";
+ const call=oksoonCallName(state.name),basis="태어난 날과 달의 기운을 함께 보면 이런 면이 읽히는구먼. "+(tenTemper[month]?.[1]||"자기만의 방식이 또렷하지")+". 다만 실제 성격은 자네가 살아온 일에 따라 달라지지.";
  const detail="가까운 사람 앞에서는 "+(branchTemper[branch]||"마음이 다르게 드러날 수 있지")+" 옛 사주에서는 태어난 날의 기운을 이런 마음에 비유한단다.";
  const add=(title,lines)=>moment(root,title,lines.map(x=>"“"+x+"”"));
  const reality="속을 전부 털어놓지 않아도 자네 마음에는 오래 남은 말이 있을 수 있지.";
@@ -1640,7 +1640,7 @@ function oksoonHumanReading(root,index){
  }else if(index===1){
   add("2027년, 무엇이 자네 마음을 건드리나",[first,"2027년의 기운을 자네 사주에 빗대면 "+yw[0]+"이 하나의 주제로 읽히는구먼. 올해 자네 마음에 어떤 선택이 남는지 살펴보게."]);
   add("기회가 와도 편하지만은 않은 까닭",["새로운 일이 설레면서도 불안할 수 있겠지. 자네는 "+voice[0]+"이기 때문에 "+voice[3]+"이 흔들리면 기회조차 부담으로 느껴질 수 있어.","올해는 또 "+(tenTemper[earth]?.[1]||"현실적인 선택을 돌아보는 마음")+"이라는 주제도 함께 살펴볼 수 있지."]);
-  add("올해 사람에게 받는 상처의 모양",["태어난 달의 기운에 비춰보면 "+wound[0]+"이 마음을 건드릴 수 있다는 풀이여.","그럴 때 "+voice[2]+". 이 반응이 올해의 선택에까지 이어지는지 봐야겠지."]);
+  add("올해 사람에게 받는 상처의 모양",["태어난 달의 기운에 비춰보면 "+wound[0]+"이 마음을 건드릴 수 있다고 보는구먼.","그럴 때 "+voice[2]+". 이 반응이 올해의 선택에까지 이어지는지 봐야겠지."]);
   add("2027년, 자네가 붙잡을 마음",["올해는 서두르는 마음과 오래 지켜온 약속 사이에서 무엇을 먼저 챙길지 생각해보게.","자네가 어떤 상황에 흔들리는지 읽는 게 핵심이야. "+reality]);
  }else if(index===2){
   add("돈 앞에서 드러나는 자네의 본심",[first,"돈이 부족한 날보다 내 수고를 인정받지 못한다고 느낄 때 더 서운할 수 있어. "+voice[3]+"이 돈 문제에 함께 걸릴 수도 있거든."]);
