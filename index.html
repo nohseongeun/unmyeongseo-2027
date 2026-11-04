@@ -306,6 +306,34 @@ header{position:relative}
 #reportAdminAuth input{display:block;width:100%;padding:12px;border-radius:9px;background:#fffdf8;color:#2d241a;border:1px solid #8a7452;font-size:16px;margin:11px 0}
 #reportAdminAuth button{background:#46331d;color:#fff6e8;border:1px solid #705439;padding:10px 18px;border-radius:9px}
 </style>
+<style>
+/* CONVERSION-V38: page 3 personalized five-teaser conversion preview */
+#page3{background:#eee4d2;color:#342a21;border:1px solid #bfa984;padding:23px 16px 20px}
+#page3 .sales-kicker{color:#8d6c3f;font-size:11px;font-weight:800;letter-spacing:1.4px;text-align:center;margin-bottom:15px}
+#page3 .sales-title{color:#33251c;text-align:center;font-family:serif;font-size:25px;line-height:1.55;margin:8px 0 14px;word-break:keep-all}
+#page3 .sales-lead{color:#6a5542;font-size:14px;line-height:1.85;text-align:center;margin:0 3px 22px}
+.sales-teasers{display:grid;gap:15px}
+.sales-teaser{background:#fffaf2;border:1px solid #d5c1a3;border-radius:13px;overflow:hidden;box-shadow:0 7px 18px #4e332a14}
+.sales-teaser-head{display:flex;align-items:center;justify-content:space-between;gap:6px;background:#efe1c7;padding:12px 15px;border-bottom:1px solid #dac4a5}
+.sales-teaser-head h3{color:#49301e;font-size:17px;margin:0;line-height:1.4}
+.sales-teaser-head span{font-size:10px;color:#8a6b44;white-space:nowrap;font-weight:800}
+.sales-teaser-content{padding:15px 16px 6px}
+#page3 .sales-teaser-content p{font-size:15px;line-height:1.95;color:#382d23;margin:0 0 9px;word-break:keep-all}
+#page3 .sales-teaser-content strong{color:#7e4a18}
+.sales-blur-zone{height:102px;position:relative;overflow:hidden;margin:3px 14px 10px;border-radius:7px;isolation:isolate}
+.sales-blur-pattern{filter:blur(5.8px);opacity:.49;transform:scale(1.035);pointer-events:none;user-select:none}
+.sales-blur-pattern i{display:block;background:#987955;height:11px;margin:11px 0;border-radius:9px}
+.sales-blur-zone:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#fffaf200 0%,#fffaf2c9 78%,#fffaf2 100%)}
+.sales-locked{border-top:1px solid #e4d2b7;color:#765534;font-weight:800;text-align:center;font-size:12px;padding:12px}
+.sales-offer{background:linear-gradient(160deg,#35261b,#1e1b17);border-radius:14px;color:#f9e4c2;text-align:center;padding:25px 17px;margin:24px 0 2px;border:1px solid #97794e}
+.sales-eyebrow{font-size:11px;letter-spacing:.5px;color:#ecd2a1;font-weight:800}
+.sales-price{font-size:37px;color:#ffe2a6;font-weight:900;line-height:1.4;margin:12px 0 0}
+.sales-price span{display:block;font-size:12px;font-weight:600;color:#e0c7a1}
+#page3 .sales-offer p{color:#eadbc2;font-size:13px;line-height:1.8}
+#page3 .sales-future{margin:4px 0 10px;color:#e8cea0}
+#page3 .sales-cta{display:block;width:100%;padding:15px 11px;border:0;border-radius:10px;color:#2c1d10;background:#f1cd8d;font-size:15px;font-weight:900;margin:18px 0 10px}
+#page3 .sales-disclaimer{color:#baa78e!important;font-size:11px!important;margin:6px 0 0}
+</style>
 </head>
 <body>
 <main>
@@ -337,12 +365,19 @@ header{position:relative}
  <div id="manseChart"></div><div id="personBody"></div>
 </section>
 <section class="page card" id="page3">
-<div class="eyebrow">03 / 05 · 할매가 들려주는 2027년</div>
-<h2>“자, 새해 운도 한번 짚어보자꾸나.”</h2>
-<p class="note">여기서는 2027년 운세의 전체 흐름을 무료로 미리 읽어볼 수 있어.</p>
-<div class="consult-preview"><div id="annualIntro"></div><div class="tabs" id="previewTabs"></div><div class="hint" id="previewBody" aria-live="polite"></div><div class="lock"><strong>🔒 더 깊은 이야기는 전체 운명서에서</strong><p id="previewLock"></p></div></div>
-
-
+ <div class="sales-kicker">03 / 05 · 자네의 2027 운명 미리보기</div>
+ <h2 class="sales-title" id="salesTitle">“돈이 열릴 때와 인연이 움직일 때가 궁금하지 않나?”</h2>
+ <p class="sales-lead">자네 사주를 바탕으로 다섯 가지 이야기를 먼저 살짝 보여주겠네. 더 깊은 해석은 한 권의 운명서에 담아뒀어.</p>
+ <div id="salesTeasers" class="sales-teasers" aria-live="polite"></div>
+ <div class="sales-offer">
+  <div class="sales-eyebrow">정옥순 할머니의 2027 운명서 · 전체 열람</div>
+  <div class="sales-price">14,900원 <span>출시 이벤트 예정가</span></div>
+  <p class="sales-future">이벤트 종료 후 판매 예정가 29,900원</p>
+  <p>재물·직업·인연·12개월 운세까지 한 번에. 분야별 추가 결제는 없어.</p>
+  <button id="salesGoOffer" type="button" class="sales-cta">전체 운명서 구성과 가격 보기</button>
+  <p class="sales-disclaimer">결제 서비스 준비 중 · 지금은 무료 미리보기만 제공돼.</p>
+ </div>
+ <div class="hidden" aria-hidden="true"><div id="annualIntro"></div><div id="previewTabs"></div><div id="previewBody"></div><div id="previewLock"></div></div>
 </section>
 <section class="page card" id="page4">
  <div class="eyebrow">04 / 05 · 2027 운명서 전체 열람</div>
@@ -743,7 +778,7 @@ function page(num){
  for(let i=1;i<=5;i++){const s=make("span");if(i<=step)s.className="active";$("progress").append(s);}
  $("stepCaption").textContent=step+" / 5 페이지";
  $("back").textContent=step===2?"입력 수정":"이전 페이지";
- $("next").textContent=step===5?"다른 정보로 다시 보기":step===2?"2027년 운세 읽기":step===3?"상품별 이용 안내":step===4?(devPreview?"개발자용 전체 풀이 확인":"상품 준비 중"):"다음 페이지";
+ $("next").textContent=step===5?"다른 정보로 다시 보기":step===2?"2027년 운세 읽기":step===3?"전체 운명서 구매 안내":step===4?(devPreview?"개발자용 전체 풀이 확인":"상품 준비 중"):"다음 페이지";
  $("next").disabled=step===4&&!devPreview;
  if(step===5)activateAutoReports();
  window.scrollTo(0,0);
@@ -865,6 +900,51 @@ function person(){
  say(root,"“반대로 "+trimline(state.ground.main)+"을 잊으면 판단이 흐려질 수 있지.”");
  say(root,"“더 들어가면 돈, 일, 사람 문제를 하나씩 봐야 해. 아래로 내려가면 계속 풀어줄게.”");
 }
+
+/* Preview uses computed saju inputs. The blurred bars are decorative, never secret paid text. */
+function renderSalesTeasers(){
+ if(!state)return;
+ const target=$("salesTeasers");target.replaceChildren();
+ const name=oksoonCallName(state.name);
+ const profile=directProfiles[state.day];
+ const year=ten(state.day,"丁"),earth=ten(state.day,"己");
+ const y=themes[year],e=themes[earth];
+ const dominant=Object.entries(countElements(state.p)).sort((a,b)=>b[1]-a[1])[0][0];
+ const starter={
+  나무:"생각한 일을 끝까지 키우고 싶은 마음이 강하구먼.",
+  불:"마음이 움직일 때 행동도 빨라지는 기운이 있네.",
+  흙:"익숙한 사람과 자리를 오래 지키려는 면이 보이는구먼.",
+  쇠:"결정할 때 나름의 분명한 기준을 세우는 기운이 있네.",
+  물:"선택하기 전에 여러 가능성을 헤아리는 면이 읽히네."
+ }[dominant];
+ $("salesTitle").textContent="“"+name+", 2027년 자네에게 돈과 인연은 언제 움직일까?”";
+ const cards=[
+  {icon:"✦",title:"2027년 종합운",head:"올해 가장 크게 달라질 흐름은?",lead:"자네 사주에 올해의 기운을 겹쳐보니 "+y.title+"가 먼저 눈에 들어오는구먼.",sub:"그런데 "+e.title+"도 함께 들어와 있어. 두 흐름이 만나는 대목을 그냥 지나쳐서는 안 되지."},
+  {icon:"◈",title:"돈·재물운",head:"돈이 모일 때와 새어 나갈 때",lead:"자네 돈의 흐름에는 "+profile.money.replace(/^돈도 /,"돈도 ").replace(/마\.$/,"마.") ,sub:"2027년에는 특히 "+y.money+"라는 주제가 맞물리네. 언제 지키고 언제 움직일지가 궁금해질 게야."},
+  {icon:"▣",title:"직업·사업운",head:"일이 풀리는 흐름과 기회의 방향",lead:profile.career,sub:"올해는 "+e.work+"라는 기운도 읽히네. 지금 하는 일이 무엇이든 선택의 모양은 달라질 수 있어."},
+  {icon:"♡",title:"연애·인간관계",head:"어떤 인연이 마음을 흔들까?",lead:profile.romance,sub:"올해의 관계 흐름에는 "+y.love+"라는 주제가 놓여 있어. 마음을 주는 방식과 받아들이는 방식이 같지는 않겠지."},
+  {icon:"☾",title:"2027년 월별 운세",head:"어느 달에 움직이고 어느 달에 살필까?",lead:starter+" 2027년 열두 달은 같은 기운으로 흐르지 않아.",sub:"월별로 돈·일·인연의 흐름을 나눠 보면 어떤 때에 더 신중해야 하는지 이야기의 결이 달라진단다."}
+ ];
+ for(const item of cards){
+  const card=make("article",null,"sales-teaser");
+  const header=make("div",null,"sales-teaser-head");
+  header.append(make("h3",item.icon+" "+item.title));
+  header.append(make("span","미리보기"));
+  card.append(header);
+  const content=make("div",null,"sales-teaser-content");
+  content.append(make("p",item.lead));
+  content.append(make("p",item.sub));
+  card.append(content);
+  const blur=make("div",null,"sales-blur-zone");
+  blur.setAttribute("aria-hidden","true");
+  const pattern=make("div",null,"sales-blur-pattern");
+  [96,83,90,70,98].forEach(width=>{const line=make("i");line.style.width=width+"%";pattern.append(line);});
+  blur.append(pattern);card.append(blur);
+  card.append(make("div","🔒 이 이야기의 뒷부분은 전체 운명서에서","sales-locked"));
+  target.append(card);
+ }
+}
+
 function annualIntro(){
  const root=$("annualIntro");root.replaceChildren();
  const day=state.day,month=ten(day,state.p.getMonthGan());
@@ -2382,7 +2462,7 @@ $("begin").addEventListener("click",()=>{
   for(let i=1;i<selectedLines.length;i++)setTimeout(()=>showInsight(i),i*900);
   setTimeout(()=>{
    try{
-    renderManse();person();renderAdminVerification();annualIntro();preview(0);
+    renderManse();person();renderAdminVerification();renderSalesTeasers();
     $("reportTitle").textContent=state.name+"님의 2027년 귀신사주";renderEditorialReport();renderFullReport();page(2);
    }catch(err){$("formError").textContent=err.message||"풀이를 준비하지 못했어요.";}
    finally{loader.classList.add("hidden");oksoonBusy=false;$("begin").disabled=false;}
@@ -2391,6 +2471,7 @@ $("begin").addEventListener("click",()=>{
 });
 names.forEach((name,i)=>{const b=make("button",name,"tab");b.type="button";b.addEventListener("click",()=>preview(i));$("previewTabs").append(b);});
 chapterNames.forEach((name,i)=>{const b=make("button",name,"chapter");b.type="button";b.addEventListener("click",()=>chapter(i));$("chapters").append(b);});
+$("salesGoOffer").addEventListener("click",()=>page(4));
 $("back").addEventListener("click",()=>page(step-1));
 $("next").addEventListener("click",()=>{if(step===5){state=null;page(1);}else page(step+1);});
 page(1);
