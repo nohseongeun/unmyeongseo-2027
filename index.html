@@ -258,6 +258,46 @@ header{position:relative}
 #page5.report-edition .report-chapter-section .chapter-text{padding:0}
 @media(max-width:390px){#page5.report-edition .chapter-text{padding:9px 10px}.report-chapter-base .okmoment{padding:17px 12px}}
 </style>
+
+<style>
+/* REPORT-READABILITY-FIX: override dark-theme rules in the paper report */
+#page5.report-edition,
+#page5.report-edition .chapter-text,
+#page5.report-edition .report-chapter-base,
+#page5.report-edition .report-chapter-section,
+#page5.report-edition .report-ai-paper,
+#page5.report-edition .ai-premium-report {color:#30271f}
+#page5.report-edition .chapter-text .okline,
+#page5.report-edition .chapter-text .okline.okbig,
+#page5.report-edition .chapter-text .report-chapter-base p,
+#page5.report-edition .chapter-text .report-ai-paper p,
+#page5.report-edition .chapter-text .okmoment p,
+#page5.report-edition .chapter-text .section p{
+ color:#322b24!important;
+ opacity:1!important;
+ transform:none!important;
+ border-left-color:#ac8a60;
+ text-shadow:none!important;
+}
+#page5.report-edition .chapter-text .okmoment h3,
+#page5.report-edition .chapter-text .section h3,
+#page5.report-edition .chapter-text .ai-premium-report h3,
+#page5.report-edition .chapter-text .report-chapter-section>h2 {color:#34261c!important}
+#page5.report-edition .chapter-text .report-chapter-number,
+#page5.report-edition .report-ai-eyebrow {color:#78552d!important}
+#page5.report-edition .chapter-text .note,
+#page5.report-edition .chapter-text .report-ai-loading{color:#65523d!important}
+#page5.report-edition .chapter-text .okmoment,
+#page5.report-edition .chapter-text .section,
+#page5.report-edition .chapter-text .report-ai-paper {background:#fffdf8!important}
+#page5.report-edition .chapter-text .compat-form {background:#f2e7d5;border-color:#aa8a61}
+#page5.report-edition .chapter-text .compat-form label,
+#page5.report-edition .chapter-text .compat-result,
+#page5.report-edition .chapter-text .compat-result p {color:#34291d!important}
+#page5.report-edition .chapter-text .compat-form input,
+#page5.report-edition .chapter-text .compat-form select{background:#fffdf8;color:#2e271f;border-color:#90734c}
+#page5.report-edition .chapter-text .compat-form button{background:#47331e;color:#fff2dd}
+</style>
 </head>
 <body>
 <main>
