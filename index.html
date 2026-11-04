@@ -348,6 +348,20 @@ header{position:relative}
 #page3 .personality-insight,#page5.report-edition .personality-insight{font-size:14px;color:#4d3926;line-height:1.8;margin:17px 0 8px}
 #page3 .personality-disclaimer,#page5.report-edition .personality-disclaimer{font-size:11px;color:#85745f;margin:5px 0 0}
 </style>
+<style>
+#page2 .sales-personality{background:#fffaf2;border:1px solid #d1b994;border-radius:12px;padding:17px 14px;margin:14px 0 18px;color:#382a1b}
+#page2 .sales-personality h3{font-size:18px;color:#46301f;text-align:center;margin:8px 0 17px}
+#page2 .personality-insight{color:#3d3124;font-size:14px;line-height:1.8}
+#page2 .personality-disclaimer{color:#73604a;font-size:11px}
+#page3 .sales-year-rhythm{background:#fffaf2;border:1px solid #cfb68d;border-radius:13px;padding:18px 14px;margin:15px 0 23px;color:#36281c}
+#page3 .sales-year-rhythm h3{color:#442d1d;text-align:center;font-size:19px;margin:6px 0 22px}
+.sales-rhythm-kicker{text-align:center;color:#8d6939;font-size:11px;font-weight:800}
+.sales-month-bars{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));height:112px;gap:4px;align-items:end;border-bottom:1px solid #a58e6a;padding:0 2px 4px}
+.sales-month{height:100%;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:5px}
+.sales-month-column{background:linear-gradient(180deg,#c69b60,#795637);border-radius:5px 5px 0 0;width:100%;min-height:12px}
+.sales-month span{font-size:9px;color:#6a543b}
+#page3 .sales-rhythm-note{font-size:11px;color:#74604a;line-height:1.6;margin:13px 0 0}
+</style>
 </head>
 <body>
 <main>
@@ -375,14 +389,14 @@ header{position:relative}
  <button class="primary" id="begin" type="button">내 성격과 팔자의 속내 무료로 보기 →</button><p id="formError" class="error" role="alert"></p>
 </section>
 <section class="page card" id="page2">
- <div class="eyebrow">02 / 05 · 정옥순 할머니의 첫마디</div><h2 id="personTitle">남들이 모르는 자네의 성격</h2>
- <div id="manseChart"></div><div id="personBody"></div>
+ <div class="eyebrow">02 / 05 · 정옥순 할머니의 첫마디</div><h2 id="personTitle">나는 왜 이런 성격일까?</h2>
+ <div id="manseChart"></div><div id="personPersonality" class="sales-personality"></div><div id="personBody"></div>
 </section>
 <section class="page card" id="page3">
- <div class="sales-kicker">03 / 05 · 자네의 2027 운명 미리보기</div>
+ <div class="sales-kicker">03 / 05 · 2027년 운세 · 돈과 일, 인연의 변화</div>
  <h2 class="sales-title" id="salesTitle">“돈이 열릴 때와 인연이 움직일 때가 궁금하지 않나?”</h2>
- <p class="sales-lead">자네 사주를 바탕으로 다섯 가지 이야기를 먼저 살짝 보여주겠네. 더 깊은 해석은 한 권의 운명서에 담아뒀어.</p>
- <div id="salesPersonality" class="sales-personality"></div>
+ <p class="sales-lead">2페이지에서는 자네의 타고난 성미를 봤지? 이제는 2027년에 어떤 일이 눈에 들어올지 살짝 보여주마.</p>
+ <div id="salesYearRhythm" class="sales-year-rhythm"></div>
  <div id="salesTeasers" class="sales-teasers" aria-live="polite"></div>
  <div class="sales-offer">
   <div class="sales-eyebrow">정옥순 할머니의 2027 운명서 · 전체 열람</div>
@@ -900,29 +914,21 @@ function oksoonRootReading(){
 function person(){
  const root=$("personBody"),who=oksoonCallName(state.name),x=oksoonRootReading(),v=x.v;
  root.replaceChildren();
- root.append(make("div","첫 풀이 · 자네는 왜 이런 성미를 타고났을까?","eyebrow"));
- moment(root,"자네는 왜 이런 일이 마음에 걸릴까?",[
-  "“"+who+", 자네는 "+v.nature+"이 강한 쪽으로 읽히는구먼.”",
-  "“태어난 날과 달의 기운을 함께 봤을 때 나오는 이야기야. 명리에서는 이 관계를 "+x.relation+"이라고 하지.”",
-  "“그래서 "+v.why+" 사람으로 풀이할 수 있네. 남들은 그냥 넘긴 일도 자네 마음에는 다른 이유로 남는 거야.”"
+ renderPersonalityGraph("personPersonality",false);
+ root.append(make("div","02 / 나를 이루는 기질 · 2027년 예언 전","eyebrow"));
+ moment(root,"자네 성격의 중심은 이거야",[
+  "“"+who+", 자네는 "+v.nature+"이 강한 사람으로 읽히네.”",
+  "“태어난 날과 달의 관계를 명리학에서는 "+x.relation+"이라고 해. 그래서 "+v.why+" 성향이 나올 수 있지.”"
  ]);
- moment(root,"밖에선 괜찮은 척해도 마음은 다를 수 있지",[
-  "“태어난 날 아랫글자에서는 "+x.branchText+" 성미도 읽혀. 가까운 사람 앞에서 이런 면이 나올 수 있네.”",
-  "“또 "+x.element+" 기운이 눈에 띄니, "+x.texture+" 쪽으로 마음이 기울 수 있어. 이렇게 사주 여러 글자를 겹쳐 읽는 거지.”"
+ moment(root,"남들은 잘 모르는 속마음",[
+  "“겉에서는 괜찮은 척하는데 속으론 다른 생각을 할 때가 있지. 자네 일지에서는 "+x.branchText+" 모습이 읽혀.”",
+  "“"+x.element+" 기운도 눈에 띄어. 그래서 "+x.texture+" 마음과 겹쳐 보이는구먼.”"
  ]);
- moment(root,"돈 앞에서 드러나는 기질",[
-  "“"+v.money+" 성향으로 풀 수 있네. 어떤 사람은 금액부터 보지만 자네는 다른 부분이 먼저 눈에 들어올 수 있어.”",
-  "“돈복이 무조건 좋다 나쁘다 하는 말은 아니야. 돈을 벌고 쓸 때 무엇부터 신경 쓰는지 보여주는 대목이지.”"
+ moment(root,"어떤 상황에서 단점이 드러날까?",[
+  "“자네에게는 "+v.why+" 경향이 있네. 이 성미가 도움이 될 때도 있고, 괜히 혼자 지치는 이유가 되기도 하지.”",
+  "“남들은 같은 상황에서 금방 넘길 수 있지만 자네가 유독 오래 붙잡는 대목은 어디인지, 사주에서는 그런 차이를 읽는 거야.”"
  ]);
- moment(root,"연애에서 유난히 서운해지는 순간",[
-  "“연애에선 "+v.love+" 기질이 읽히는구먼.”",
-  "“태어난 날 아랫글자에서도 "+x.branchText+" 성미가 겹치지. 같은 싸움이라도 누구는 금방 잊고 누구는 오래 기억하는 까닭을 이렇게 읽는 거야.”"
- ]);
- moment(root,"일할 때는 어떤 모습일까?",[
-  "“일터에서는 "+v.work+" 상황에 마음이 상할 수 있네.”",
-  "“2027년에는 이 기질이 돈, 일, 사람 문제에서 어떻게 나타날지 더 자세히 풀어주마.”"
- ]);
- root.append(make("p","※ 전통 사주 기운에 따른 해석이야. 실제 성격이나 겪은 일을 확인한 결과는 아니란다.","note"));
+ root.append(make("p","※ 사주에 따른 성향 해석이며, 실제 성격이나 경험을 확인한 결과는 아니야.","note"));
 }
 
 /* Preview uses computed saju inputs. The blurred bars are decorative, never secret paid text. */
@@ -964,48 +970,99 @@ function renderPersonalityGraph(id,full){
  else root.append(make("p","오행 구성을 시각화한 풀이 점수 · 심리검사 아님","personality-disclaimer"));
 }
 
+/* Page 3 is about 2027, not another repetition of personality analysis. */
+function renderSalesYearRhythm(){
+ const root=$("salesYearRhythm");if(!root)return;
+ root.replaceChildren();
+ root.append(make("div","2027년 월별 운세 미리보기","sales-rhythm-kicker"));
+ root.append(make("h3","자네 운은 열두 달 내내 똑같지 않네."));
+ const months=make("div",null,"sales-month-bars");
+ const data=[];
+ for(let m=1;m<=12;m++){
+  const monthP=Solar.fromYmdHms(2027,m,15,12,0,0).getLunar().getEightChar();
+  const relation=ten(state.day,monthP.getMonthGan());
+  const category={
+   비견:62,겁재:49,식신:78,상관:66,편재:84,정재:82,편관:54,정관:74,편인:58,정인:72
+  }[relation]||60;
+  const branch=monthP.getMonthZhi();
+  const shift=clashes[state.p.getDayZhi()]===branch?-15:0;
+  data.push({m,score:Math.max(24,Math.min(90,category+shift)),relation});
+ }
+ for(const entry of data){
+  const item=make("div",null,"sales-month");
+  const bar=make("div",null,"sales-month-column");
+  bar.style.height=entry.score+"%";
+  item.append(bar);
+  item.append(make("span",entry.m+"월"));
+  months.append(item);
+ }
+ root.append(months);
+ root.append(make("p","월별 기운의 강약을 상징적으로 표시한 그래프야. 수입이나 실제 사건을 예측한 확률은 아니란다.","sales-rhythm-note"));
+}
 function renderSalesTeasers(){
  if(!state)return;
  const target=$("salesTeasers");target.replaceChildren();
- renderPersonalityGraph("salesPersonality",false);
+ renderSalesYearRhythm();
  const name=oksoonCallName(state.name);
- const profile=directProfiles[state.day];
  const year=ten(state.day,"丁"),earth=ten(state.day,"己");
  const y=themes[year],e=themes[earth];
- const dominant=Object.entries(countElements(state.p)).sort((a,b)=>b[1]-a[1])[0][0];
- const starter={
-  나무:"생각한 일을 끝까지 키우고 싶은 마음이 강하구먼.",
-  불:"마음이 움직일 때 행동도 빨라지는 기운이 있네.",
-  흙:"익숙한 사람과 자리를 오래 지키려는 면이 보이는구먼.",
-  쇠:"결정할 때 나름의 분명한 기준을 세우는 기운이 있네.",
-  물:"선택하기 전에 여러 가능성을 헤아리는 면이 읽히네."
- }[dominant];
- $("salesTitle").textContent="“"+name+", 2027년 돈 들어올 기회를 놓치고 싶진 않겠지?”";
- const specifics=oksoonConcrete();
- const origin=oksoonRootReading();
+ const moneyLead={
+  비견:"돈을 벌 기회가 생겨도 동업이나 수익 배분에서 내 몫을 먼저 따져볼 해로 읽히네.",
+  겁재:"수입을 늘리고 싶다는 마음이 커질수록 주변 사람의 돈 이야기에 조급해지기 쉬운 해일 수 있네.",
+  식신:"가만히 기다리는 돈보다 직접 만든 결과가 수입으로 이어지는 길을 눈여겨볼 만하구먼.",
+  상관:"아이디어나 제안을 돈으로 바꾸려는 흐름이 있지만 말로 한 약속은 비용까지 확인해야겠네.",
+  편재:"새 수입원을 찾고 싶은 마음이 커지는 해로 읽히네. 문제는 들어올 돈만큼 먼저 나갈 돈이야.",
+  정재:"한 번에 크게 벌기보다 정해진 수입과 지출에서 남는 돈이 눈에 띄는 흐름이네.",
+  편관:"돈을 벌 기회와 동시에 부담도 커질 수 있어. 누군가 대신 책임져 달라는 부탁을 조심해야겠네.",
+  정관:"안정적으로 돈을 벌 수 있는 조건을 따지는 흐름이 강하겠네. 계약과 보수 기준이 중요해.",
+  편인:"새로운 걸 배우거나 준비하는 데 돈이 들어갈 수 있네. 수입으로 이어질지 아직 따져봐야 해.",
+  정인:"수입을 급하게 늘리기보다 자격과 실력을 쌓는 일에 마음이 갈 수 있네."
+ }[year];
+ const workLead={
+  비견:"혼자 결정할 수 있는 일과 남과 맞춰야 하는 일이 부딪힐 수 있네.",
+  겁재:"같은 자리를 두고 경쟁하거나 성과를 비교할 일이 마음에 걸릴 수 있네.",
+  식신:"준비만 하던 걸 실제로 보여주는 일이 중요해지는 해로 읽히네.",
+  상관:"해오던 방식이 답답해져 새 방법을 제안하고 싶어질 수 있네.",
+  편재:"원래 하던 일 말고 다른 곳에서 제안이 들어오면 마음이 움직일 수 있네.",
+  정재:"꾸준히 맡아온 일을 안정된 수입으로 연결하고 싶은 해가 될 수 있겠네.",
+  편관:"일의 무게가 커지면서 시험받는 느낌을 받을 수 있네.",
+  정관:"평가나 계약, 책임 있는 자리가 유난히 중요해지는 해로 읽히네.",
+  편인:"새로운 일을 시작하기 전에 정보를 모으고 준비하려는 마음이 커질 수 있네.",
+  정인:"배워온 걸 어디서 써야 할지, 자격과 실력을 어떻게 보여줄지 고민할 수 있네."
+ }[year];
+ const loveLead={
+  비견:"연애 중이라면 서로의 시간과 선택을 두고 부딪힐 수 있네.",
+  겁재:"연인이 있든 없든 비교하거나 경쟁하는 마음이 관계에 끼어들기 쉬운 해로 읽히네.",
+  식신:"말보다 함께 보내는 시간과 작은 행동이 관계를 바꿀 수 있네.",
+  상관:"평소 참았던 말을 꺼내고 싶은 마음이 커질 수 있어.",
+  편재:"새로운 만남에 눈길이 가거나 기존 관계에서 다른 설렘을 찾고 싶어질 수 있네.",
+  정재:"관계를 오래 이어갈 현실적인 약속이 더 중요해질 수 있네.",
+  편관:"관계가 편하기보다 무겁게 느껴지는 순간이 생길 수 있네.",
+  정관:"서로에게 어떤 책임을 질지 생각하게 되는 흐름이네.",
+  편인:"작은 말에도 여러 뜻을 붙이기 쉬운 해로 읽히네.",
+  정인:"관계에서 안심과 확인을 바라는 마음이 더 커질 수 있네."
+ }[earth];
+ $("salesTitle").textContent="“"+name+", 2027년 자네 돈과 일, 인연의 흐름을 엿보세.”";
  const cards=[
-  {icon:"✦",title:"2027년 종합운",head:"타고난 성미가 올해는 어떻게 드러날까?",lead:"태어난 날과 달을 함께 보면 "+origin.v.nature+"이 강한 쪽으로 읽혀.",sub:"2027년엔 "+y.title+"의 주제가 겹치지. 이 성미가 어떤 선택 앞에서 더 강해질지 풀어보겠네."},
-  {icon:"◈",title:"돈·재물운",head:"돈을 벌어도 남는 돈이 다른 이유는?",lead:""+origin.v.money+" 기질이 있네. 자네는 돈 앞에서 남과 다른 부분을 먼저 볼 수 있겠구먼.",sub:"2027년 돈에 관한 풀이는 "+y.title+"의 기운과도 연결돼. 수입과 지출을 어떤 눈으로 보게 될지 이어서 읽어보세."},
-  {icon:"▣",title:"직업·사업운",head:"왜 일할 때 유독 이런 일이 싫을까?",lead:"태어난 달의 기운을 보면 "+origin.v.work+" 상황이 특히 마음에 걸릴 수 있어.",sub:"그래서 같은 일을 해도 누군가는 참는 걸 자네는 오래 기억할 수 있지. 2027년 직업운에서 그 까닭을 따로 풀어보마."},
-  {icon:"♡",title:"연애·인간관계",head:"좋아할수록 왜 더 서운해질까?",lead:"자네는 "+origin.v.love+" 모습으로 읽혀. 가까울수록 이 기질이 드러날 수 있겠네.",sub:"태어난 날 아랫글자에는 "+origin.branchText+" 성미도 있어. 다툼이 길어지는 이유를 더 짚어보지."},
-  {icon:"☾",title:"2027년 월별 운세",head:"열두 달 중 마음이 바뀌는 시기는?",lead:"자네에게 두드러진 "+origin.element+" 기운은 "+origin.texture+" 성질과 연결해서 읽어.",sub:"월마다 달라지는 기운과 비교해 돈·일·인연에서 어떤 때 결정이 쉬워지고 어려워지는지 살펴보겠네."}
+  {icon:"✦",title:"2027년 종합운",lead:"2027년 정미년의 기운을 자네 사주와 비교하면 ‘"+y.title+"’이 먼저 보여.",sub:"그런데 해의 다른 기운에서는 ‘"+e.title+"’도 읽히네. 이 둘이 맞물릴 때의 해석은 아직 가려져 있지."},
+  {icon:"◈",title:"돈·재물운",lead:moneyLead,sub:"돈이 움직이는 달과 지출을 더 조심할 달은 열두 달을 나눠서 보게. 그 뒷이야기는 아직 가려두었네."},
+  {icon:"▣",title:"직업·사업운",lead:workLead,sub:"언제 움직일지, 어떤 일을 고를지. 2027년의 월별 직업운에서는 그 차이를 더 자세히 볼 수 있지."},
+  {icon:"♡",title:"연애·인간관계",lead:loveLead,sub:"새 인연인지 오래된 인연인지에 따라 읽는 장면도 달라져. 그 이야기는 이어지는 장에 남겨두었네."},
+  {icon:"☾",title:"2027년 월별 운세",lead:"위 그래프처럼 2027년의 월별 기운은 다르게 읽혀. 어느 달이 재물에, 어느 달이 일과 관계에 더 힘을 싣는지 각각 풀어두었네.",sub:"1월부터 12월까지 돈·일·인연의 월별 이야기는 전체 운명서에서 이어진단다."}
  ];
  for(const item of cards){
   const card=make("article",null,"sales-teaser");
-  const header=make("div",null,"sales-teaser-head");
-  header.append(make("h3",item.icon+" "+item.title));
-  header.append(make("span","미리보기"));
-  card.append(header);
+  const head=make("div",null,"sales-teaser-head");
+  head.append(make("h3",item.icon+" "+item.title));
+  head.append(make("span","2027년 운세"));
+  card.append(head);
   const content=make("div",null,"sales-teaser-content");
-  content.append(make("p",item.lead));
-  content.append(make("p",item.sub));
-  card.append(content);
-  const blur=make("div",null,"sales-blur-zone");
-  blur.setAttribute("aria-hidden","true");
+  content.append(make("p",item.lead));content.append(make("p",item.sub));card.append(content);
+  const blur=make("div",null,"sales-blur-zone");blur.setAttribute("aria-hidden","true");
   const pattern=make("div",null,"sales-blur-pattern");
   [96,83,90,70,98].forEach(width=>{const line=make("i");line.style.width=width+"%";pattern.append(line);});
   blur.append(pattern);card.append(blur);
-  card.append(make("div","🔒 이 이야기의 뒷부분은 전체 운명서에서","sales-locked"));
+  card.append(make("div","🔒 2027년 상세 풀이 · 전체 운명서에서","sales-locked"));
   target.append(card);
  }
 }
