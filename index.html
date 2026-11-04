@@ -1711,7 +1711,7 @@ function oksoonAIChapter(root,index){
    const p=state.p;
    const body={adminKey,topic:key,chart:{year:p.getYear(),month:p.getMonth(),day:p.getDay(),time:state.unknown?null:p.getTime()}};
    const res=await fetch(chatApi()+"/api/report",{method:"POST",credentials:"omit",
-    headers:{"Content-Type":"application/json"},body:JSON.stringify(body),signal:AbortSignal.timeout(33000)});
+    headers:{"Content-Type":"application/json"},body:JSON.stringify(body),signal:AbortSignal.timeout(55000)});
    const data=await res.json().catch(()=>({}));
    if(!res.ok||!data.report)throw Error(data.error||"AI 심층 풀이를 가져오지 못했어.");
    oksoonAICache.set(key,data.report);
