@@ -4,7 +4,7 @@
  * This template is NOT a public-sale-ready entitlement system.
  * Anonymous client tokens do not enforce one free turn per person.
  */
-const SITE_ORIGIN = "https://nohseongeun.github.io";
+const SITE_ORIGINS = new Set(["https://nohseongeun.github.io", "https://unmyeongseo.github.io"]);
 const MAX_QUESTION = 500;
 const STALE_MS = 30 * 24 * 60 * 60 * 1000;
 const json = (value,status=200,headers={}) =>
@@ -32,7 +32,7 @@ async function isAdmin(value,env){
  return diff===0;
 }
 function cors(origin){
- return {"access-control-allow-origin":origin===SITE_ORIGIN?origin:"null",
+ return {"access-control-allow-origin":SITE_ORIGINS.has(origin)?origin:"null",
  "access-control-allow-methods":"POST,OPTIONS",
  "access-control-allow-headers":"content-type",
  "access-control-max-age":"600","vary":"Origin"};
@@ -128,7 +128,7 @@ export default {
   const origin=request.headers.get("origin")||"";
   const headers=cors(origin);
   if(request.method==="OPTIONS")return new Response(null,{status:204,headers});
-  if(origin!==SITE_ORIGIN)return json({error:"허용되지 않은 사이트 요청이야."},403,headers);
+  if(!SITE_ORIGINS.has(origin))return json({error:"허용되지 않은 사이트 요청이야."},403,headers);
   const pathname=new URL(request.url).pathname;
   if(request.method!=="POST"||!["/api/session","/api/chat","/api/admin/check","/api/report"].includes(pathname))return json({error:"찾을 수 없는 요청이야."},404,headers);
   if(!env.DB)return json({error:"상담 데이터베이스가 연결되지 않았어."},503,headers);
