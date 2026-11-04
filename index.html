@@ -343,22 +343,45 @@ const branchTemper={
  "戌":"책임과 의리를 중요하게 봐. 서운한 일이 오래 남기 쉬워.",
  "亥":"혼자 생각하는 시간이 필요해. 새로운 가능성에 마음이 움직여."
 };
-function detailedTemper(){
- const p=state.p, m=ten(state.day,p.getMonthGan()), t=tenTemper[m];
- const e=countElements(p), order=Object.entries(e).sort((x,y)=>y[1]-x[1]);
- const max=order[0][1], leaders=order.filter(x=>x[1]===max).map(x=>x[0]);
- const lowest=order.filter(x=>x[1]===0).map(x=>x[0]);
+/* EVERYDAY-READING-V33: plain language first; symbols are suggestions, not predictions. */
+const everydayElements={
+ "나무":{nature:"자라는 나무처럼 새 일을 배우고 넓히려는 마음",strength:"새로운 가능성을 보면 그냥 지나치기 어려울 수 있지",risk:"하고 싶은 일을 너무 많이 벌여서 정작 끝맺음이 어려울 수 있어",habit:"한 번에 하나씩 뿌리내리듯 마무리할 것",color:"초록색이나 청록색",avoid:"일정이 꽉 찬 날에 새 약속부터 더 잡는 일"},
+ "불":{nature:"불꽃처럼 마음과 표현이 빠르게 움직이는 성향",strength:"사람들 사이에서 분위기를 살리고 먼저 나서는 힘이 있을 수 있지",risk:"마음이 뜨거워진 순간 말을 먼저 꺼냈다가 후회할 수 있어",habit:"중요한 말은 감정이 가라앉은 뒤 다시 읽어볼 것",color:"붉은색이나 따뜻한 주황색",avoid:"화가 난 상태에서 바로 답장을 보내는 일"},
+ "흙":{nature:"땅처럼 버티고 지키려는 성향",strength:"한 번 맡은 일과 사람을 쉽게 포기하지 않는 책임감이 있을 수 있지",risk:"내 몫이 아닌 책임까지 짊어지고도 힘들다는 말을 못 할 수 있어",habit:"남의 부탁에도 내가 감당할 수 있는 선을 정할 것",color:"베이지나 갈색",avoid:"서운한 마음을 쌓아두고 혼자 오래 견디는 일"},
+ "쇠":{nature:"금속처럼 기준과 결정을 또렷하게 세우는 성향",strength:"복잡한 상황에서도 잘못된 부분을 가려내고 정리할 수 있지",risk:"상대의 사정까지 옳고 그름으로만 재단하면 관계가 차가워질 수 있어",habit:"충고하기 전에 상대가 무엇을 느꼈는지 들어볼 것",color:"흰색이나 은색",avoid:"작은 실수 하나로 사람 전체를 판단하는 일"},
+ "물":{nature:"물처럼 상황과 사람의 마음을 살피는 성향",strength:"눈에 띄지 않는 분위기와 변화를 남보다 먼저 알아차릴 수 있지",risk:"남의 말 한마디를 오래 곱씹다가 아직 일어나지도 않은 일을 걱정할 수 있어",habit:"짐작한 사실과 직접 확인한 사실을 따로 생각할 것",color:"남색이나 짙은 파란색",avoid:"확인하지 않은 추측만으로 마음을 닫는 일"}
+};
+function everydayElementReading(){
+ const p=state.p,counts=countElements(p);
+ const order=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+ const top=order[0],second=order[1],lead=everydayElements[top[0]];
+ const noTime=state.unknown;
+ const day=directProfiles[state.day];
  return {
-  main:"월주(태어난 달을 나타내는 두 글자) "+koreanPillar(p.getMonth())+"의 월간(그중 위 글자) "+ganKo[p.getMonthGan()]+"은 일간(태어난 날 위 글자, 바로 너를 뜻하는 기운) "+ganKo[state.day]+"에게 "+tenEasy(m)+"이야. 이 조합의 특징은 이거야. "+t[0]+". "+t[1]+". 약점은 "+t[2]+".",
-  day:"일주(태어난 날에 붙은 두 글자) "+koreanPillar(p.getDay())+"의 일지(그중 아래 글자) "+zhiKo[p.getDayZhi()]+"는 가까운 관계와 일상적인 반응을 읽는 자리야. "+branchTemper[p.getDayZhi()],
-  elements:"오행(나무·불·흙·쇠·물 다섯 기운)을 보자. 사주 겉글자 "+(p.getTime()?"8":"6")+"개를 보면 "+leaders.join("·")+" 기운이 "+max+"개로 가장 두드러져. "+(lowest.length?lowest.join("·")+"은 표면에 안 보여. 그렇다고 아예 없는 기운이나 부족한 성격이라고 단정하면 안 돼.":"다른 기운도 함께 섞여 있어.")+" 이건 천간과 지지의 대표 오행을 단순 집계한 결과야.",
-  limitation:"성격은 이 간지 조합을 바탕으로 한 명리학적 해석이야. 실제 성격검사 결과나 확인된 개인 이력은 아니야."
+  opening:"자네 사주에서 먼저 눈에 띄는 건 "+top[0]+"의 기운이여. 옛사람들은 이걸 "+lead.nature+"에 빗대어 읽었지. 그렇다고 자네 성격을 이 한 가지로 딱 잘라 말하는 건 아니여.",
+  strength:"이런 기운이 두드러지면 "+lead.strength+". "+(day?day.strength:"")+" 자네가 실제로 어떤 상황에서 그렇게 행동하는지는 살아온 경험과 함께 봐야 하는 법이지.",
+  caution:"그런데 좋은 성향도 지나치면 힘들어지는 법이여. "+lead.risk+". 그래서 평소에는 "+lead.habit+". "+(day?day.weak:""),
+  style:"옷차림도 어렵게 생각하지 말게. "+lead.color+"은 전통 오행에서 "+top[0]+"과 연결하는 색이여. 즐겨 입는 옷에 조금 섞어보는 정도면 충분하지. 그 색이 운명을 바꾸거나 반드시 좋은 결과를 준다는 뜻은 아니여.",
+  avoid:"평소 조심할 건 "+lead.avoid+"이여. "+(second&&second[1]===top[1]?"또 "+second[0]+"의 기운도 비슷하게 드러나니 한 가지 성향만으로 자신을 판단하지 말게.":"")+" 무슨 일이 꼭 벌어진다는 예언이 아니라, 스스로를 살펴보라는 이야기여.",
+  note:"※ 이 풀이는 태어난 해·달·날"+(noTime?"(출생시각 제외)":"·시각")+"의 겉글자 오행을 참고한 전통적 상징 해석입니다. 실제 성격·건강·미래를 확정하지 않으며, 옷 색상의 효과도 검증된 사실은 아닙니다."
+ };
+}
+function detailedTemper(){
+ const p=state.p,m=ten(state.day,p.getMonthGan()),t=tenTemper[m]||[];
+ const b=branchTemper[p.getDayZhi()]||"";
+ return {
+  main:"자네는 "+(t[0]||"자기만의 방식이 뚜렷한 편")+"라는 성향으로 읽히는구먼. "+(t[1]||"")+" 하지만 "+(t[2]||"그 장점이 때로는 부담이 될 수 있지")+". 이건 옛 사주에서 태어난 달과 날의 관계를 보고 하는 이야기여.",
+  day:"가까운 사람 앞에서는 또 다른 모습이 보일 수 있지. "+b+" 그렇지만 실제 모습은 어떤 일을 겪어왔는지에 따라 다를 수 있어.",
+  limitation:"전통 명리학의 성향 풀이이며, 자네의 실제 삶을 확인한 진단은 아니여."
  };
 }
 function renderTemper(root){
- const t=detailedTemper();
- moment(root,"태어난 달까지 합쳐 본 성격",["“"+t.main+"”","“"+t.day+"”"]);
- moment(root,"오행 구성은 이렇게 읽어",["“"+t.elements+"”"]);
+ const t=detailedTemper(),e=everydayElementReading();
+ moment(root,"자네는 어떤 사람이냐면",["“"+t.main+"”","“"+t.day+"”"]);
+ moment(root,"타고난 기운을 생활 속에서 읽으면",["“"+e.opening+"”","“"+e.strength+"”"]);
+ moment(root,"자네가 평소 조심할 일",["“"+e.caution+"”","“"+e.avoid+"”"]);
+ moment(root,"옷 색깔과 작은 생활 습관",["“"+e.style+"”"]);
+ addP(root,e.note);
 }
 function renderDaewoon(root){
  const d=state.daewoon||[];
@@ -1663,7 +1686,10 @@ function oksoonReportBirthKey(){
 }
 function oksoonRenderAIText(root,report){
  const section=make("section",null,"ai-premium-report");
- const lines=String(report).replace(/\r\n?/g,"\n").split("\n");
+ const lines=String(report).normalize("NFC").replace(/\r\n?/g,"\n")
+  .replace(/설명하기이/g,"설명하기").replace(/그라이까/g,"그러니까")
+  .replace(/됬/g,"됐").replace(/되엇/g,"되었")
+  .replace(/([가-힣])\\1{4,}/g,(_,c)=>c.repeat(2)).split("\n");
  let paragraph=[];
  const flush=()=>{
   const words=paragraph.join(" ").trim();
@@ -1692,7 +1718,7 @@ function oksoonAIChapter(root,index){
  }
  const heading=make("div","정옥순 할매의 AI 심층 운명서 · 관리자 검수","eyebrow");
  root.append(heading);
- const explanation=make("p","미리 정해진 문장을 이어 붙이지 않고 만세력의 간지로 새롭게 쓰는 장문 풀이야. 개인정보나 현재 상황을 추가로 묻지 않아.","note");
+ const explanation=make("p","복잡한 사주 용어보다 성격, 일과 돈, 사랑, 평소 조심할 일을 생활 속 말로 풀어내는 긴 풀이야. AI 표현은 참고용이며 실제 삶을 단정하지 않아.","note");
  root.append(explanation);
  const result=make("div",null,"ai-report-output");root.append(result);
  const status=make("p","","note");status.setAttribute("role","status");
@@ -1709,7 +1735,8 @@ function oksoonAIChapter(root,index){
   go.disabled=true;status.textContent="만세력을 바탕으로 할매가 긴 이야기를 풀고 있어… AI 사용료가 발생해.";
   try{
    const p=state.p;
-   const body={adminKey,topic:key,chart:{year:p.getYear(),month:p.getMonth(),day:p.getDay(),time:state.unknown?null:p.getTime()}};
+   const body={adminKey,topic:key,chart:{year:p.getYear(),month:p.getMonth(),day:p.getDay(),time:state.unknown?null:p.getTime()},
+    styleGuide:"어려운 만세력·십성 용어를 나열하지 말고 쉬운 생활 언어로 설명. 성격의 장점과 그림자, 일·돈·연애의 실제 장면, 평소 조심할 말과 행동, 전통 오행의 색상·옷차림 상징을 구체적으로 연결. 자네에게 말하는 자연스러운 할머니 어투를 쓰되 억지 사투리와 반복 문장 금지. 한글 맞춤법·조사·띄어쓰기 교정. 현재 직업·연애 상태는 모르므로 지어내지 말 것. 색상이나 기운의 효과를 과학적 사실 또는 확정된 미래로 표현하지 말 것."};
    const res=await fetch(chatApi()+"/api/report",{method:"POST",credentials:"omit",
     headers:{"Content-Type":"application/json"},body:JSON.stringify(body),signal:AbortSignal.timeout(55000)});
    const data=await res.json().catch(()=>({}));
