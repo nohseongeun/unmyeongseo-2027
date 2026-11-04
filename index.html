@@ -363,7 +363,7 @@ function everydayElementReading(){
   caution:"그런데 좋은 성향도 지나치면 힘들어지는 법이여. "+lead.risk+". 그래서 평소에는 "+lead.habit+". "+(day?day.weak:""),
   style:"옷차림도 어렵게 생각하지 말게. "+lead.color+"은 전통 오행에서 "+top[0]+"과 연결하는 색이여. 즐겨 입는 옷에 조금 섞어보는 정도면 충분하지. 그 색이 운명을 바꾸거나 반드시 좋은 결과를 준다는 뜻은 아니여.",
   avoid:"평소에는 "+lead.avoid+"을 조심하면 좋겠구먼. "+(second&&second[1]===top[1]?"또 "+second[0]+"의 기운도 비슷하게 드러나니 한 가지 성향만으로 자신을 판단하지 말게.":"")+" 무슨 일이 꼭 벌어진다는 예언이 아니라, 스스로를 살펴보라는 이야기여.",
-  note:"※ 이 풀이는 태어난 해·달·날"+(noTime?"(출생시각 제외)":"·시각")+"의 겉글자 오행을 참고한 전통적 상징 해석입니다. 실제 성격·건강·미래를 확정하지 않으며, 옷 색상의 효과도 검증된 사실은 아닙니다."
+  note:""
  };
 }
 function detailedTemper(){
@@ -381,7 +381,7 @@ function renderTemper(root){
  moment(root,"타고난 기운을 생활 속에서 읽으면",["“"+e.opening+"”","“"+e.strength+"”"]);
  moment(root,"자네가 평소 조심할 일",["“"+e.caution+"”","“"+e.avoid+"”"]);
  moment(root,"옷 색깔과 작은 생활 습관",["“"+e.style+"”"]);
- addP(root,e.note);
+
 }
 function renderDaewoon(root){
  const d=state.daewoon||[];
