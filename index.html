@@ -2088,6 +2088,7 @@ function queueAutoReport(index){
 }
 function activateAutoReports(){
  if(!state||!devPreview||step!==5||!adminKey)return;
+ queueAutoReport(0);queueAutoReport(1);
  if(autoReportObserver){autoReportObserver.disconnect();autoReportObserver=null;}
  const targets=[...$("chapterBody").querySelectorAll(".report-chapter-section")].filter(x=>x.id!=="fortune-chapter-9");
  if("IntersectionObserver" in window){
@@ -2138,7 +2139,7 @@ function renderEditorialReport(){
   chart.append(row);
  }
  element.append(chart);
- element.append(make("p","태어난 해·달·날"+(state.unknown?"":"·시각")+"의 겉글자를 바탕으로 다섯 기운을 간단히 표시한 그림이야. 기운의 많고 적음만으로 모든 사람의 삶을 결정하지는 않지."));
+ element.append(make("p","태어난 해·달·날"+(state.unknown?"":"·시각")+"의 글자를 나무·불·흙·쇠·물의 다섯 기운으로 나누어 살펴본 그림이야."));
 }
 
 function chapter(index){
