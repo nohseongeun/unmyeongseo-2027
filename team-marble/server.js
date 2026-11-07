@@ -47,7 +47,7 @@ if(id==='shield')t.shield=(t.shield||0)+1;
 if(id==='land')t.freeBuy=(t.freeBuy||0)+1;
 if(id==='dice')t.extraRoll=(t.extraRoll||0)+1;
 if(id==='bonus'){const count=Object.values(s.properties).filter(x=>x.owner===t.id).length;const value=count*100000;t.cash+=value;effect='땅 '+count+'개 × 10만 = '+money(value)+' 획득';}
-if(id==='build'){const p=Object.values(s.properties).find(x=>x.owner===t.id&&x.level<2);if(p){p.level++;effect='내 건물 무료 업그레이드 완료';}else{t.cash+=300000;effect='건설할 땅 없음 · 현금 30만 획득';}}
+if(id==='build'){const p=Object.values(s.properties).find(x=>x.owner===t.id&&x.level<3);if(p){p.level++;effect='내 건물 무료 업그레이드 완료';}else{t.cash+=300000;effect='건설할 땅 없음 · 현금 30만 획득';}}
 if(id==='travel'){const index=places.findIndex((name,i)=>i>0&&tile(i).price&&!s.properties[i]);if(index>=0){const old=t.pos;t.pos=index;const l=tile(index);s.properties[index]={owner:t.id,price:l.price,level:0};s.lastMove={id:Date.now()+'-golden-'+t.id,team:t.id,from:old,to:index,steps:0,at:Date.now(),tile:places[index]};effect=places[index]+'로 이동해 무료 취득';}else{t.cash+=500000;effect='빈 땅 없음 · 현금 50만 획득';}}
 s.goldenDisplay={id:Date.now()+'-'+t.id,team:t.id,card:{...card},effect,at:Date.now()};s.message='🔑 황금열쇠! '+t.name+' — '+card.title+'! '+effect;s.log.unshift(s.message);s.log=s.log.slice(0,12);return effect;}
 function openGoldenChoice(t){const first=drawCard();const second=drawCard(first.id);s.goldenChoice={team:t.id,cards:[first,second],id:Date.now()+'-'+t.id};s.message='🔑 '+t.name+' 황금열쇠 2장 중 1장을 골라주세요!';}
@@ -81,7 +81,7 @@ if(kind==='freeBuy'){winner.freeBuy++;detail='무료 땅 구매권';}
 if(kind==='extraRoll'){winner.extraRoll++;detail='추가 주사위';}
 if(kind==='shield'){winner.shield++;detail='통행료 1회 면제';}
 if(kind==='steal'){const enemy=Object.values(s.properties).find(x=>x.owner!==winner.id);if(enemy){enemy.owner=winner.id;detail='상대 팀 땅 1개 강탈';}else{winner.cash+=500000;detail='상대 땅 없음 · 현금 50만';}}
-if(kind==='hotel'){const own=Object.values(s.properties).find(x=>x.owner===winner.id&&x.level<2);if(own){own.level=2;detail='보유 도시 무료 호텔 건설';}else{winner.cash+=300000;detail='건설할 땅 없음 · 현금 30만';}}
+if(kind==='hotel'){const own=Object.values(s.properties).find(x=>x.owner===winner.id&&x.level<3);if(own){own.level=3;detail='보유 도시 무료 호텔 건설';}else{winner.cash+=300000;detail='건설할 땅 없음 · 현금 30만';}}
 if(kind==='travel'){const idx=places.findIndex((name,i)=>i>0&&tile(i).price&&!s.properties[i]);if(idx>=0){const land=tile(idx);s.properties[idx]={owner:winner.id,price:land.price,level:0};detail=places[idx]+' 무료 취득';}else{winner.cash+=500000;detail='빈 땅 없음 · 현금 50만';}}
 if(kind==='double'){winner.doubleToll=(winner.doubleToll||0)+1;detail='다음 통행료 수입 2배';}
 if(kind==='estate'){const count=Object.values(s.properties).filter(x=>x.owner===winner.id).length;winner.cash+=count*100000;detail='보유 땅 '+count+'개 × 10만 원';}
