@@ -67,7 +67,7 @@ s.phase='mission';}
 function next(){const t=s.teams[s.turn];if(t.extraRoll>0){t.extraRoll--;s.phase='roll';s.mission=null;s.message=t.name+' 추가 주사위 차례!';return;}s.turn=(s.turn+1)%s.teams.length;if(!s.turn)s.round++;s.phase='roll';s.mission=null;s.message=s.teams[s.turn].name+' 차례!';}
 function action(b){tick();arcadeFinish();const team=s.teams[s.turn];if(s.finished&&b.type!=='reset')throw Error('게임이 종료되었습니다');switch(b.type){
 case 'setPlayMode':{if(!['mc','arcade'].includes(b.mode))throw Error('진행 방식 오류');if(s.playMode!==b.mode&&s.arcade?.status==='running')throw Error('진행 중인 QR 게임을 먼저 종료하세요');s.playMode=b.mode;s.modeChangedAt=Date.now();s.message=b.mode==='arcade'?'🎮 텐텐 스타일 QR 오락실 모드':'🎤 MC 직접 레크리에이션 모드';break;}
-case 'arcadeStart':{if(s.playMode!=='arcade')throw Error('오락실 모드를 선택하세요');if(s.arcade?.status==='running')throw Error('진행 중인 게임이 있습니다. 종료 후 다음 게임을 시작하세요');const g=arcadeCatalog.find(x=>x.id===Number(b.gameId));if(!g)throw Error('게임 선택 오류');s.arcade={status:'running',gameId:g.id,startedAt:Date.now()+4000,endsAt:Date.now()+4000+g.duration*1000,results:{},winner:null,awarded:false};s.message='🎮 '+g.title+' 시작! 팀 대표들이 QR로 참가합니다.';break;}
+case 'arcadeStart':{if(s.playMode!=='arcade')throw Error('오락실 모드를 선택하세요');if(s.arcade?.status==='running')throw Error('진행 중인 게임이 있습니다. 종료 후 다음 게임을 시작하세요');const g=arcadeCatalog.find(x=>x.id===Number(b.gameId));if(!g)throw Error('게임 선택 오류');s.arcade={status:'running',gameId:g.id,startedAt:Date.now()+4000,endsAt:Date.now()+4000+Math.min(60,Math.max(10,Math.round(Number(b.duration)||g.duration)))*1000,results:{},winner:null,awarded:false};s.message='🎮 '+g.title+' 시작! 팀 대표들이 QR로 참가합니다.';break;}
 case 'arcadeProgress':
 case 'arcadeSubmit':{
  const a=s.arcade;
