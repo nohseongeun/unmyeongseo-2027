@@ -84,8 +84,9 @@ case 'arcadeSubmit':{
  if(score>cap)throw Error('허용된 점수 범위를 벗어났습니다');
  const previous=a.results[id];
  if(previous?.submitted)throw Error('이미 기록이 확정됐습니다');
- const highest=Math.max(previous?.score||0,score);
- a.results[id]={score:highest,when:score> (previous?.score||0)?now:(previous?.when||now),submitted:b.type==='arcadeSubmit'};
+ const seq=Math.max(0,Math.floor(Number(b.seq)||0));
+ if(previous&&seq<=previous.seq)break;
+ a.results[id]={score,when:now,seq,submitted:b.type==='arcadeSubmit'};
  break;
 }
 case 'arcadeFinish':{if(s.arcade?.status!=='running')throw Error('게임 진행 중이 아닙니다');s.arcade.endsAt=Date.now()-1500;arcadeFinish();break;}
