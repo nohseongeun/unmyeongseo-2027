@@ -133,6 +133,7 @@ function publicState(){tick();arcadeFinish();return {...s,arcade:arcadePublic(),
 const server=http.createServer(async(req,res)=>{const url=new URL(req.url,'http://localhost');function send(status,obj){res.writeHead(status,{'content-type':'application/json; charset=utf-8','cache-control':'no-store','access-control-allow-origin':'*'});res.end(JSON.stringify(obj));}
 if(req.method==='GET'&&url.pathname==='/api/state')return send(200,publicState());
 if(req.method==='POST'&&url.pathname==='/api/action'){try{let raw='';for await(const chunk of req){raw+=chunk;if(raw.length>10000)throw Error('요청 초과');}const b=JSON.parse(raw);const result=action(b);return send(200,{ok:true,...result});}catch(e){return send(400,{error:e.message});}}
+if(req.method==='GET'&&(url.pathname==='/arcade-v2.js'||url.pathname==='/arcade-v2.css')){const asset=url.pathname.slice(1);res.writeHead(200,{'content-type':asset.endsWith('.js')?'application/javascript; charset=utf-8':'text/css; charset=utf-8','cache-control':'public, max-age=60'});return fs.createReadStream(path.join(ROOT,asset)).pipe(res);}
 if(req.method==='GET'&&(url.pathname==='/'||url.pathname==='/index.html')){res.writeHead(200,{'content-type':'text/html; charset=utf-8','cache-control':'no-store'});return fs.createReadStream(path.join(ROOT,'index.html')).pipe(res);}
 res.writeHead(404);res.end('Not found');});
 server.listen(PORT,'0.0.0.0',()=>console.log('Team Marble online on '+PORT));
