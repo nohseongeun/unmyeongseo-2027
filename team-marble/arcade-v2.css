@@ -62,3 +62,24 @@
 @keyframes arcadePulse{to{opacity:.55;transform:scale(.96)}}
 @keyframes arcadeBurst{0%{opacity:0;transform:translate(-50%,15px) scale(.5)}30%{opacity:1;transform:translate(-50%,-10px) scale(1.14)}100%{opacity:0;transform:translate(-50%,-110px) scale(1.05)}}
 @media(max-width:400px){.arcadeV2{padding:14px}.arcadeGrid{gap:6px}.arcadeGrid button{min-height:56px}.arcadeAnswers button{min-height:68px}}
+
+/* MC arcade selection and event hall spectator scoreboard */
+#arcadeList{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}
+#arcadeList button{display:flex;flex-direction:column;align-items:flex-start;gap:5px;min-height:106px;padding:13px 12px;border:1px solid #6d85b8;border-radius:15px;text-align:left;background:linear-gradient(155deg,#253e6b,#132648);box-shadow:inset 0 1px #ffffff29,0 6px 15px #0005}
+#arcadeList button.active{border:2px solid #f6cf70;background:linear-gradient(145deg,#3b5e92,#1b3768);box-shadow:inset 0 1px #ffffff52,0 0 16px #dda85935}
+#arcadeList button b{font-size:14px;color:white;line-height:1.25}
+#arcadeList button small{font-size:10px;color:#bdd0ee;line-height:1.35}
+.arcadeNumber{font-size:11px;color:#f9d882;letter-spacing:.12em;font-weight:900}
+.arcadeSelectionDetail{background:linear-gradient(130deg,#2b476a,#172f52);border:1px solid #e2be6a;border-radius:14px;padding:14px;margin:12px 0;color:#e0ebff;line-height:1.5}
+.arcadeSelectionDetail b{display:block;font-size:17px;color:#ffdc82}
+.arcadeSelectionDetail p{font-size:13px;margin:8px 0}
+.arcadeSelectionDetail small{color:#e8d7ab}
+#projectorArcade{background:radial-gradient(circle at 50% 5%,#385b94 0%,#142a55 42%,#0a1230 95%)!important;border:14px ridge #bf9951;box-shadow:inset 0 0 100px #020717}
+#projectorArcade:before{content:"ARCADE 20 • WORLD TRAVEL CHAMPIONSHIP";font-weight:900;letter-spacing:.35em;color:#e8c67c;font-size:clamp(12px,1.4vw,23px)}
+#projectorArcade .arcade-stage-rule{font-size:clamp(22px,2.5vw,39px);font-weight:800;color:#d9e9ff;max-width:1100px;line-height:1.3}
+#projectorArcade .arcade-stage-scoring{font-size:clamp(17px,1.8vw,29px);color:#f4d283;background:#9c743023;padding:11px 20px;border:1px solid #dfbe70;border-radius:16px}
+#projectorArcade .arcade-stage-ranking>div{font-weight:900;font-variant-numeric:tabular-nums;font-size:clamp(17px,2.3vw,31px)}
+body.role-player #arcadePanel{padding:10px}
+body.role-player #arcadePanel h2{font-size:19px;color:#f0d38d}
+body.role-player #arcadePanel .arcadeV2{margin:12px 0}
+@media(min-width:800px){#arcadeList{grid-template-columns:repeat(2,minmax(0,1fr))}}
