@@ -130,6 +130,16 @@ body.role-player .landArrival{border:2px solid #dfbd68;background:linear-gradien
 body.role-player .assetOverview>div{background:linear-gradient(135deg,#2c5078,#1e335d);box-shadow:inset 0 1px #ffffff33,0 4px 9px #0005}
 body.role-view.arcade-stage #projectorClock{display:block}
 @media(max-width:650px){.board .centerboard h2{font-size:clamp(20px,5vw,45px)}.board .tile .nm{font-size:9px!important}.board .tile .cost{font-size:8px!important}.board{border-width:7px!important}}
+
+/* Larger numbered 3D pieces visible from the back of the event hall */
+.board .tokens{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:2px;position:relative;z-index:6}
+.board .token{display:flex;align-items:center;justify-content:center;flex:none;width:clamp(16px,1.8vw,26px)!important;height:clamp(16px,1.8vw,26px)!important;font-size:clamp(9px,1vw,14px);color:#fff;font-weight:1000;text-shadow:0 2px 2px #071a38;box-shadow:inset -5px -6px 6px #0610248c,inset 2px 3px 3px #ffffffae,0 5px 5px #0008!important;border:2px solid #fffbd2!important;transform:translateY(-3px)}
+#travelToken{width:clamp(54px,5.1vw,76px)!important;height:clamp(54px,5.1vw,76px)!important;font-size:clamp(24px,3vw,42px)!important;font-weight:1000;color:white!important;text-shadow:0 3px 3px #001b35;border:5px solid #fff2a8!important;box-shadow:inset -9px -12px 12px #07152d77,inset 4px 5px 7px #ffffffb8,0 0 0 6px #ffde76,0 14px 22px #000b!important;z-index:87}
+#travelToken.hop{animation:marbleHop .47s ease-in-out}
+@keyframes marbleHop{0%{scale:1;filter:brightness(1)}30%{scale:1.23;filter:brightness(1.45)}64%{scale:1.10;filter:brightness(1.2)}100%{scale:1;filter:brightness(1)}}
+body.role-view .board .token{width:clamp(20px,2.35vw,34px)!important;height:clamp(20px,2.35vw,34px)!important;font-size:clamp(10px,1.15vw,17px)}
+body.role-view #travelToken{width:clamp(64px,5.9vw,90px)!important;height:clamp(64px,5.9vw,90px)!important}
+@media(max-width:680px){.board .token{width:15px!important;height:15px!important;font-size:9px}}
 </style></head><body>
 <header><div><h1>🎲 TEAM MARBLE</h1><span class="sub">무료 체험판 · 로그인 없이 모든 버튼 이용 가능</span></div><div id="screenModeHint">세계여행 부루마블</div><div id="screenTools"><button onclick="setMode('admin')">🎮 전체 기능 체험</button><button onclick="setMode('player')">📱 팀 게임 직접 하기</button><button onclick="openDrawer('modePanel')">🕹️ 모드 선택</button><button onclick="enterMC()">🏆 1등 특혜</button><button onclick="enterArcade()">🎮 오락실</button><button onclick="openDrawer('share')">📱 QR</button><button onclick="openDrawer('adminExtra')">⏱️ 시간·초기화</button><button id="soundToggle" class="soundOff" onclick="toggleSound()">🔇 소리 켜기</button></div></header>
 <div id="drawerShade" onclick="closeDrawer()"></div><div id="controlDrawer"><div class="drawerTitle"><h2 id="drawerHeading">관리 메뉴</h2><button onclick="closeDrawer()">✕ 닫기</button></div><div id="drawerSlot"></div></div><div id="projectorClock">⏳ 90:00</div><div id="projectorArcade"><div class="arcade-stage-title" id="projectorArcadeTitle">🎮 오락실</div><div id="projectorArcadeTimer" class="arcade-stage-timer">MC의 시작을 기다리는 중</div><div id="projectorArcadeRank" class="arcade-stage-ranking"></div></div><main class="layout"><section><div class="panel"><div class="row"><h2>🏙️ 게임판 28칸</h2><span id="round" class="tag"></span></div><div id="board" class="board"></div></div><div class="panel" id="rankPanel"><h2>🏆 실시간 순위</h2><div id="rank"></div></div></section><aside><div class="panel"><div class="row"><h2>🎮 진행 상황</h2><span id="phase" class="tag"></span></div><div class="bigdice" id="dice">🎲</div><div class="row" style="margin:10px 0"><strong>⏳ 남은 시간 <span id="clock">60:00</span></strong><span class="tag">총자산 1등 우승</span></div><h2 id="turnTitle">게임 준비 중</h2><div id="message" class="info"></div><div id="notice"></div><div id="join" class="hidden"><h2>내 팀 선택</h2><select id="joinTeam"></select><div class="buttons"><button class="primary" onclick="joinTeam()">이 팀으로 참가</button></div><p class="info">팀당 대표 1명이 접속합니다. 미션은 팀 전원이 함께 수행합니다.</p></div><div id="playerRoll" class="hidden"><div class="buttons"><button class="primary" onclick="rollWithAnimation()">🎲 주사위 던지기</button></div></div><div id="leaderPanel" class="panel hidden"><h2>🏠 우리 팀 부동산 관리</h2><div id="leaderStatus" class="info">팀을 선택하면 자산을 확인할 수 있어요.</div><div id="leaderLand" class="info"></div><div id="leaderActions"></div></div><div id="adminLogin" class="hidden"><input type="password" id="pin" placeholder="관리자 PIN" style="width:100%"><div class="buttons"><button onclick="login()" class="primary">관리자 로그인</button></div></div><div id="controls" class="hidden"><div class="buttons"><button class="primary" onclick="rollWithAnimation()">🎲 주사위 크게 던지기</button><button class="green" onclick="act('buy')">🏠 땅 구매</button><button onclick="act('upgrade')">🏢 건물 건설</button><button id="endTurn" onclick="act('endTurn')">⏭ 다음 팀 차례</button></div></div></div>
@@ -156,8 +166,62 @@ function hideBigCard(){if(cardTimeout)clearTimeout(cardTimeout);document.getElem
 function displayBigCard(icon,title,detail,choiceHTML='',stay=false){if(cardTimeout)clearTimeout(cardTimeout);const overlay=document.getElementById('bigCardOverlay');document.getElementById('bigCardIcon').textContent=icon;document.getElementById('bigCardTitle').textContent=title;document.getElementById('bigCardDetail').textContent=detail;document.getElementById('bigCardChoices').innerHTML=choiceHTML;document.getElementById('cardDismiss').style.display=stay?'none':'inline-block';overlay.classList.add('on');if(!stay)cardTimeout=setTimeout(hideBigCard,5400);}
 function showGoldenChoice(){const choice=s?.goldenChoice;if(!choice)return;const team=s.teams.find(x=>x.id===choice.team);const html=choice.cards.map((card,i)=>'<button data-pick-golden="'+i+'"><span class="giftIcon">'+card.icon+'</span><b>'+card.title+'</b><p style="font-size:15px">'+card.detail+'</p></button>').join('');displayBigCard('🔑','황금열쇠 2장 중 선택',team.name+' — 원하는 카드 한 장을 눌러주세요!',html,true);document.querySelectorAll('[data-pick-golden]').forEach(b=>b.onclick=()=>{soundEffect('reward');hideBigCard();act('goldenChoose',{index:Number(b.dataset.pickGolden)});});}
 function startDemoPlay(){myTeam=Number(document.getElementById('demoTeam').value);demoPlay=true;localStorage.setItem('marbleTeam',myTeam);soundEffect('arcade');renderArcade();}
-function animateMove(move){if(!move||seenMove===move.id)return;seenMove=move.id;const index=s?.teams.find(t=>t.id===move.team);if(!index)return;if(Date.now()-move.at>14000)return;movementActive=true;const token=document.getElementById('travelToken'),caption=document.getElementById('stageCaption');token.style.background=colors[move.team];token.textContent='🎩';token.classList.add('on');caption.classList.add('on');let step=0;const maxSteps=move.steps||1;const placeToken=()=>{const position=move.steps?((move.from+step)%28):(step?move.to:move.from);const tile=document.querySelector('[data-pos="'+position+'"]');if(tile){const r=tile.getBoundingClientRect();token.style.left=(r.left+r.width/2)+'px';token.style.top=(r.top+r.height/2)+'px';}};
-placeToken();caption.textContent='🎲 '+index.name+' 이동 중!';const timer=setInterval(()=>{step++;if(step>maxSteps){clearInterval(timer);token.classList.remove('on');caption.classList.remove('on');movementActive=false;const landing=s?.tiles[move.to],owner=s?.properties[move.to];if(landing){let detail=landing.price?'토지 가격 '+fmt(landing.price):(s?.message||'특별 이벤트');if(owner){const t=s.teams.find(x=>x.id===owner.owner);detail=(t?t.name:'다른 팀')+' 소유 · 통행료 자동 처리';}const flag=({서울:'🇰🇷',도쿄:'🇯🇵',베이징:'🇨🇳',방콕:'🇹🇭',싱가포르:'🇸🇬',두바이:'🇦🇪',로마:'🇮🇹',파리:'🇫🇷',런던:'🇬🇧',마드리드:'🇪🇸',뉴욕:'🇺🇸',로스앤젤레스:'🇺🇸',시드니:'🇦🇺',상파울루:'🇧🇷',황금열쇠:'🔑',보너스:'🎁',미션:'🎤',대결:'⚔️',약탈전:'🔥',출발:'🚩'})[landing.name]||'🌍';displayBigCard(flag,landing.name,detail);soundEffect('arrive');}return;}placeToken();caption.textContent='🎩 '+index.name+' · '+step+'/'+maxSteps+'칸 이동';soundEffect('step');},380);}
+let moveTimer=null,movingTeam=null,moveFinishedAt=0;
+function animateMove(move){
+ if(!move||seenMove===move.id)return;
+ seenMove=move.id;
+ const team=s?.teams.find(t=>t.id===move.team);
+ if(!team||Date.now()-move.at>10000)return;
+ if(mode==='player')return;
+ if(moveTimer)clearTimeout(moveTimer);
+ movingTeam=move.team;movementActive=true;
+ const token=document.getElementById('travelToken'),caption=document.getElementById('stageCaption');
+ token.style.background=colors[move.team]||'#f9ce72';
+ token.textContent=String(move.team+1);
+ token.setAttribute('aria-label',team.name+' 이동 중');
+ token.classList.add('on');
+ caption.classList.add('on');
+ let step=0;
+ const steps=move.steps||1;
+ const put=(position)=>{
+  const cell=document.querySelector('[data-pos="'+position+'"]');
+  if(!cell)return;
+  const rect=cell.getBoundingClientRect();
+  token.style.left=(rect.left+rect.width/2)+'px';
+  token.style.top=(rect.top+rect.height/2)+'px';
+  const original=cell.querySelector('.nm')?.textContent||'';
+  caption.textContent='🎲 '+team.name+' · '+original+' ('+step+'/'+steps+'칸)';
+ };
+ token.style.transition='none';
+ put(move.from);
+ void token.offsetWidth;
+ token.style.transition='left .39s cubic-bezier(.22,.74,.37,1),top .39s cubic-bezier(.22,.74,.37,1)';
+ soundEffect('roll');
+ const advance=()=>{
+  step++;
+  if(step>steps){
+   movementActive=false;movingTeam=null;moveFinishedAt=Date.now();
+   token.classList.remove('on','hop');
+   caption.classList.remove('on');
+   render();
+   const landed=s?.tiles[move.to],owner=s?.properties[move.to];
+   if(landed){
+    let detail=landed.price?'토지 가격 '+fmt(landed.price):(s?.message||'특별 이벤트');
+    if(owner){const owning=s.teams.find(x=>x.id===owner.owner);detail=(owning?.name||'다른 팀')+' 소유 · 통행료 자동 정산';}
+    const emoji=({서울:'🇰🇷',도쿄:'🇯🇵',베이징:'🇨🇳',방콕:'🇹🇭',싱가포르:'🇸🇬',두바이:'🇦🇪',로마:'🇮🇹',파리:'🇫🇷',런던:'🇬🇧',마드리드:'🇪🇸',뉴욕:'🇺🇸',로스앤젤레스:'🇺🇸',시드니:'🇦🇺',상파울루:'🇧🇷',황금열쇠:'🔑',보너스:'🎁',미션:'🎤',대결:'⚔️',약탈전:'🔥',출발:'🚩'})[landed.name]||'🌍';
+    soundEffect('arrive');
+    displayBigCard(emoji,team.name+' · '+landed.name+' 도착!',detail);
+   }
+   return;
+  }
+  const destination=move.steps?(move.from+step)%28:move.to;
+  token.classList.remove('hop');void token.offsetWidth;token.classList.add('hop');
+  put(destination);
+  soundEffect('step');
+  moveTimer=setTimeout(advance,470);
+ };
+ moveTimer=setTimeout(advance,300);
+}
 function showRewardSpin(v,teamName){const icons=['💰','🏡','🏨','🎲','✈️','🛡️','⚔️','💸','🏦','🔑'];let n=0;soundEffect('reward');displayBigCard('🎰','랜덤 특혜 추첨 중...',teamName+' · 특혜가 결정됩니다!', '',true);const handle=setInterval(()=>{if(!document.getElementById('bigCardOverlay').classList.contains('on')){clearInterval(handle);return;}document.getElementById('bigCardIcon').textContent=icons[n%icons.length];n++;if(n>=18){clearInterval(handle);soundEffect('win');displayBigCard('🏆',teamName+' 특혜 당첨!',v.detail);}},110);}
 let priorStageMessage='',eventsHydrated=false;
 function showNewEvents(){if(!eventsHydrated){eventsHydrated=true;seenReward=s?.lastReward?.id||'';seenMove=s?.lastMove?.id||'';seenGolden=s?.goldenDisplay?.id||'';priorStageMessage=s?.message||'';if(s?.goldenChoice){shownChoice=s.goldenChoice.id;showGoldenChoice();}return;}if(s?.message&&s.message!==priorStageMessage){if(priorStageMessage){if(s.message.includes('통행료'))soundEffect('rent');else if(s.message.includes('구매'))soundEffect('buy');else if(s.message.includes('건물')||s.message.includes('업그레이드'))soundEffect('build');else if(s.message.includes('게임 종료')||s.message.includes('우승'))soundEffect('win');}priorStageMessage=s.message;}if(s?.lastMove&&s.lastMove.id!==seenMove)animateMove(s.lastMove);if(s?.goldenChoice&&s.goldenChoice.id!==shownChoice){shownChoice=s.goldenChoice.id;setTimeout(()=>{soundEffect('key');showGoldenChoice();},movementActive?((s.lastMove?.steps||1)*380+1800):250);}if(s?.goldenDisplay&&s.goldenDisplay.id!==seenGolden){seenGolden=s.goldenDisplay.id;const g=s.goldenDisplay;setTimeout(()=>{if(s.goldenChoice)return;soundEffect('key');displayBigCard(g.card.icon,'🔑 '+g.card.title,g.effect);},movementActive?((s.lastMove?.steps||1)*380+1800):400);}if(s?.lastReward&&s.lastReward.id!==seenReward){seenReward=s.lastReward.id;const v=s.lastReward;const winner=s.teams.find(t=>t.id===v.team);if(v.kind!=='golden'&&Date.now()-v.at<10000&&mode!=='player')setTimeout(()=>showRewardSpin(v,'1등 '+(winner?.name||'팀')),350);}}
@@ -240,7 +304,7 @@ document.getElementById('turnTitle').textContent=s.finished?'🏆 최종 결과'
 const flags={'서울':'🇰🇷','도쿄':'🇯🇵','베이징':'🇨🇳','방콕':'🇹🇭','싱가포르':'🇸🇬','두바이':'🇦🇪','로마':'🇮🇹','파리':'🇫🇷','런던':'🇬🇧','마드리드':'🇪🇸','뉴욕':'🇺🇸','로스앤젤레스':'🇺🇸','시드니':'🇦🇺','상파울루':'🇧🇷'};
 const specials={'출발':'🚩','황금열쇠':'🔑','대결':'⚔️','보너스':'🎁','미션':'🎤','통행료 면제':'🛡️','약탈전':'🔥'};
 const spots=[];for(let col=7;col>=0;col--)spots.push([7,col]);for(let row=6;row>=0;row--)spots.push([row,0]);for(let col=1;col<=7;col++)spots.push([0,col]);for(let row=1;row<=6;row++)spots.push([row,7]);
-document.getElementById('board').innerHTML='<div class="centerboard"><div class="sky">✈️ 🌐 🛫</div><div class="ribbon">WORLD TRAVEL · MC BATTLE</div><h2>세계여행<br>부루마블</h2><div style="font-size:clamp(12px,2vw,24px);font-weight:900">RECREATION MARBLE</div><p>🏆 제한시간 총자산 1위 우승</p><div style="font-size:clamp(14px,2vw,24px)">🎲 ✈️ 🏙️</div></div>'+s.tiles.map((v,i)=>{const p=s.properties[i],owners=p?'<div class="owner" style="background:'+colors[p.owner]+'"></div>':'';const pieces=s.teams.filter(x=>x.pos===i).map(x=>'<div class="token" title="'+x.name+'" style="background:'+colors[x.id]+'"></div>').join('');const [row,col]=spots[i];return '<div class="tile '+(t.pos===i?'current ':'')+([0,7,14,21].includes(i)?'corner':'')+'" data-pos="'+i+'" style="grid-row:'+(row+1)+';grid-column:'+(col+1)+'"><span class="nr">'+i+'</span>'+owners+'<div class="flag">'+(flags[v.name]||specials[v.name]||'🌐')+'</div><div class="nm">'+v.name+'</div><div class="cost">'+(v.price?fmt(v.price):'EVENT')+(p?' '+(['','🏠','🏢','🏨'][p.level]||'🏨'):'')+'</div><div class="tokens">'+pieces+'</div></div>';}).join('');
+document.getElementById('board').innerHTML='<div class="centerboard"><div class="sky">✈️ 🌐 🛫</div><div class="ribbon">WORLD TRAVEL · MC BATTLE</div><h2>세계여행<br>부루마블</h2><div style="font-size:clamp(12px,2vw,24px);font-weight:900">RECREATION MARBLE</div><p>🏆 제한시간 총자산 1위 우승</p><div style="font-size:clamp(14px,2vw,24px)">🎲 ✈️ 🏙️</div></div>'+s.tiles.map((v,i)=>{const p=s.properties[i],owners=p?'<div class="owner" style="background:'+colors[p.owner]+'"></div>':'';const pieces=s.teams.filter(x=>x.pos===i&&x.id!==movingTeam).map(x=>'<div class="token" title="'+x.name+'" style="background:'+colors[x.id]+'">'+(x.id+1)+'</div>').join('');const [row,col]=spots[i];return '<div class="tile '+(t.pos===i?'current ':'')+([0,7,14,21].includes(i)?'corner':'')+'" data-pos="'+i+'" style="grid-row:'+(row+1)+';grid-column:'+(col+1)+'"><span class="nr">'+i+'</span>'+owners+'<div class="flag">'+(flags[v.name]||specials[v.name]||'🌐')+'</div><div class="nm">'+v.name+'</div><div class="cost">'+(v.price?fmt(v.price):'EVENT')+(p?' '+(['','🏠','🏢','🏨'][p.level]||'🏨'):'')+'</div><div class="tokens">'+pieces+'</div></div>';}).join('');
 
 document.getElementById('rank').innerHTML=s.rank.map((x,i)=>'<div class="row rank"><span>'+(i+1)+'위 <b style="color:'+colors[x.id]+'">'+x.name+'</b></span><span class="money">'+fmt(x.total)+'</span></div>').join('');
 document.getElementById('teams').innerHTML=s.teams.map(x=>'<div class="team '+(x.id===t.id?'turn':'')+'"><div class="row"><b style="color:'+colors[x.id]+'">● '+x.name+'</b><span class="tag">'+(x.joined?'접속':'대기')+'</span></div><div class="row"><span>현금 '+fmt(x.cash)+'</span><span>땅 '+Object.values(s.properties).filter(p=>p.owner===x.id).length+'개</span></div></div>').join('');
